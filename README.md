@@ -3,7 +3,7 @@
 Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScript, HTML und CSS. 
 Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus und finde die verborgene Schatztruhe!
 
-**Live-Demo:** [Hier klicken, um das Spiel zu spielen!]((https://...)) <--- reiche ich noch nach ---> 
+**Live-Demo:** [Hier klicken, um das Spiel zu spielen!]((https://liasab24.github.io/TreasureHunt/ ))
 
 ## Features
 -   Ein steuerbarer Charakter mit Lauf- und Sprunganimationen.
