@@ -3,7 +3,7 @@
 Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScript, HTML und CSS. 
 Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus und finde die verborgene Schatztruhe!
 
-**Live-Demo:** [Hier klicken, um das Spiel zu spielen!]((https://liasab24.github.io/TreasureHunt/ ))
+**Live-Demo:** https://liasab24.github.io/TreasureHunt/ 
 
 ## Features
 -   Ein steuerbarer Charakter mit Lauf- und Sprunganimationen.
@@ -24,7 +24,7 @@ Da es sich um eine reine Webanwendung handelt, ist keine komplexe Installation n
 
 1.  **Klone das Repository:**
     ```bash
-    git clone https://github.com/LiaSab24/JumpRunGame.git
+    git clone https://github.com/LiaSab24/TreasureHunt.git
     ```
 2.  **Öffne die `index.html`:**
     Navigiere in den Projektordner und öffne die `index.html`-Datei in einem modernen Webbrowser (z.B. Chrome, Firefox, Safari).
