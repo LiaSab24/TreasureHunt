@@ -34,7 +34,7 @@ function goToImpressum(url) {
 }
 
 // ============================================================================
-// A. Konfiguration: Mappt Button-IDs zu ihren Aktionen
+// A. Konfiguration Button-IDs
 // ============================================================================
 
 /**
@@ -47,7 +47,7 @@ const buttonEventMap = {
     'restartButtonWin': restartGame,
     'backButton': () => window.location.href = 'index.html',
     'impButton': () => window.location.href = 'impressum.html',
-    'pauseButton': () => world?.togglePause(), // Optional Chaining: Ruft nur auf, wenn 'world' existiert
+    'pauseButton': () => world?.togglePause(), 
     'buyLifeButton': () => world?.buyLife(),
     'helpButton': toggleHelpText
 };
@@ -69,7 +69,7 @@ function toggleHelpText() {
 }
 
 /**
- * Richtet alle Event-Listener basierend auf der buttonEventMap ein.
+ * Richtet alle Event-Listener basierend auf der buttonEventMap ein
  */
 function setupEventListeners() {
     for (const id in buttonEventMap) {
@@ -95,7 +95,7 @@ function setupInitialUI() {
 }
 
 // ============================================================================
-// C. Haupt-Initialisierung (Der neue, kurze Event Listener)
+// C. Haupt-Initialisierung 
 // ============================================================================
 
 window.addEventListener('DOMContentLoaded', () => {
