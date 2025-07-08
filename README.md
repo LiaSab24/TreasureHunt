@@ -4,7 +4,7 @@ Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScrip
 Es handelt sich um eine reine Webanwendung. Keine Installation notwendig. 
 Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus und finde die verborgene Schatztruhe!
 
-**Live-Demo:** https://liasab24.github.io/TreasureHunt/ 
+**Live-Demo:** [Link https://liasab24.github.io/TreasureHunt/ ]
 
 ## Features
 -   Ein steuerbarer Charakter mit Lauf- und Sprunganimationen.
@@ -23,14 +23,6 @@ Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus u
 ## Installation & Setup
 Da es sich um eine reine Webanwendung handelt, ist keine komplexe Installation nötig.
 Zur Erstellung wurde Visual Studio Code genutzt und mit GitHub verknüpft.
-
-1.  **Repository on GitHub**
-    ```bash
-    git clone https://github.com/LiaSab24/TreasureHunt.git
-    ```
-2.  **Öffne der `index.html`:**
-    > **Tipp:** Für die beste Erfahrung und um potenzielle Probleme mit dem Laden von lokalen Dateien zu vermeiden, wird empfohlen,einen lokalen Webserver zu verwenden.
-    > Eine einfache Möglichkeit ist die [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) Erweiterung für Visual Studio Code.
 
 ## Projektstruktur
 Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeiten zu gewährleisten:
@@ -52,11 +44,17 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **/styles:** Beherbergt die CSS-Dateien für das Styling der UI.
 -   **`index.html`:** Der Haupteinstiegspunkt des Spiels.
 
-## Gameplay-Steuerung
+## Gameplay-Steuerung Keyboard
 -   **Laufen:** `⬅️` / `➡️` Pfeiltasten
 -   **Springen:** `⬆️` Pfeiltaste
 -   **Stein werfen:** `D`-Taste
--   
+
+## Gameplay-Steuerung Mouse
+-   **Laufen:** ` left-button `
+-   **Springen:** 
+-   **Stein werfen:** 
+
+## Gameplay-Steuerung Mobile/Touch
 
 ## Dokumentation
 Weitere Details zur Entwicklung und Architektur finden sich hier:
