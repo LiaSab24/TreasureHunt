@@ -47,8 +47,8 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 ## Gameplay-Steuerung Keyboard
 -   **Laufen:** `⬅️` / `➡️` Pfeiltasten
 -   **Springen:** `⬆️` Pfeiltaste
--   **Stein werfen:** `D`-Taste   [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/D.png)]
-
+-   **Stein werfen:** `D`-Taste
+  
 ## Gameplay-Steuerung Mouse
 -   **Laufen:** Buttons: ` nach Links ` , `nach Rechts` 
 -   **Springen:** Button: `Springen`
