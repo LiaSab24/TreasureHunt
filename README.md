@@ -4,7 +4,7 @@ Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScrip
 Es handelt sich um eine reine Webanwendung. Keine Installation notwendig. 
 Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus und finde die verborgene Schatztruhe!
 
-**Live-Demo:** [Link] (https://liasab24.github.io/TreasureHunt/) [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/screenshot.png)](https://liasab24.github.io/TreasureHunt/)
+**Live-Demo:** [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/bg/treasureHunt.png)](https://liasab24.github.io/TreasureHunt/)
 
 
 ## Features
