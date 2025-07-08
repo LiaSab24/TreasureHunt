@@ -1,6 +1,7 @@
 # Treasure Hunt - 2D Run & Jump Game
 
 Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScript, HTML und CSS. 
+Es handelt sich um eine reine Webanwendung. Keine Installation notwendig. 
 Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus und finde die verborgene Schatztruhe!
 
 **Live-Demo:** https://liasab24.github.io/TreasureHunt/ 
@@ -21,16 +22,14 @@ Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus u
 
 ## Installation & Setup
 Da es sich um eine reine Webanwendung handelt, ist keine komplexe Installation nötig.
+Zur Erstellung wurde Visual Studio Code genutzt und mit GitHub verknüpft.
 
-1.  **Klone das Repository:**
+1.  **Repository on GitHub**
     ```bash
     git clone https://github.com/LiaSab24/TreasureHunt.git
     ```
-2.  **Öffne die `index.html`:**
-    Navigiere in den Projektordner und öffne die `index.html`-Datei in einem modernen Webbrowser (z.B. Chrome, Firefox, Safari).
-
-    > **Tipp:** Für die beste Erfahrung und um potenzielle Probleme mit dem Laden von lokalen Dateien zu vermeiden
-    > , wird empfohlen,einen lokalen Webserver zu verwenden.
+2.  **Öffne der `index.html`:**
+    > **Tipp:** Für die beste Erfahrung und um potenzielle Probleme mit dem Laden von lokalen Dateien zu vermeiden, wird empfohlen,einen lokalen Webserver zu verwenden.
     > Eine einfache Möglichkeit ist die [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) Erweiterung für Visual Studio Code.
 
 ## Projektstruktur
@@ -40,6 +39,7 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
     -   `movable-object.class.js`: Die Basisklasse für alle beweglichen Objekte mit gemeinsamer Logik (Position, Bilder laden, Kollision).
     -   `character.class.js`: Steuert den Spieler, seine Animationen, Aktionen (Springen, Werfen) und Lebenspunkte.
     -   `enemies.class.js`: Definiert das Verhalten und die Animation der Gegner.
+    -   `endboss.class.js`: Definiert das Verhalten und die Animation des Endgegners.
     -   `throwable-object.class.js`: Logik für geworfene Objekte (Steine), inklusive Flugbahn und Rotation.
     -   `coins.class.js`, `stones.class.js`: Klassen für die sammelbaren Objekte im Spiel.
     -   `treasureChest.class.js`: Definiert das Endziel des Spiels, die Schatztruhe.
@@ -56,6 +56,7 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **Laufen:** `⬅️` / `➡️` Pfeiltasten
 -   **Springen:** `⬆️` Pfeiltaste
 -   **Stein werfen:** `D`-Taste
+-   
 
 ## Dokumentation
 Weitere Details zur Entwicklung und Architektur finden sich hier:
