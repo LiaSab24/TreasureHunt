@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-image: url('../images/bg/bg-waterfall/waterfall.png');
+  background-size: cover;
+  background-position: center; 
+  backdrop-filter: blur(10px);
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: grid;
+  place-content: center;
+}
+main {
+  width: 100%;
+}
+.back-button {
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.impressum {
+  background-image: url('../images/bg/button/emptyMap.png');
+  background-repeat: no-repeat;
+  color: #703347;
+  line-height: 1.6;
+  padding: 10%;
+  .impressum-content {
+    padding: 3%;
+  }
+}
+p {
+  margin-bottom: 8px
+}
