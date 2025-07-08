@@ -4,7 +4,7 @@ Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScrip
 Es handelt sich um eine reine Webanwendung. Keine Installation notwendig. 
 Begleite den Helden auf seiner Schatzsuche, sammle Münzen, weiche Gegnern aus und finde die verborgene Schatztruhe!
 
-**Live-Demo:** [Link https://liasab24.github.io/TreasureHunt/ ]
+**Live-Demo:** [Link] (https://liasab24.github.io/TreasureHunt/) 
 
 ## Features
 -   Ein steuerbarer Charakter mit Lauf- und Sprunganimationen.
@@ -50,11 +50,14 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **Stein werfen:** `D`-Taste
 
 ## Gameplay-Steuerung Mouse
--   **Laufen:** ` left-button `
--   **Springen:** 
--   **Stein werfen:** 
+-   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
+-   **Springen:** Button: `Springen`
+-   **Stein werfen:** Button: `Werfen`
 
 ## Gameplay-Steuerung Mobile/Touch
+-   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
+-   **Springen:** Button: `Springen`
+-   **Stein werfen:** Button: `Werfen`
 
 ## Dokumentation
 Weitere Details zur Entwicklung und Architektur finden sich hier:
