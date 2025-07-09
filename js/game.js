@@ -1,6 +1,6 @@
 /**
  * Globale Variable, die die Instanz der Hauptspielwelt enthält.
- * @type {World}
+ * @type {world}
  */
 let world;
 /**
@@ -61,10 +61,9 @@ const buttonEventMap = {
  */
 function toggleHelpText() {
     const helpText = document.getElementById('helpText');
-    const imprintText = document.getElementById('imprintText');
-    if (helpText && imprintText) {
-        helpText.style.display = helpText.style.display === 'none' ? 'block' : 'none';
-        imprintText.style.display = 'none';
+    if (helpText) {
+        // Toggle zwischen "block" und "none"
+        helpText.style.display = (helpText.style.display === 'none' || helpText.style.display === '') ? 'block' : 'none';
     }
 }
 
