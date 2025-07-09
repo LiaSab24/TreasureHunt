@@ -34,7 +34,7 @@ class World {
         this.draw();
         this.setWorld();
         this.bindKeyboardEvents();
-        this.initButtonControls(); // this.initTouchControls(); => Name geändert, um Maus und Touch abzudecken
+        this.initButtonControls(); 
         this.togglePause();      
         this.run();
         this.gameWon = false;    

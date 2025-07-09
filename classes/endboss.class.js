@@ -15,7 +15,7 @@ class Endboss extends MovableObject {
  //           'images/endboss/Walk/WalkEndboss5.png'
         ];
         this.IMAGES_DEAD = [
-            'images/endboss/Faint/1.png',
+            'images/enemies/endboss/cobra-snake.png',
             'images/endboss/Faint/2.png',
             'images/endboss/Faint/3.png',
             'images/endboss/Faint/4.png',
