@@ -19,7 +19,7 @@ class ThrowableObject extends MovableObject {
      * @param {World} world - Eine Referenz auf die Spielwelt, um den Pausenzustand zu prüfen.
      */
     constructor(x, y, direction, world) {
-        super().loadImage('images/objects/stones/stone1.png'); 
+        super().loadImage('images/objects/stones/stone.PNG'); 
         this.x = x;
         this.y = y;
         this.height = 30;
