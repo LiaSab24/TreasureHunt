@@ -23,11 +23,16 @@ main {
 .impressum {
   background-image: url('../images/bg/button/emptyMap.png');
   background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   color: #703347;
   line-height: 1.6;
-  padding: 10% 10% 10% 15%;
+  padding: 5%;
   .impressum-content {
-    padding: 3%;
+    margin: 3%;
   }
 }
 p {
