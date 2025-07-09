@@ -5,11 +5,11 @@ class Enemy extends MovableObject {
     currentImage = 0; // Aktuelles Bild für Animation
 
     IMAGES_WALKING = [
-         'images/enemies/enemy/Walk/WalkBoy1.png',
-         'images/enemies/enemy/Walk/WalkBoy2.png',
-         'images/enemies/enemy/Walk/WalkBoy3.png',
-         'images/enemies/enemy/Walk/WalkBoy4.png',
-         'images/enemies/enemy/Walk/WalkBoy5.png'
+         'images/enemies/enemy/Walk/Walk1.png',
+         'images/enemies/enemy/Walk/Walk2.png',
+         'images/enemies/enemy/Walk/Walk3.png',
+         'images/enemies/enemy/Walk/Walk4.png',
+         'images/enemies/enemy/Walk/Walk5.png'
     ];
 
     IMAGES_DEAD = [
