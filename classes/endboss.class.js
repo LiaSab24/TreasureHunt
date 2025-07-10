@@ -17,7 +17,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImage(this.IMAGES_WALKING[0]); 
-        this.animate();             // << NEU: Starte die Animations-Loop
+        this.animate();             // Starte die Animations-Loop
     }
 
     /**
@@ -26,10 +26,9 @@ class Endboss extends MovableObject {
      */
     animate() {
         setInterval(() => {
-            // HIER KÖNNTE LOGIK FÜR VERSCHIEDENE ZUSTÄNDE STEHEN
-            // (z.B. Laufen, Angreifen, Sterben)
-
-            // Einfache Lauf-Animation
+            // hier soll LOGIK für weitere Zustände rein
+            // (z.B. kriechen, angreifen, sterben)
+            
             this.playAnimation(this.IMAGES_WALKING);
 
         }, 200); // Wechselt das Bild alle 200ms
