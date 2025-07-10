@@ -5,7 +5,7 @@ class World {
 
     character = new Character(); 
     enemies = [new Enemy(400), new Enemy(800), new Enemy(1200)]; 
-    endboss = new Endboss();
+ //   endboss = new Endboss();
     clouds = [new Cloud(0),new Cloud(400),new Cloud(900)]; 
     coins = []; 
     stones = [];
@@ -81,7 +81,7 @@ class World {
         this.initCoins();
         this.initStones();
         this.initEnemies();
-        this.initEndboss();
+//        this.initEndboss();
     }
 
     initCoins() {
@@ -116,12 +116,12 @@ class World {
             new Enemy(2300, this),
         );
     }
-    initEndboss() {
-        this.endboss = new Endboss();
-        this.endboss.x = this.LEVEL_END - 200;  // Setzt den Endboss 200 Pixel vor dem Level-Ende
-        this.endboss.y = 100;                   // Setzt die Y-Position des Endbosses
-        this.enemies.push(this.endboss);        // Fügt den Endboss zu den Gegnern hinzu
-    }
+//    initEndboss() {
+//        this.endboss = new Endboss();
+//        this.endboss.x = this.LEVEL_END - 200;  // Setzt den Endboss 200 Pixel vor dem Level-Ende
+//        this.endboss.y = 100;                   // Setzt die Y-Position des Endbosses
+//        this.enemies.push(this.endboss);        // Fügt den Endboss zu den Gegnern hinzu
+//    }
 
     initTreasureChest() {
         const groundYForChest = 320;
