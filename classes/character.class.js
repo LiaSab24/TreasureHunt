@@ -2,7 +2,7 @@ class Character extends MovableObject {
     height = 170; 
     width = 80;
     y = 380;     
-    speed = 2;
+    speed = 3;
     speedY = 0; 
     speedX = 0;                                 // Horizontale Geschwindigkeit (für Wurfobjekte)
     acceleration = 1.5; 
@@ -178,24 +178,6 @@ class Character extends MovableObject {
         }
     }
 
-   // applyGravity() {
-   //     if (this.isDead()) return;                  // Keine Gravitation wenn tot (oder Fallanimation)
-   //     if (this.y < this.GROUND_Y || this.speedY > 0) {
-   //          this.y -= this.speedY; // Y-Position basierend auf vertikaler Geschwindigkeit ändern
-   //          this.speedY -= this.acceleration; // Geschwindigkeit durch Gravitation verringern
-   //          // Sicherstellen, dass der Charakter nicht unter den Boden fällt
-   //          if (this.y >= this.GROUND_Y && !this.isOnGround) {
-   //              this.y = this.GROUND_Y; // Genau auf den Boden setzen
-   //              this.speedY = 0; // Vertikale Geschwindigkeit stoppen
-   //              this.isOnGround = true;
-   //          }
-   //     } else {
-   //         // Charakter ist bereits am Boden
-   //         this.isOnGround = true;
-   //          if(this.speedY != 0) this.speedY = 0; // Sicherstellen, dass SpeedY 0 ist
-   //     }
-   // }
-
    /**
      * Wendet Gravitation auf den Charakter an, wenn er sich in der Luft befindet.
      * Aktualisiert die vertikale Geschwindigkeit und Position.
@@ -294,9 +276,9 @@ class Character extends MovableObject {
      * @param {string[]} images - Array von Bildpfaden für die aktuelle Animation.
      */
     playAnimation(images) {
-        let i = this.currentImage % images.length; // Index im Array berechnen
+        let i = this.currentImage % images.length;  // Index im Array berechnen
         let path = images[i];
-        this.img = this.imageCache[path]; // Bild aus dem Cache holen und setzen
+        this.img = this.imageCache[path];           // Bild aus dem Cache holen und setzen
         this.currentImage++;
     }
 }
