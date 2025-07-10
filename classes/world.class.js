@@ -5,7 +5,6 @@ class World {
 
     character = new Character(); 
     enemies = [new Enemy(400), new Enemy(800), new Enemy(1200)]; 
-    endboss = new Endboss();
     clouds = [new Cloud(0),new Cloud(400),new Cloud(900)]; 
     coins = []; 
     stones = [];
@@ -57,7 +56,7 @@ class World {
         this.coins = [];
         this.stones = [];
         this.enemies = [];
-        this.endboss = [];
+        this.endboss = new Endboss();
         this.throwableObjects = [];
     }
 
@@ -121,7 +120,6 @@ class World {
      * Der Endboss erscheint erst, wenn der Charakter nahe genug am Level-Ende ist.
      */
     initEndboss() {
-        this.endboss = new Endboss();
         this.endboss.x = this.LEVEL_END - 200; // 200px vor der Truhe
         this.endboss.y = 100;
         this.enemies.push(this.endboss);
