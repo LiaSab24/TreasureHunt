@@ -12,7 +12,7 @@ class TreasureChest extends MovableObject {
    * @param {number} y - Die Position auf der y-Achse.
    */
   constructor(x, y) {
-    super().loadImage('images/objects/treasure/bag.png');
+    super().loadImage('images/objects/treasure/treasure-bag.png');
     this.x = x;
     this.y = y; 
   }
