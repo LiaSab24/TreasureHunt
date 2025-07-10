@@ -15,7 +15,7 @@ class World {
     camera_x = 0;               
     gameLoopIntervalId = null;  
     treasureChest = null;       
-    LEVEL_END = 3000;           // Level-Ende (soll dynamisch gesetzt werden)
+    LEVEL_END = 2500;           // Level-Ende (soll dynamisch gesetzt werden)
     gameWon = false;           
     isPaused = false;          
 
