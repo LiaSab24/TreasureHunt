@@ -2,7 +2,7 @@ class Character extends MovableObject {
     height = 170; 
     width = 80;
     y = 380;     
-    speed = 3;
+    speed = 0.15 + Math.random() * 0.3;         //speed = 3;
     speedY = 0; 
     speedX = 0;                                 // Horizontale Geschwindigkeit (für Wurfobjekte)
     acceleration = 1.5; 
