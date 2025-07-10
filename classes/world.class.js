@@ -57,7 +57,7 @@ class World {
         this.coins = [];
         this.stones = [];
         this.enemies = [];
-        this.endboss = [];
+//        this.endboss = [];
         this.throwableObjects = [];
     }
 
