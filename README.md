@@ -8,7 +8,7 @@ Begleitet den Helden auf seiner Schatzsuche. Folgt den Münzen und sammelt Stein
 
 ## Features
 -   Ein steuerbarer Charakter mit Lauf- und Sprunganimationen.
--   Verschiedene Gegnertypen, die die Welt bevölkern.
+-   Verschiedene Gegnertypen, die den Schatz bewachen.
 -   Sammelbare Objekte wie Münzen und Steine.
 -   Wurfmechanik: Nutze gesammelte Steine, um Gegner auszuschalten.
 -   Ein klares Endziel: Erreiche die Schatztruhe, um das Spiel zu gewinnen.
@@ -22,7 +22,6 @@ Begleitet den Helden auf seiner Schatzsuche. Folgt den Münzen und sammelt Stein
 
 ## Installation & Setup
 Da es sich um eine reine Webanwendung handelt, ist keine komplexe Installation nötig.
-Zur Erstellung wurde Visual Studio Code genutzt und mit GitHub verknüpft.
 
 ## Projektstruktur
 Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeiten zu gewährleisten:
