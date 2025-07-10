@@ -114,7 +114,7 @@ class Enemy extends MovableObject {
            super.draw(ctx); // Normal zeichnen
        }
        // --- DEBUG: Kollisionsbox ---
-       ctx.strokeStyle = 'green';
-       ctx.strokeRect(this.x, this.y, this.width, this.height);
+    //   ctx.strokeStyle = 'green';
+    //   ctx.strokeRect(this.x, this.y, this.width, this.height);
     }
 }

@@ -285,8 +285,8 @@ class Character extends MovableObject {
         ctx.restore(); // Zustand wiederherstellen
 
         // --- DEBUG: Kollisionsbox ---
-        ctx.strokeStyle = 'blue';
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
+    //    ctx.strokeStyle = 'blue';
+    //    ctx.strokeRect(this.x, this.y, this.width, this.height);
     }
 
     /**
