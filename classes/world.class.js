@@ -120,8 +120,8 @@ class World {
      * Der Endboss erscheint erst, wenn der Charakter nahe genug am Level-Ende ist.
      */
     initEndboss() {
-        this.endboss.x = this.LEVEL_END - 200; // 200px vor der Truhe
-        this.endboss.y = 100;
+        this.endboss.x = this.LEVEL_END - 100; // 200px vor der Truhe
+        this.endboss.y = 200;
         this.enemies.push(this.endboss);
     }
 
