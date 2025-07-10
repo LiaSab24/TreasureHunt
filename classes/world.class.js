@@ -16,7 +16,7 @@ class World {
     camera_x = 0;               
     gameLoopIntervalId = null;  
     treasureChest = null;       
-    LEVEL_END = 2500;           // Level-Ende (soll dynamisch gesetzt werden)
+    LEVEL_END = 3000;           // Level-Ende (soll dynamisch gesetzt werden)
     gameWon = false;           
     isPaused = false;          
 
@@ -81,7 +81,7 @@ class World {
         this.initCoins();
         this.initStones();
         this.initEnemies();
-//        this.initEndboss();
+        this.initEndboss();
     }
 
     initCoins() {
@@ -116,12 +116,16 @@ class World {
             new Enemy(2300, this),
         );
     }
-//    initEndboss() {
-//        this.endboss = new Endboss();
-//        this.endboss.x = this.LEVEL_END - 200;  // Setzt den Endboss 200 Pixel vor dem Level-Ende
-//        this.endboss.y = 100;                   // Setzt die Y-Position des Endbosses
-//        this.enemies.push(this.endboss);        // Fügt den Endboss zu den Gegnern hinzu
-//    }
+    /**
+     * Initialisiert den Endboss und platziert ihn kurz vor der Schatztruhe.
+     * Der Endboss erscheint erst, wenn der Charakter nahe genug am Level-Ende ist.
+     */
+    initEndboss() {
+        this.endboss = new Endboss();
+        this.endboss.x = this.LEVEL_END - 200; // 200px vor der Truhe
+        this.endboss.y = 100;
+        this.enemies.push(this.endboss);
+    }
 
     initTreasureChest() {
         const groundYForChest = 320;
@@ -305,33 +309,56 @@ class World {
 
         // 3. Kollision Charakter mit Gegnern
         this.enemies.forEach((enemy) => {
-           // Prüfen, ob Kollision stattfindet UND der Charakter nicht gerade unverwundbar ist
+            // Prüfen, ob Kollision stattfindet UND der Charakter nicht gerade unverwundbar ist
             if (this.character.isColliding(enemy) && !this.character.isHurt()) {
                 this.character.hit();                  // Charakter nimmt Schaden
                 this.updateStatusBars();               // Statusbar sofort aktualisieren
-                // ?! Gegner könnte auch Schaden nehmen oder zurückgestoßen werden
             }
         });
 
         // 4. Kollision Steine mit Gegnern
         this.throwableObjects.forEach((stone) => {
             this.enemies.forEach((enemy) => {
-              if (stone && enemy && !enemy.isDead && stone.isColliding(enemy)) {
+                if (stone && enemy && !enemy.isDead && stone.isColliding(enemy)) {
                     enemy.hit();
                     stone.isDestroyed = true; // Markiere den Stein zum Entfernen
                 }
             });
         });
-    
-        // 5. Kollision Charakter mit Schatztruhe << NEU
+
+        // 5. Kollision Charakter mit Endboss
+        if (this.endboss && this.character.isColliding(this.endboss) && !this.endboss.isDead) {
+            // Endboss muss zuerst besiegt werden, bevor die Truhe erreichbar ist
+            if (!this.character.isHurt()) {
+                this.character.hit();
+                this.updateStatusBars();
+            }
+        }
+
+        // 6. Kollision Steine mit Endboss
+        if (this.endboss && !this.endboss.isDead) {
+            this.throwableObjects.forEach((stone) => {
+                if (stone && stone.isColliding(this.endboss)) {
+                    this.endboss.hit();
+                    stone.isDestroyed = true;
+                }
+            });
+        }
+
+        // 7. Kollision Charakter mit Schatztruhe NUR wenn Endboss tot ist
         if (this.treasureChest && this.character.isColliding(this.treasureChest)) {
-            this.handleWin(); // Gewinnzustand auslösen
+            if (this.endboss && !this.endboss.isDead) {
+                // Truhe ist blockiert, solange Endboss lebt
+                // Optional: Feedback anzeigen
+                return;
+            } else {
+                this.handleWin(); // Gewinnzustand auslösen
+            }
         }
 
         // --- Aufräumen: Objekte entfernen ---
         // Entferne Steine, die aus dem Bild geflogen sind (Performance)
-        this.throwableObjects = this.throwableObjects.filter(stone => 
-           !stone.isDestroyed)
+        this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed)
 
         // Entferne "tote" Gegner (die getroffen wurden)
         this.enemies = this.enemies.filter(enemy => !enemy.isDead); // Behalte nur lebende Gegner
