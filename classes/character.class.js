@@ -18,6 +18,7 @@ class Character extends MovableObject {
     throwCooldown = 500;                        // Cooldown in ms (0.5 Sekunden)
     GROUND_Y = 380;                             // Y-Position des Bodens für diesen Charakter (abhängig von Höhe)
     facingDirection = 'right';                  // Blickrichtung des Charakters (initial nach rechts)
+    isThrowing = false;                         // Ist der Charakter gerade am Werfen?
 
     IMAGES_IDLE = [
         'images/character/Idle/1.png',
@@ -76,32 +77,33 @@ class Character extends MovableObject {
         this.lastIdleTime = new Date().getTime();   // Setzt die Zeit für die Idle-Animation
     }
 
-    // in character.class.js
 
-animate() {
-    setInterval(() => {
-        let imagesToPlay;
-        if (this.isDead()) {
-            imagesToPlay = this.IMAGES_DEAD;
-        } else if (this.isHurt()) {
-            imagesToPlay = this.IMAGES_HURT;
-        } else if (!this.isOnGround) {
-            imagesToPlay = this.IMAGES_JUMPING;
-            this.lastIdleTime = new Date().getTime(); 
-        } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'])) {
-            imagesToPlay = this.IMAGES_WALKING;
-            this.lastIdleTime = new Date().getTime(); 
-        } else {
-            if (new Date().getTime() - this.lastIdleTime > this.idleDelay) {
-                imagesToPlay = this.IMAGES_IDLE; 
+    animate() {
+        setInterval(() => {
+            let imagesToPlay;
+            if (this.isDead()) {
+                imagesToPlay = this.IMAGES_DEAD;
+            } else if (this.isHurt()) {
+                imagesToPlay = this.IMAGES_HURT;
+            } else if (this.isThrowing) {  
+                imagesToPlay = this.IMAGES_THROW;
+            }else if (!this.isOnGround) {
+                imagesToPlay = this.IMAGES_JUMPING;
+                this.lastIdleTime = new Date().getTime(); 
+            } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'])) {
+                imagesToPlay = this.IMAGES_WALKING;
+                this.lastIdleTime = new Date().getTime(); 
             } else {
-                imagesToPlay = [this.IMAGES_IDLE[0]]; 
+                if (new Date().getTime() - this.lastIdleTime > this.idleDelay) {
+                    imagesToPlay = this.IMAGES_IDLE; 
+                } else {
+                    imagesToPlay = [this.IMAGES_IDLE[0]]; 
+                }
             }
-        }
-        this.playAnimation(imagesToPlay);
+            this.playAnimation(imagesToPlay);
 
-    }, 120); // <-- 120 Millisekunden (150 ms für langsamere Animation, 90 ms für schnellere Animation)
-}
+        }, 120); // <-- 120 Millisekunden (150 ms für langsamere Animation, 90 ms für schnellere Animation)
+    }
 
     updateIdleTimer() {
         // Wenn der Charakter sich bewegt oder springt, setze den Timer zurück
@@ -214,6 +216,11 @@ animate() {
         if (this.stones > 0 && !this.isDead()  && now - this.lastThrowTime > this.throwCooldown) {
             this.stones--;                              // Einen Stein verbrauchen
             this.lastThrowTime = now;                   // Zeit des Wurfs speichern
+            this.isThrowing = true;                     // Wurfanimation starten
+            this.currentImage = 0;                      // Wurf-Animation von vorne starten
+            setTimeout(() => {
+                this.isThrowing = false;
+            }, 350); // 350ms reichen für eine kurze Wurf-Animation
 
             // Startposition des Steins (z.B. Mitte des Charakters)
             let startX = this.x + (this.facingDirection === 'right' ? this.width - 30 : 0); // Etwas vor dem Charakter starten
@@ -236,7 +243,7 @@ animate() {
     draw(ctx) {
         // Siehst du? Die ganzen if/else-Abfragen von eben sind jetzt weg.
         // draw() muss jetzt nur noch malen.
-    
+
         ctx.save(); // Wir speichern die aktuelle Einstellung vom Stift
         if (this.facingDirection === 'left') {
             // Wenn der Charakter nach links schaut, spiegeln wir das Bild
