@@ -177,8 +177,8 @@ class Character extends MovableObject {
     applyGravity() {
         if (this.isDead()) return;                  // Keine Gravitation wenn tot (oder Fallanimation)
         if (!this.isOnGround || this.speedY > 0) {
-            this.y += this.speedY;                  // Y-Position basierend auf vertikaler Gesch
-            this.speedY += this.acceleration;       // Geschwindigkeit durch Gravitation erhöhen
+            this.y -= this.speedY;                  // Y-Position basierend auf vertikaler Gesch
+            this.speedY -= this.acceleration;       // Geschwindigkeit durch Gravitation erhöhen
             //Lanndung
             if (this.y >= this.GROUND_Y) {
                 this.y = this.GROUND_Y;             // Genau auf den Boden setzen
