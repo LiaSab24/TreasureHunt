@@ -80,7 +80,7 @@ class Character extends MovableObject {
 
          setInterval(() => {
             this.updateIdleTimer();
-        }, 120);
+        }, 200);
     }
 
     updateIdleTimer() {
