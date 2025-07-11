@@ -77,15 +77,6 @@ class Character extends MovableObject {
     }
 
     animate() {
-        // Ein Intervall, das prüft, ob sich der Zustand geändert hat und Animationen durchläuft
-        // Die Auswahl der richtigen Animation passiert in draw()
-        // Hier erhöhen wir nur den Frame-Zähler für flüssige Animationen
-        //setInterval(() => {
-             // Logik zum Weiterschalten der Animationsframes (passiert jetzt in playAnimation)
-             // this.currentImage++; // Wird durch playAnimation gesteuert
-        //}, 500); // Animationsgeschwindigkeit (Frames alle 500ms)
-
-        // Optional: Ein separates Intervall für Zustands-Checks, falls nicht im Game Loop
          setInterval(() => {
             this.updateIdleTimer();
         }, 200);
@@ -185,8 +176,8 @@ class Character extends MovableObject {
     applyGravity() {
         if (this.isDead()) return;                  // Keine Gravitation wenn tot (oder Fallanimation)
         if (!this.isOnGround || this.speedY > 0) {
-            this.y += this.speedY;                  // Y-Position basierend auf vertikaler Gesch
-            this.speedY += this.acceleration;       // Geschwindigkeit durch Gravitation erhöhen
+            this.y -= this.speedY;                  // Y-Position basierend auf vertikaler Gesch
+            this.speedY -= this.acceleration;       // Geschwindigkeit durch Gravitation erhöhen
             //Lanndung
             if (this.y >= this.GROUND_Y) {
                 this.y = this.GROUND_Y;             // Genau auf den Boden setzen
