@@ -76,12 +76,32 @@ class Character extends MovableObject {
         this.lastIdleTime = new Date().getTime();   // Setzt die Zeit für die Idle-Animation
     }
 
-    animate() {
+    // in character.class.js
 
-         setInterval(() => {
-            this.updateIdleTimer();
-        }, 200);
-    }
+animate() {
+    setInterval(() => {
+        let imagesToPlay;
+        if (this.isDead()) {
+            imagesToPlay = this.IMAGES_DEAD;
+        } else if (this.isHurt()) {
+            imagesToPlay = this.IMAGES_HURT;
+        } else if (!this.isOnGround) {
+            imagesToPlay = this.IMAGES_JUMPING;
+            this.lastIdleTime = new Date().getTime(); 
+        } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'])) {
+            imagesToPlay = this.IMAGES_WALKING;
+            this.lastIdleTime = new Date().getTime(); 
+        } else {
+            if (new Date().getTime() - this.lastIdleTime > this.idleDelay) {
+                imagesToPlay = this.IMAGES_IDLE; 
+            } else {
+                imagesToPlay = [this.IMAGES_IDLE[0]]; 
+            }
+        }
+        this.playAnimation(imagesToPlay);
+
+    }, 120); // <-- 120 Millisekunden (150 ms für langsamere Animation, 90 ms für schnellere Animation)
+}
 
     updateIdleTimer() {
         // Wenn der Charakter sich bewegt oder springt, setze den Timer zurück
@@ -211,56 +231,23 @@ class Character extends MovableObject {
         } 
     }
 
+    // in character.class.js
+
     draw(ctx) {
-        // 1. Zustand ermitteln (Priorität: Tod > Verletzt > Springen/Fallen > Gehen > Idle)
-        let imagesToPlay = this.IMAGES_IDLE; // Standard: Idle
-
-        if (this.isDead()) {
-            imagesToPlay = this.IMAGES_DEAD;
-             // Optional: Animation nur einmal abspielen oder letzten Frame halten
-            if (this.currentImage >= this.IMAGES_DEAD.length -1) {
-                this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length -1]];
-                super.draw(ctx);                                        // Letzten Frame zeichnen
-                return;                                                 // Keine weitere Animation
-            }
-        } else if (this.isHurt()) {
-            imagesToPlay = this.IMAGES_HURT;
-        } else if (!this.isOnGround) {                                  // Springen oder Fallen
-            imagesToPlay = this.IMAGES_JUMPING;
-             this.lastIdleTime = new Date().getTime();                  // Idle Timer zurücksetzen
-        } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'])) {     // Gehen
-            imagesToPlay = this.IMAGES_WALKING;
-             this.lastIdleTime = new Date().getTime();                  // Idle Timer zurücksetzen
-        } else {                                                        // Idle-Zustand
-             // Prüfen, ob lange genug idle für spezielle Animation
-             if (new Date().getTime() - this.lastIdleTime > this.idleDelay) {
-                 // Hier könnte eine längere, spezielle Idle-Animation kommen
-                 // imagesToPlay = this.IMAGES_LONG_IDLE; // Falls vorhanden
-                 imagesToPlay = this.IMAGES_IDLE; // Fürs Erste normale Idle-Loop
-             } else {
-                  imagesToPlay = [this.IMAGES_IDLE[0]]; // Nur erstes Idle-Bild zeigen, wenn nicht lange idle
-             }
-        }
-
-        // 2. Animation abspielen
-        this.playAnimation(imagesToPlay);
-
-        // 3. Bild zeichnen (ggf. gespiegelt)
-        ctx.save(); // Zustand speichern
+        // Siehst du? Die ganzen if/else-Abfragen von eben sind jetzt weg.
+        // draw() muss jetzt nur noch malen.
+    
+        ctx.save(); // Wir speichern die aktuelle Einstellung vom Stift
         if (this.facingDirection === 'left') {
-            // Bild spiegeln
-            ctx.translate(this.x + this.width, this.y);             // Gehe zum rechten Rand des Bildes
-            ctx.scale(-1, 1);                                       // Spiegele horizontal
-            ctx.drawImage(this.img, 0, 0, this.width, this.height); // Zeichne an gespiegelter Position
+            // Wenn der Charakter nach links schaut, spiegeln wir das Bild
+            ctx.translate(this.x + this.width, this.y);
+            ctx.scale(-1, 1);
+            ctx.drawImage(this.img, 0, 0, this.width, this.height);
         } else {
-            // Normal zeichnen
-            super.draw(ctx);                                        // Nutzt die geerbte draw-Methode mit this.img
+            // Sonst malen wir es ganz normal
+            super.draw(ctx);
         }
-        ctx.restore(); // Zustand wiederherstellen
-
-        // --- DEBUG: Kollisionsbox ---
-    //    ctx.strokeStyle = 'blue';
-    //    ctx.strokeRect(this.x, this.y, this.width, this.height);
+        ctx.restore(); // Wir stellen die alte Stift-Einstellung wieder her
     }
 
     /**
