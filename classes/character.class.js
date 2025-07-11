@@ -60,11 +60,11 @@ class Character extends MovableObject {
     // Zeitstempel für Idle-Animation
     lastIdleTime = 0;
     idleDelay = 3000; // Wartezeit in ms bevor Idle-Animation startet
-
     idleCounter = 0;
+    
     constructor() {
         super();
-        this.loadImage(this.IMAGES_IDLE[0]); // Lade das erste Idle-Bild
+        this.loadImage(this.IMAGES_IDLE[0]);        // Ladet das erste Idle-Bild
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
@@ -72,23 +72,15 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_THROW);
         this.applyGravity();
-        this.animate(); // Starte die Animation
-        this.lastIdleTime = new Date().getTime(); // Setze die Zeit für die Idle-Animation
+        this.animate();                             // Startet die Animation
+        this.lastIdleTime = new Date().getTime();   // Setzt die Zeit für die Idle-Animation
     }
 
     animate() {
-        // Ein Intervall, das prüft, ob sich der Zustand geändert hat und Animationen durchläuft
-        // Die Auswahl der richtigen Animation passiert in draw()
-        // Hier erhöhen wir nur den Frame-Zähler für flüssige Animationen
-        //setInterval(() => {
-             // Logik zum Weiterschalten der Animationsframes (passiert jetzt in playAnimation)
-             // this.currentImage++; // Wird durch playAnimation gesteuert
-        //}, 500); // Animationsgeschwindigkeit (Frames alle 500ms)
 
-        // Optional: Ein separates Intervall für Zustands-Checks, falls nicht im Game Loop
          setInterval(() => {
             this.updateIdleTimer();
-        }, 200);
+        }, 120);
     }
 
     updateIdleTimer() {
@@ -228,8 +220,8 @@ class Character extends MovableObject {
              // Optional: Animation nur einmal abspielen oder letzten Frame halten
             if (this.currentImage >= this.IMAGES_DEAD.length -1) {
                 this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length -1]];
-                super.draw(ctx); // Letzten Frame zeichnen
-                return; // Keine weitere Animation
+                super.draw(ctx);                                        // Letzten Frame zeichnen
+                return;                                                 // Keine weitere Animation
             }
         } else if (this.isHurt()) {
             imagesToPlay = this.IMAGES_HURT;
@@ -238,8 +230,8 @@ class Character extends MovableObject {
              this.lastIdleTime = new Date().getTime();                  // Idle Timer zurücksetzen
         } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'])) {     // Gehen
             imagesToPlay = this.IMAGES_WALKING;
-             this.lastIdleTime = new Date().getTime();                                                          // Idle Timer zurücksetzen
-        } else { // Idle-Zustand
+             this.lastIdleTime = new Date().getTime();                  // Idle Timer zurücksetzen
+        } else {                                                        // Idle-Zustand
              // Prüfen, ob lange genug idle für spezielle Animation
              if (new Date().getTime() - this.lastIdleTime > this.idleDelay) {
                  // Hier könnte eine längere, spezielle Idle-Animation kommen
@@ -276,9 +268,9 @@ class Character extends MovableObject {
      * @param {string[]} images - Array von Bildpfaden für die aktuelle Animation.
      */
     playAnimation(images) {
-        let i = this.currentImage % images.length;  // Index im Array berechnen
+        let i = this.currentImage % images.length;                  // Index im Array berechnen
         let path = images[i];
-        this.img = this.imageCache[path];           // Bild aus dem Cache holen und setzen
+        this.img = this.imageCache[path];                           // Bild aus dem Cache holen und setzen
         this.currentImage++;
     }
 }
