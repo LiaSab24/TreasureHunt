@@ -2,7 +2,7 @@ class Endboss extends MovableObject {
     constructor() {
         super();
         this.x = 2400;              // Startposition des Endbosses
-        this.y = 200;               // Startposition des Endbosses
+        this.y = 380;               // Startposition des Endbosses
         this.width = 200;           // Breite des Endbosses
         this.height = 200;          // Höhe des Endbosses
         this.speed = 0.5;           // Geschwindigkeit des Endbosses
