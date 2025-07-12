@@ -1,7 +1,7 @@
 class Endboss extends MovableObject {
     constructor(world) {            // endboss nimmt jetzt die Welt als Parameter 
         super();
-        this.world = this.world;    // Speichert die Welt, um später darauf zugreifen zu können
+        this.world = world;    // Speichert die Welt, um später darauf zugreifen zu können
         this.x = 2400;              // Startposition des Endbosses
         this.y = 200;               // Startposition des Endbosses
         this.width = 200;           // Breite des Endbosses
@@ -75,7 +75,7 @@ class Endboss extends MovableObject {
     moveUp() {
     this.y -= this.speed;
     }
-    
+
     moveDown() {
         this.y += this.speed;
     }
