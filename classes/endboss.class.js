@@ -55,6 +55,14 @@ class Endboss extends MovableObject {
                 } else {                                // Frage 2: Wo ist der Charakter?
                     this.moveRight();                   // Antwort: Der Charakter ist rechts von mir!
                 }
+                // NEUE Frage 2: Wo ist der Charakter oben oder unten?
+                if (this.world.character.y < this.y) {
+                    // Antwort: Der Charakter ist über mir! Jetpack an!
+                    this.moveUp();
+                } else {
+                    // Antwort: Der Charakter ist unter mir! Jetpack aus!
+                    this.moveDown();
+                }
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);        // Wenn er besiegt ist, zeige das "tot"-Bild
@@ -62,6 +70,14 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING);     // Sonst bewegt er sich
             }
         }, 200);                                             // Wechselt das Bild alle 200ms
+    }
+
+    moveUp() {
+    this.y -= this.speed;
+    }
+    
+    moveDown() {
+        this.y += this.speed;
     }
 
     moveLeft() {
