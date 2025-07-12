@@ -366,7 +366,7 @@ class World {
         this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed)
 
         // Entferne "tote" Gegner (die getroffen wurden)
-        this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss); // Behalte nur lebende Gegner
+        this.enemies = this.enemies.filter(enemy => !enemy.isDead || enemy instanceof Endboss); // Behalte nur lebende Gegner
     }
 
     draw() {
