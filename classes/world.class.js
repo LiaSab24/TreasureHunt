@@ -325,11 +325,18 @@ class World {
         });
 
         // 5. Kollision Charakter mit Endboss
-        if (this.endboss && this.character.isColliding(this.endboss) && !this.endboss.isDead) {
+        if (this.endboss && this.character.isColliding(this.endboss) && !this.endboss.isDead()) {
             // Endboss muss zuerst besiegt werden, bevor die Truhe erreichbar ist
-            if (!this.character.isHurt()) {
-                this.character.hit();
-                this.updateStatusBars();
+            // Prüfen, ob der Charakter von OBEN auf den Boss springt
+            if (!this.character.isOnGround && this.character.speedY < 0) {
+                this.endboss.hit();         // Der Boss kriegt Schaden
+                this.character.bounce();    // Der Charakter springt ab wie ein Flummi
+
+            } else {
+                if (!this.character.isHurt()) {
+                    this.character.hit();
+                    this.updateStatusBars();
+                }
             }
         }
 
