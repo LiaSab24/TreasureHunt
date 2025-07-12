@@ -56,7 +56,7 @@ class World {
         this.coins = [];
         this.stones = [];
         this.enemies = [];
-        this.endboss = new Endboss();
+        this.endboss = new Endboss(this); // Endboss wird hier initialisiert
         this.throwableObjects = [];
     }
 

@@ -1,6 +1,7 @@
 class Endboss extends MovableObject {
-    constructor() {
+    constructor(world) {            // endboss nimmt jetzt die Welt als Parameter 
         super();
+        this.world = this.world;    // Speichert die Welt, um später darauf zugreifen zu können
         this.x = 2400;              // Startposition des Endbosses
         this.y = 200;               // Startposition des Endbosses
         this.width = 200;           // Breite des Endbosses
@@ -48,12 +49,27 @@ class Endboss extends MovableObject {
      */
     animate() {
         setInterval(() => {
+            if (!this.isDead()) { // Nur bewegen, wenn er noch lebt
+                if (this.world.character.x < this.x) {  // Frage 1: Wo ist der Charakter?
+                    this.moveLeft();                    // Antwort: Der Charakter ist links von mir!
+                } else {                                // Frage 2: Wo ist der Charakter?
+                    this.moveRight();                   // Antwort: Der Charakter ist rechts von mir!
+                }
+            }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);        // Wenn er besiegt ist, zeige das "tot"-Bild
             } else {
                 this.playAnimation(this.IMAGES_WALKING);     // Sonst bewegt er sich
             }
         }, 200);                                             // Wechselt das Bild alle 200ms
+    }
+
+    moveLeft() {
+        this.x -= this.speed;
+    }
+
+    moveRight() {
+        this.x += this.speed;
     }
 
     /**
