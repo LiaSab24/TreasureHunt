@@ -6,7 +6,8 @@ class Endboss extends MovableObject {
         this.width = 200;           // Breite des Endbosses
         this.height = 200;          // Höhe des Endbosses
         this.speed = 0.5;           // Geschwindigkeit des Endbosses
-        this.health = 1;            // Lebenspunkte des Endbosses
+        this.health = 3;            // Lebenspunkte des Endbosses
+        this.isActuallyDead = false; // Status, ob der Endboss tot ist
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
             'images/enemies/endboss/cobra-snake.png'
@@ -21,17 +22,37 @@ class Endboss extends MovableObject {
     }
 
     /**
+     * Prüft, ob der Endboss keine Lebenspunkte mehr hat.
+     */
+    isDead() {
+        return this.isActuallyDead;
+    }
+
+    /**
+     * Wird aufgerufen, wenn der Endboss getroffen wird.
+     */
+    hit() {
+        this.health -= 1;               // Ein Leben abziehen
+        console.log('Endboss getroffen! Leben:', this.health);
+
+        if (this.health <= 0) {
+            this.isActuallyDead = true; // Er ist jetzt besiegt!
+        }
+    }
+
+
+    /**
      * Startet ein Intervall, um die Animation des Endbosses zu steuern.
      * @memberof Endboss
      */
     animate() {
         setInterval(() => {
-            // hier soll LOGIK für weitere Zustände rein
-            // (z.B. kriechen, angreifen, sterben)
-            
-            this.playAnimation(this.IMAGES_WALKING);
-
-        }, 200); // Wechselt das Bild alle 200ms
+            if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD);        // Wenn er besiegt ist, zeige das "tot"-Bild
+            } else {
+                this.playAnimation(this.IMAGES_WALKING);     // Sonst bewegt er sich
+            }
+        }, 200);                                             // Wechselt das Bild alle 200ms
     }
 
     /**
