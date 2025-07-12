@@ -19,6 +19,8 @@ Begleitet den Helden auf seiner Schatzsuche. Folgt den Münzen und sammelt Stein
 -   **Logik:** Objektorientiertes JavaScript (ES6+ Klassen)
 -   **Darstellung:** HTML5 `<canvas>` für eine performante Grafik-Engine.
 -   **Struktur & Stil:** Klassisches HTML5 und CSS3.
+-   **Animation** Erstellung einzelner Grafiken mit Adobe Illustrator, Adobe Photoshop, `canva.com`
+-   **Bildmaterialen** `pixabay.com`, freeLizenzen
 
 ## Installation & Setup
 Da es sich um eine reine Webanwendung handelt, ist keine komplexe Installation nötig.
@@ -48,8 +50,8 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **Springen:** `⬆️` Pfeiltaste
 -   **Stein werfen:** `D`-Taste
   
-## Gameplay-Steuerung Mouse
--   **Laufen:** Buttons: ` nach Links ` , `nach Rechts` 
+## Gameplay-Steuerung Mouse 
+-   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
 -   **Springen:** Button: `Springen`
 -   **Stein werfen:** Button: `Werfen`
 
