@@ -421,14 +421,14 @@ class World {
         });
     }
 
-     // << NEU: Methode zum Zeichnen des Pause-Overlays >>
+     // Methode zum Zeichnen des Pause-Overlays 
      drawPauseOverlay() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          // Halbtransparentes Grau
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);     // Über den ganzen Canvas
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);       // Über den ganzen Canvas
 
         this.ctx.font = "48px 'Arial'";
         this.ctx.fillStyle = "white";
-        this.ctx.textAlign = "center"; // Text zentrieren
+        this.ctx.textAlign = "center"; 
         this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
 
         this.ctx.font = "24px 'Arial'";
