@@ -121,7 +121,7 @@ class World {
      */
     initEndboss() {
         this.endboss.x = this.LEVEL_END - 100; // 200px vor der Truhe
-        this.endboss.y = 200;
+        this.endboss.y = 250;
         this.enemies.push(this.endboss);
     }
 
