@@ -15,7 +15,7 @@ class Endboss extends MovableObject {
             'images/enemies/endboss/cobra-snake-move2.png'
         ];
         this.IMAGES_DEAD = [
-            'images/enemies/endboss/cobra-snake.png'
+            'images/enemies/endboss/cobra-snake-dead.png'
         ];
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
