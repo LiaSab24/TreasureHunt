@@ -9,6 +9,7 @@ class Endboss extends MovableObject {
         this.health = 3;            // Lebenspunkte des Endbosses
         this.isActuallyDead = false; // Status, ob der Endboss tot ist
         this.IMAGES_WALKING = [
+            'images/enemies/endboss/cobra-snake.png',
             'images/enemies/endboss/cobra-snake-move1.png',
             'images/enemies/endboss/cobra-snake-move2.png'
         ];
