@@ -192,6 +192,13 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Lässt den Charakter nach einem erfolgreichen Sprung auf einen Gegner abprallen.
+     */
+    bounce() {
+        this.speedY = 15; // Gibt ihm einen kleinen Schubs nach oben
+    }
+
    /**
      * Wendet Gravitation auf den Charakter an, wenn er sich in der Luft befindet.
      * Aktualisiert die vertikale Geschwindigkeit und Position.
