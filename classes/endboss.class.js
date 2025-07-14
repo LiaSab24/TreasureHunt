@@ -6,13 +6,13 @@ class Endboss extends MovableObject {
         this.y = 200;               // Startposition des Endbosses
         this.width = 200;           // Breite des Endbosses
         this.height = 200;          // Höhe des Endbosses
-        this.speed = 4;             // Geschwindigkeit des Endbosses
+        this.speed = 2;             // Geschwindigkeit des Endbosses
         this.health = 5;            // Lebenspunkte des Endbosses
         this.maxHealth = 5;         // Maximale Lebenspunkte des Endbosses
         this.isActuallyDead = false; // Status, ob der Endboss tot ist
-        this.isPaused = false;      // Status, ob der Endboss pausiert ist
-        this.isStalking = true;     // "Grünes Licht" zum Bewegen
-        this.stalkingPause = 1500;  // 1.5 Sekunden Pause ("Rotes Licht")
+        this.canMove = false;      // Status, ob der Endboss pausiert ist
+       // this.isStalking = true;     // "Grünes Licht" zum Bewegen
+       // this.stalkingPause = 1500;  // 1.5 Sekunden Pause ("Rotes Licht")
 
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
@@ -52,45 +52,45 @@ class Endboss extends MovableObject {
      * @memberof Endboss
      */
     animate() {
+        // --- TEIL 1: BEWEGUNG & ANIMATION (läuft 60 Mal pro Sekunde für flüssige Bilder) ---
         setInterval(() => {
-            if (!this.isDead() && this.isPaused) {    // Nur bewegen, wenn er noch lebt           
-                const tolerance = 5;                    // Die neue "Komfort-Zone"
-                const distanceX = this.x - this.world.character.x;
-            //    const distanceY = this.y - this.world.character.y;
-                
-                if (distanceX > tolerance) {
+            if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD); // Zeige das "tot"-Bild
+                return; // Wenn tot, mache nichts anderes mehr
+            }
+
+            // Prüfe, ob der Boss sich bewegen darf UND ob der Charakter in der Nähe ist.
+            const distanceToChar = this.x - this.world.character.x;
+            const isCharNear = Math.abs(distanceToChar) < 800; // Boss "erwacht", wenn du in die Nähe kommst
+
+            if (this.canMove && isCharNear) {
+                // Wenn der Schalter auf "true" steht, bewege den Boss ein kleines Stück.
+                if (distanceToChar > 5) { // Die 5 ist eine kleine Komfortzone, damit er nicht zittert
                     this.moveLeft();
-                } else if (distanceX < -tolerance) {
+                } else if (distanceToChar < -5) {
                     this.moveRight();
                 }
+            }
+            
+            // Die Lauf-Animation wird immer abgespielt, wenn er nicht tot ist.
+            this.playAnimation(this.IMAGES_WALKING);
 
-            //    if (distanceY > tolerance) {
-            //        this.moveUp();
-            //    } else if (distanceY < -tolerance) {
-            //        this.moveDown();
-            //    }
-            //    this.isStalking = false;
-            //    setTimeout(() => {
-            //        this.isStalking = true; // Nach der Pause: Wieder "Grünes Licht"!
-            //    }, this.stalkingPause);
-            }
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);        // Wenn er besiegt ist, zeige das "tot"-Bild
-            } else {
-                this.playAnimation(this.IMAGES_WALKING);     // Sonst bewegt er sich
-            }
-        }, 1000 / 60);                                       // flüssige Bewegung mit 60 FPS
-        // --- Gehirn 2: Der Pausen-Wecker (klingelt nur alle paar Sekunden) ---
+        }, 1000 / 60);
+
+        // --- TEIL 2: DER "ROTES LICHT, GRÜNES LICHT"-TIMER ---
+        // Dieser Teil schaltet nur den "canMove"-Schalter an und aus.
         setInterval(() => {
             if (!this.isDead()) {
-                this.isPaused = true; // Pause starten!
-                console.log("Endboss macht eine Pause.");
+                console.log("Endboss startet seinen Angriff!");
+                this.canMove = true; // Grünes Licht: Los geht's!
+
+                // Wir setzen einen Wecker, um ihn nach kurzer Zeit wieder zu stoppen.
                 setTimeout(() => {
-                    this.isPaused = false; // Pause beenden!
-                    console.log("Endboss schleicht weiter.");
-                }, 1500); // Dauer der Pause: 1.5 Sekunden
+                    console.log("Endboss macht eine Pause.");
+                    this.canMove = false; // Rotes Licht: Stopp!
+                }, 1500); // So lange dauert der Angriff: 1,5 Sekunden
             }
-        }, 4000); // Alle 4 Sekunden wird eine neue Pause ausgelöst.
+        }, 4000); // Der ganze Zyklus (Angriff + Pause) wiederholt sich alle 4 Sekunden.
     }
 
     moveUp() {
