@@ -101,6 +101,19 @@ class Endboss extends MovableObject {
         }
     }
     
+     // HIER IST DIE FEHLENDE FUNKTION:
+    /**
+     * Spielt eine Animation ab, indem sie durch ein Array von Bildpfaden iteriert.
+     * @param {string[]} images - Das Array der Bilder, die animiert werden sollen.
+     */
+    playAnimation(images) {
+        // Modulo (%) sorgt dafür, dass der Index immer im gültigen Bereich des Arrays bleibt
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path]; // Setzt das zu zeichnende Bild aus dem Cache
+        this.currentImage++;
+    }
+
     /**
      * steuert den Ablauf der Angriffs-Phasen
      */
