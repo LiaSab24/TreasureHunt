@@ -56,13 +56,9 @@ class MovableObject {
 
      // Einfache Bewegungsfunktionen (Beispiele)
      moveRight() {
-        console.log('Moving right'); // Für Debugging
-        // Wird später durch Spiel-Logik (z.B. world.character.x += world.character.speed) gesteuert
      }
 
      moveLeft() {
-        console.log('Moving left'); // Für Debugging
-        // Wird später durch Spiel-Logik gesteuert
      }
 
      // Grundlegende Kollisionserkennung (Rechteck-Kollision)
