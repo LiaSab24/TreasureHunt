@@ -1,18 +1,22 @@
 class Endboss extends MovableObject {
-    constructor(world) {            // endboss nimmt jetzt die Welt als Parameter 
+    constructor(world) {
         super();
-        this.world = world;         // Speichert die Welt, um später darauf zugreifen zu können
-        this.x = 2400;              // Startposition des Endbosses
-        this.y = 200;               // Startposition des Endbosses
-        this.width = 200;           // Breite des Endbosses
-        this.height = 200;          // Höhe des Endbosses
-        this.speed = 2;             // Geschwindigkeit des Endbosses
-        this.health = 5;            // Lebenspunkte des Endbosses
-        this.maxHealth = 5;         // Maximale Lebenspunkte des Endbosses
-        this.isActuallyDead = false; // Status, ob der Endboss tot ist
-        this.canMove = false;      // Status, ob der Endboss pausiert ist
-       // this.isStalking = true;     // "Grünes Licht" zum Bewegen
-       // this.stalkingPause = 1500;  // 1.5 Sekunden Pause ("Rotes Licht")
+        this.world = world;
+        this.x = 2400;
+        this.y = 200;
+        this.width = 200;
+        this.height = 200;
+        
+        // verschiedene Geschwindigkeiten für verschiedene Aktionen
+        this.stalkingSpeed = 0.75; // Langsames Schleichen
+        this.lungeSpeed = 9;      // Blitzschneller Angriff
+
+        this.health = 5;
+        this.maxHealth = 5;
+        this.isActuallyDead = false;
+
+        // der Zustands-Schalter, der das Verhalten steuert
+        this.state = 'stalking'; // endBoss beginnt im Schleich-Modus
 
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
@@ -24,101 +28,109 @@ class Endboss extends MovableObject {
         ];
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
-        this.loadImage(this.IMAGES_WALKING[0]); 
-        this.animate();             
+        this.loadImage(this.IMAGES_WALKING[0]);
+        this.animate();
     }
 
-    /**
-     * Prüft, ob der Endboss keine Lebenspunkte mehr hat.
-     */
     isDead() {
         return this.isActuallyDead;
     }
 
-    /**
-     * Wird aufgerufen, wenn der Endboss getroffen wird.
-     */
     hit() {
-        this.health -= 1;               // Ein Leben abziehen
+        this.health -= 1;
+        // Beim ersten Treffer aus dem Lauer-Modus erwachen lassen
+        if(this.state === 'pausing') {
+            this.state = 'lunging';
+        }
         console.log('Endboss getroffen! Leben:', this.health);
 
         if (this.health <= 0) {
-            this.isActuallyDead = true; // Er ist jetzt besiegt!
+            this.isActuallyDead = true;
         }
     }
-
+    
     /**
-     * Startet ein Intervall, um die Animation des Endbosses zu steuern.
-     * @memberof Endboss
+     * neuer Ansatz für animate() LOGIK mit unterschiedlichen Angriffsphasen
+     * 
+     * steuert die Bewegungen und Animationen des Endbosses
+     * prüft den Zustand des Endbosses und wendet die passende Geschwindigkeit an
+     * Zustand des Endbosses wird regelmäßig aktualisiert, um das Verhalten zu steuern
+     * 
+     * @returns {void}
      */
     animate() {
-        // --- TEIL 1: BEWEGUNG & ANIMATION (läuft 60 Mal pro Sekunde für flüssige Bilder) ---
+        // --- Die BEWEGUNG (60x pro Sekunde) ---
+        // prüfen in welchem Zustand die Schlange ist und die passende Geschwindigkeit anwenden
         setInterval(() => {
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD); // Zeige das "tot"-Bild
-                return; // Wenn tot, mache nichts anderes mehr
-            }
-
-            // Prüfe, ob der Boss sich bewegen darf UND ob der Charakter in der Nähe ist.
-            const distanceToChar = this.x - this.world.character.x;
-            const isCharNear = Math.abs(distanceToChar) < 800; // Boss "erwacht", wenn du in die Nähe kommst
-
-            if (this.canMove && isCharNear) {
-                // Wenn der Schalter auf "true" steht, bewege den Boss ein kleines Stück.
-                if (distanceToChar > 5) { // Die 5 ist eine kleine Komfortzone, damit er nicht zittert
-                    this.moveLeft();
-                } else if (distanceToChar < -5) {
-                    this.moveRight();
-                }
+            if (this.isDead() || this.world.isPaused) {
+                return; // Bei Tod oder Spiel-Pause nichts tun
             }
             
-            // Die Lauf-Animation wird immer abgespielt, wenn er nicht tot ist.
-            this.playAnimation(this.IMAGES_WALKING);
+            // Nur bewegen, wenn der Charakter in der Nähe ist
+            const distanceToChar = this.x - this.world.character.x;
+            if (Math.abs(distanceToChar) < 800) {
+                
+                if (this.state === 'stalking') {
+                    this.speed = this.stalkingSpeed;
+                    this.moveTowardsCharacter();
+                } else if (this.state === 'lunging') {
+                    this.speed = this.lungeSpeed;
+                    this.moveTowardsCharacter();
+                }
+                // Wenn state 'pausing' ist, passiert hier nichts -> die Schlange steht still.
+            }
+            
+            this.playAnimation(this.isDead() ? this.IMAGES_DEAD : this.IMAGES_WALKING);
 
         }, 1000 / 60);
 
-        // --- TEIL 2: DER "ROTES LICHT, GRÜNES LICHT"-TIMER ---
-        // Dieser Teil schaltet nur den "canMove"-Schalter an und aus.
-        setInterval(() => {
-            if (!this.isDead()) {
-                console.log("Endboss startet seinen Angriff!");
-                this.canMove = true; // Grünes Licht: Los geht's!
-
-                // Wir setzen einen Wecker, um ihn nach kurzer Zeit wieder zu stoppen.
-                setTimeout(() => {
-                    console.log("Endboss macht eine Pause.");
-                    this.canMove = false; // Rotes Licht: Stopp!
-                }, 1500); // So lange dauert der Angriff: 1,5 Sekunden
-            }
-        }, 4000); // Der ganze Zyklus (Angriff + Pause) wiederholt sich alle 4 Sekunden.
-    }
-
-    moveUp() {
-    this.y -= this.speed;
-    }
-
-    moveDown() {
-        this.y += this.speed;
-    }
-
-    moveLeft() {
-        this.x -= this.speed;
-    }
-
-    moveRight() {
-        this.x += this.speed;
+        // --- ZUSTANDS-MANAGER (das Taktgefühl) ---
+        // steuert den Rhythmus der Schlange, indem sie nach bestimmten Zeiten den Zustand ändert
+        this.updateBrain();
     }
 
     /**
-     * Spielt eine Animation ab, indem sie durch ein Array von Bildpfaden iteriert.
-     * @param {string[]} images - Das Array der Bilder, die animiert werden sollen.
-     * @memberof MovableObject
+     * HELFER-FUNKTION Bewegt den endBoss in Richtung des Charakters
      */
-    playAnimation(images) {
-        // Modulo (%) sorgt dafür, dass der Index immer im gültigen Bereich des Arrays bleibt
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path]; // Setzt das zu zeichnende Bild aus dem Cache
-        this.currentImage++;
+    moveTowardsCharacter() {
+        const distanceToChar = this.x - this.world.character.x;
+        if (distanceToChar > 5) {
+            this.moveLeft();
+        } else if (distanceToChar < -5) {
+            this.moveRight();
+        }
+    }
+    
+    /**
+     * steuert den Ablauf der Angriffs-Phasen
+     */
+    updateBrain() {
+        if (this.isDead() || this.world.isPaused) {
+            // Wenn das Spiel pausiert, wird es in 1 Sekunde erneut versucht, das Gehirn zu aktualisieren
+            setTimeout(() => this.updateBrain(), 1000);
+            return;
+        }
+
+        if (this.state === 'stalking') {
+            // endBoss schleicht für 3 Sekunden, dann...
+            setTimeout(() => {
+                this.state = 'pausing'; // ...geh/ er in den Lauer-Modus
+                this.updateBrain();     // starte den nächsten Gehirn-Zyklus
+            }, 3000);
+
+        } else if (this.state === 'pausing') {
+            // Lauert für 1.5 Sekunden, dann...
+            setTimeout(() => {
+                this.state = 'lunging'; // ...schnappe zu!
+                this.updateBrain();
+            }, 1500);
+
+        } else if (this.state === 'lunging') {
+            // Schnappt für eine halbe Sekunde (0.5s) zu, dann...
+            setTimeout(() => {
+                this.state = 'stalking'; // ...beginne wieder mit dem Schleichen!
+                this.updateBrain();
+            }, 500);
+        }
     }
 }
