@@ -166,7 +166,7 @@ class World {
      * Nutzt eine Konfigurations-Map, um den Code sauber und erweiterbar zu halten.
      */
     initButtonControls() {
-        // Konfiguration: Map mit Button-IDs zu ihren Steuerungs-Aktionen.
+        // ButtonID-Konfiguration zu den SteuerungsAktionen.
         const controlButtonMap = {
             'leftButton': 'TOUCH_LEFT',
             'rightButton': 'TOUCH_RIGHT',
