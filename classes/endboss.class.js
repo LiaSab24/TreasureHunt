@@ -42,7 +42,6 @@ class Endboss extends MovableObject {
         }
     }
 
-
     /**
      * Startet ein Intervall, um die Animation des Endbosses zu steuern.
      * @memberof Endboss
