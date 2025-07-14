@@ -6,9 +6,11 @@ class Endboss extends MovableObject {
         this.y = 200;               // Startposition des Endbosses
         this.width = 200;           // Breite des Endbosses
         this.height = 200;          // Höhe des Endbosses
-        this.speed = 1;           // Geschwindigkeit des Endbosses
-        this.health = 3;            // Lebenspunkte des Endbosses
+        this.speed = 4;             // Geschwindigkeit des Endbosses
+        this.health = 5;            // Lebenspunkte des Endbosses
+        this.maxHealth = 5;         // Maximale Lebenspunkte des Endbosses
         this.isActuallyDead = false; // Status, ob der Endboss tot ist
+        this.isPaused = false;      // Status, ob der Endboss pausiert ist
         this.isStalking = true;     // "Grünes Licht" zum Bewegen
         this.stalkingPause = 1500;  // 1.5 Sekunden Pause ("Rotes Licht")
 
@@ -51,37 +53,44 @@ class Endboss extends MovableObject {
      */
     animate() {
         setInterval(() => {
-            if (!this.isDead() && this.isStalking) {    // Nur bewegen, wenn er noch lebt
-                
+            if (!this.isDead() && this.isPaused) {    // Nur bewegen, wenn er noch lebt           
                 const tolerance = 5;                    // Die neue "Komfort-Zone"
                 const distanceX = this.x - this.world.character.x;
-                const distanceY = this.y - this.world.character.y;
+            //    const distanceY = this.y - this.world.character.y;
                 
-                // Bewegung nur, wenn der Abstand größer als die Komfort-Zone ist
                 if (distanceX > tolerance) {
                     this.moveLeft();
                 } else if (distanceX < -tolerance) {
                     this.moveRight();
                 }
 
-                if (distanceY > tolerance) {
-                    this.moveUp();
-                } else if (distanceY < -tolerance) {
-                    this.moveDown();
-                }
-                
-                // Nach der Bewegung: "Rotes Licht" einschalten!
-                this.isStalking = false;
-                setTimeout(() => {
-                    this.isStalking = true; // Nach der Pause: Wieder "Grünes Licht"!
-                }, this.stalkingPause);
+            //    if (distanceY > tolerance) {
+            //        this.moveUp();
+            //    } else if (distanceY < -tolerance) {
+            //        this.moveDown();
+            //    }
+            //    this.isStalking = false;
+            //    setTimeout(() => {
+            //        this.isStalking = true; // Nach der Pause: Wieder "Grünes Licht"!
+            //    }, this.stalkingPause);
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);        // Wenn er besiegt ist, zeige das "tot"-Bild
             } else {
                 this.playAnimation(this.IMAGES_WALKING);     // Sonst bewegt er sich
             }
-        }, 200);                                             // Wechselt das Bild alle 200ms
+        }, 1000 / 60);                                       // flüssige Bewegung mit 60 FPS
+        // --- Gehirn 2: Der Pausen-Wecker (klingelt nur alle paar Sekunden) ---
+        setInterval(() => {
+            if (!this.isDead()) {
+                this.isPaused = true; // Pause starten!
+                console.log("Endboss macht eine Pause.");
+                setTimeout(() => {
+                    this.isPaused = false; // Pause beenden!
+                    console.log("Endboss schleicht weiter.");
+                }, 1500); // Dauer der Pause: 1.5 Sekunden
+            }
+        }, 4000); // Alle 4 Sekunden wird eine neue Pause ausgelöst.
     }
 
     moveUp() {

@@ -443,18 +443,26 @@ class World {
      * Wird nur angezeigt, wenn der Charakter in der Nähe ist.
      */
     drawEndbossStatusBar() {
-        if (!this.endboss) return; // Nur ausführen, wenn es einen Endboss gibt
+        if (!this.endboss) return;              // Nur ausführen, wenn es einen Endboss gibt
 
         const distance = this.endboss.x - this.character.x;
         const statusBar = document.getElementById('endbossStatus');
         const healthBar = document.getElementById('endbossHealthBar');
 
-        // Zeige die Leiste nur an, wenn der Boss in der Nähe und am Leben ist
+        // Zeigt die Leiste nur an, wenn der Boss in der Nähe und am Leben ist
         if (distance < 800 && !this.endboss.isDead()) {
             statusBar.style.display = 'flex';
             // Berechne, wie viel Prozent Leben der Boss noch hat
-            const healthPercentage = (this.endboss.health / 5) * 100; // 5 ist die maximale Gesundheit
+            const healthPercentage = (this.endboss.health / this.endboss.maxHealth) * 100; // 5 ist die maximale Gesundheit
             healthBar.style.width = healthPercentage + '%';
+
+            // Wenn die Leben niedrig sind, färbt sich der Balken rot!
+            if (healthPercentage < 40) {
+                healthBar.style.backgroundColor = 'red';
+            } else {
+                healthBar.style.backgroundColor = 'green';
+            }
+
         } else {
             statusBar.style.display = 'none'; // Sonst verstecken
         }
