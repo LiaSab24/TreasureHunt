@@ -236,32 +236,23 @@ class Character extends MovableObject {
             // Neues Wurfobjekt erstellen
             let stone = new ThrowableObject(startX, startY, this.facingDirection, this.world); 
             // Wurfobjekt zur Welt hinzufügen (Methode muss in World existieren)
-            this.world.addThrowableObject(stone);
-
-            // Statusleiste aktualisieren (wird jetzt von World.checkCollisions gemacht,
-            // aber hier könnten wir es auch direkt machen)
-             this.world.updateStatusBars(); // Sicherstellen, dass Steinabzug angezeigt wird
+            this.world.addThrowableObject(stone)
+            this.world.updateStatusBars(); // Sicherstellen, dass Steinabzug angezeigt wird
 
         } 
     }
 
-    // in character.class.js
-
     draw(ctx) {
-        // Siehst du? Die ganzen if/else-Abfragen von eben sind jetzt weg.
-        // draw() muss jetzt nur noch malen.
-
-        ctx.save(); // Wir speichern die aktuelle Einstellung vom Stift
+        ctx.save();                             // Wir speichern die aktuelle Einstellung vom Stift
         if (this.facingDirection === 'left') {
-            // Wenn der Charakter nach links schaut, spiegeln wir das Bild
+            // Wenn der Charakter nach links schaut, wrid das Bild gespiegelt
             ctx.translate(this.x + this.width, this.y);
             ctx.scale(-1, 1);
             ctx.drawImage(this.img, 0, 0, this.width, this.height);
         } else {
-            // Sonst malen wir es ganz normal
             super.draw(ctx);
         }
-        ctx.restore(); // Wir stellen die alte Stift-Einstellung wieder her
+        ctx.restore(); 
     }
 
     /**

@@ -1,14 +1,17 @@
 class Endboss extends MovableObject {
     constructor(world) {            // endboss nimmt jetzt die Welt als Parameter 
         super();
-        this.world = world;    // Speichert die Welt, um später darauf zugreifen zu können
+        this.world = world;         // Speichert die Welt, um später darauf zugreifen zu können
         this.x = 2400;              // Startposition des Endbosses
         this.y = 200;               // Startposition des Endbosses
         this.width = 200;           // Breite des Endbosses
         this.height = 200;          // Höhe des Endbosses
-        this.speed = 0.5;           // Geschwindigkeit des Endbosses
+        this.speed = 1;           // Geschwindigkeit des Endbosses
         this.health = 3;            // Lebenspunkte des Endbosses
         this.isActuallyDead = false; // Status, ob der Endboss tot ist
+        this.isStalking = true;     // "Grünes Licht" zum Bewegen
+        this.stalkingPause = 1500;  // 1.5 Sekunden Pause ("Rotes Licht")
+
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
             'images/enemies/endboss/cobra-snake-move1.png',
@@ -20,7 +23,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImage(this.IMAGES_WALKING[0]); 
-        this.animate();             // Starte die Animations-Loop
+        this.animate();             
     }
 
     /**
@@ -48,20 +51,30 @@ class Endboss extends MovableObject {
      */
     animate() {
         setInterval(() => {
-            if (!this.isDead()) { // Nur bewegen, wenn er noch lebt
-                if (this.world.character.x < this.x) {  // Frage 1: Wo ist der Charakter?
-                    this.moveLeft();                    // Antwort: Der Charakter ist links von mir!
-                } else {                                // Frage 2: Wo ist der Charakter?
-                    this.moveRight();                   // Antwort: Der Charakter ist rechts von mir!
+            if (!this.isDead() && this.isStalking) {    // Nur bewegen, wenn er noch lebt
+                
+                const tolerance = 5;                    // Die neue "Komfort-Zone"
+                const distanceX = this.x - this.world.character.x;
+                const distanceY = this.y - this.world.character.y;
+                
+                // Bewegung nur, wenn der Abstand größer als die Komfort-Zone ist
+                if (distanceX > tolerance) {
+                    this.moveLeft();
+                } else if (distanceX < -tolerance) {
+                    this.moveRight();
                 }
-                // NEUE Frage 2: Wo ist der Charakter oben oder unten?
-                if (this.world.character.y < this.y) {
-                    // Antwort: Der Charakter ist über mir! Jetpack an!
+
+                if (distanceY > tolerance) {
                     this.moveUp();
-                } else {
-                    // Antwort: Der Charakter ist unter mir! Jetpack aus!
+                } else if (distanceY < -tolerance) {
                     this.moveDown();
                 }
+                
+                // Nach der Bewegung: "Rotes Licht" einschalten!
+                this.isStalking = false;
+                setTimeout(() => {
+                    this.isStalking = true; // Nach der Pause: Wieder "Grünes Licht"!
+                }, this.stalkingPause);
             }
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);        // Wenn er besiegt ist, zeige das "tot"-Bild

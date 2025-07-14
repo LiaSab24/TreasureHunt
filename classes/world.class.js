@@ -409,6 +409,9 @@ class World {
         }
         // --- 4. Kamera-Translation zurücksetzen ---
         this.ctx.translate(-this.camera_x, 0);
+
+        // --- 5. Statusleiste ENDBOSS zeichnen ---
+        this.drawEndbossStatusBar();
     }
 
      /**
@@ -433,6 +436,28 @@ class World {
 
         this.ctx.font = "24px 'Arial'";
         this.ctx.fillText("Drücke 'P' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+    }
+
+    /**
+     * Zeichnet und aktualisiert die Statusanzeige des Endbosses.
+     * Wird nur angezeigt, wenn der Charakter in der Nähe ist.
+     */
+    drawEndbossStatusBar() {
+        if (!this.endboss) return; // Nur ausführen, wenn es einen Endboss gibt
+
+        const distance = this.endboss.x - this.character.x;
+        const statusBar = document.getElementById('endbossStatus');
+        const healthBar = document.getElementById('endbossHealthBar');
+
+        // Zeige die Leiste nur an, wenn der Boss in der Nähe und am Leben ist
+        if (distance < 800 && !this.endboss.isDead()) {
+            statusBar.style.display = 'flex';
+            // Berechne, wie viel Prozent Leben der Boss noch hat
+            const healthPercentage = (this.endboss.health / 5) * 100; // 5 ist die maximale Gesundheit
+            healthBar.style.width = healthPercentage + '%';
+        } else {
+            statusBar.style.display = 'none'; // Sonst verstecken
+        }
     }
 
      /**
