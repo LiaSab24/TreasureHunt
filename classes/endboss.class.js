@@ -7,13 +7,13 @@ class Endboss extends MovableObject {
         this.width = 200;
         this.height = 200;
         
-        // verschiedene Geschwindigkeiten für verschiedene Aktionen
         this.Speed = 1.5; // Grundgeschwindigkeit
 
         this.health = 5;
         this.maxHealth = 5;
         this.isActuallyDead = false;
-        this.actionColldown = false; // 'Schalter' für die Angriffs-Animation'
+        this.actionColldown = false; 
+        this.hasDescended = false; // Flag, ob sich die Schlange schon 'abwärts' zum character bewegt hat
 
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
@@ -41,7 +41,6 @@ class Endboss extends MovableObject {
         this.health -= 1;                   // Reduziert Leben des Endbosses um 1  
         if (this.health <= 0) {
             this.isActuallyDead = true;
-            this.state = 'dead';            // Zustand auf 'tot' setzen
         }
     }
     
@@ -78,7 +77,7 @@ class Endboss extends MovableObject {
             if (!this.actionCooldown) {
                 this.decideNextAction();
             }
-        }, 200);    // 1000 / 60
+        }, 200);  
     }
     
     /**
@@ -93,12 +92,18 @@ class Endboss extends MovableObject {
 
         // Nur aktiv werden, wenn der Charakter in der Nähe ist.
         if (distanceToChar < 850) {
+            // Y-Achsen-Bewegung beim ersten Mal
+            if (!this.hasDescended) {
+                this.descendToGround();
+                this.hasDescended = true;
+            }
+
             // ZUFALL: Zu 70% greift sie an, zu 30% pausiert sie. Das macht sie unberechenbar.
             if (Math.random() > 0.3) {
                 // ANGRIFFS-AKTION
                 console.log("Schlange greift an!");
                 this.speed = 4; // Schneller für den Angriff
-                this.moveTowardsCharacterForDuration(800); // Bewegt sich für 0.8 Sekunden
+                this.moveTowardsCharacterForDuration(400); // Bewegt sich für 0.4 Sekunden
                 
                 // Setzt den Cooldown für die nächste Aktion.
                 setTimeout(() => { this.actionCooldown = false; }, 1500); // 1.5s Pause nach dem Angriff
@@ -116,7 +121,7 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * NEUE HELFER-FUNKTION: Bewegt die Schlange für eine bestimmte Dauer.
+     * HELFER-FUNKTION: Bewegt die Schlange für eine bestimmte Dauer.
      * @param {number} duration - Die Dauer der Bewegung in Millisekunden.
      */
     moveTowardsCharacterForDuration(duration) {
@@ -134,6 +139,19 @@ class Endboss extends MovableObject {
         setTimeout(() => {
             clearInterval(moveInterval);
         }, duration);
+    }
+
+    // Bewegt die Schlange langsam nach unten
+    descendToGround() {
+        const targetY = 220; // Die Zielhöhe
+        const descendInterval = setInterval(() => {
+            if (this.y < targetY) {
+                this.y += 0.5; // Geschwindigkeit des Heruntergleitens
+            } else {
+                this.y = targetY;
+                clearInterval(descendInterval);
+            }
+        }, 1000 / 60);
     }
     
     /**
