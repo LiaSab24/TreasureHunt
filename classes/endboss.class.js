@@ -17,6 +17,7 @@ class Endboss extends MovableObject {
 
         // der Zustands-Schalter, der das Verhalten steuert
         this.state = 'stalking'; // endBoss beginnt im Schleich-Modus
+        this.lungeDirection = 'left'; // Richtung des Angriffs
 
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
@@ -37,15 +38,18 @@ class Endboss extends MovableObject {
     }
 
     hit() {
-        this.health -= 1;
-        // Beim ersten Treffer aus dem Lauer-Modus erwachen lassen
-        if(this.state === 'pausing') {
+        if (this.isDead() || this.world.isPaused) {
+            return; // Wenn Endboss tot ist oder Spiel pausiert, passiert nichts
+        }
+        
+        this.health -= 1;                   // Reduziert Leben des Endbosses um 1
+        if(this.state === 'pausing') {      // Beim ersten Treffer aus dem Lauer-Modus erwachen lassen
             this.state = 'lunging';
         }
-        console.log('Endboss getroffen! Leben:', this.health);
 
         if (this.health <= 0) {
             this.isActuallyDead = true;
+            this.state = 'dead';            // Zustand auf 'tot' setzen
         }
     }
     
@@ -60,24 +64,25 @@ class Endboss extends MovableObject {
      */
     animate() {
         // --- Die BEWEGUNG (60x pro Sekunde) ---
-        // prüfen in welchem Zustand die Schlange ist und die passende Geschwindigkeit anwenden
+        // Bewegungslogik wird nur ausgeführt, wenn der Boss NICHT tot ist
         setInterval(() => {
-            if (this.isDead() || this.world.isPaused) {
-                return; // Bei Tod oder Spiel-Pause nichts tun
-            }
-            
-            // Nur bewegen, wenn der Charakter in der Nähe ist
-            const distanceToChar = this.x - this.world.character.x;
-            if (Math.abs(distanceToChar) < 800) {
-                
-                if (this.state === 'stalking') {
-                    this.speed = this.stalkingSpeed;
-                    this.moveTowardsCharacter();
-                } else if (this.state === 'lunging') {
-                    this.speed = this.lungeSpeed;
-                    this.moveTowardsCharacter();
+            if (!this.isDead() && !this.world.isPaused) {
+                const distanceToChar = this.x - this.world.character.x;
+                if (Math.abs(distanceToChar) < 800) {
+                    
+                    if (this.state === 'stalking') {
+                        this.speed = this.stalkingSpeed;
+                        this.moveTowardsCharacter();
+                    } else if (this.state === 'lunging') {
+                        // KORREKTUR "Zittern": Bewegt sich nur noch in die einmal festgelegte Richtung.
+                        this.speed = this.lungeSpeed;
+                        if (this.lungeDirection === 'left') {
+                            this.moveLeft();
+                        } else {
+                            this.moveRight();
+                        }
+                    }
                 }
-                // Wenn state 'pausing' ist, passiert hier nichts -> die Schlange steht still.
             }
             
             this.playAnimation(this.isDead() ? this.IMAGES_DEAD : this.IMAGES_WALKING);
@@ -94,7 +99,7 @@ class Endboss extends MovableObject {
      */
     moveTowardsCharacter() {
         const distanceToChar = this.x - this.world.character.x;
-        if (distanceToChar > 5) {
+        if (distanceToChar > 5) {   // "Komfortzone", um das Zittern beim Schleichen zu minimieren
             this.moveLeft();
         } else if (distanceToChar < -5) {
             this.moveRight();
@@ -134,6 +139,7 @@ class Endboss extends MovableObject {
         } else if (this.state === 'pausing') {
             // Lauert für 1.5 Sekunden, dann...
             setTimeout(() => {
+                this.lungeDirection = (this.x > this.world.character.x) ? 'left' : 'right'; // Legt die Angriffsrichtung fest, BEVOR der Angriff startet
                 this.state = 'lunging'; // ...schnappe zu!
                 this.updateBrain();
             }, 1500);
