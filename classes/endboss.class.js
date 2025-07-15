@@ -8,16 +8,12 @@ class Endboss extends MovableObject {
         this.height = 200;
         
         // verschiedene Geschwindigkeiten für verschiedene Aktionen
-        this.stalkingSpeed = 0.75; // Langsames Schleichen
-        this.lungeSpeed = 9;      // Blitzschneller Angriff
+        this.Speed = 1.5; // Grundgeschwindigkeit
 
         this.health = 5;
         this.maxHealth = 5;
         this.isActuallyDead = false;
-
-        // der Zustands-Schalter, der das Verhalten steuert
-        this.state = 'stalking'; // endBoss beginnt im Schleich-Modus
-        this.lungeDirection = 'left'; // Richtung des Angriffs
+        this.actionColldown = false; // 'Schalter' für die Angriffs-Animation'
 
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
@@ -42,17 +38,23 @@ class Endboss extends MovableObject {
             return; // Wenn Endboss tot ist oder Spiel pausiert, passiert nichts
         }
         
-        this.health -= 1;                   // Reduziert Leben des Endbosses um 1
-        if(this.state === 'pausing') {      // Beim ersten Treffer aus dem Lauer-Modus erwachen lassen
-            this.state = 'lunging';
-        }
-
+        this.health -= 1;                   // Reduziert Leben des Endbosses um 1  
         if (this.health <= 0) {
             this.isActuallyDead = true;
             this.state = 'dead';            // Zustand auf 'tot' setzen
         }
     }
     
+     // HINZUGEFÜGT: Stellt sicher, dass die Bewegung funktioniert.
+    moveRight() {
+        this.x += this.speed;
+    }
+
+    // HINZUGEFÜGT: Stellt sicher, dass die Bewegung funktioniert.
+    moveLeft() {
+        this.x -= this.speed;
+    }
+
     /**
      * neuer Ansatz für animate() LOGIK mit unterschiedlichen Angriffsphasen
      * 
@@ -63,50 +65,80 @@ class Endboss extends MovableObject {
      * @returns {void}
      */
     animate() {
-        // --- Die BEWEGUNG (60x pro Sekunde) ---
-        // Bewegungslogik wird nur ausgeführt, wenn der Boss NICHT tot ist
+         // --- Gehirn-Teil 1: Die BEWEGUNG (60x pro Sekunde) ---
+        // Dieser Teil ist jetzt viel einfacher.
         setInterval(() => {
-            if (!this.isDead() && !this.world.isPaused) {
-                const distanceToChar = this.x - this.world.character.x;
-                if (Math.abs(distanceToChar) < 800) {
-                    
-                    if (this.state === 'stalking') {
-                        this.speed = this.stalkingSpeed;
-                        this.moveTowardsCharacter();
-                    } else if (this.state === 'lunging') {
-                        // KORREKTUR "Zittern": Bewegt sich nur noch in die einmal festgelegte Richtung.
-                        this.speed = this.lungeSpeed;
-                        if (this.lungeDirection === 'left') {
-                            this.moveLeft();
-                        } else {
-                            this.moveRight();
-                        }
-                    }
-                }
+            if (this.isDead()) {
+                // Wenn tot, nur noch die Todesanimation abspielen.
+                this.playAnimation(this.IMAGES_DEAD);
+                return;
             }
-            
-            this.playAnimation(this.isDead() ? this.IMAGES_DEAD : this.IMAGES_WALKING);
 
+            // Die normale Lauf-Animation läuft immer.
+            this.playAnimation(this.IMAGES_WALKING);
+
+            // Nur wenn der Cooldown vorbei ist, darf eine neue Aktion gestartet werden.
+            if (!this.actionCooldown) {
+                this.decideNextAction();
+            }
         }, 1000 / 60);
+    }
+    
+    /**
+     * VÖLLIG NEUE LOGIK: Der Taktgeber der Schlange.
+     * Entscheidet, was die nächste Aktion ist und führt sie aus.
+     */
+    decideNextAction() {
+        // 1. Cooldown setzen: Verhindert, dass diese Funktion 60x pro Sekunde aufgerufen wird.
+        this.actionCooldown = true;
 
-        // --- ZUSTANDS-MANAGER (das Taktgefühl) ---
-        // steuert den Rhythmus der Schlange, indem sie nach bestimmten Zeiten den Zustand ändert
-        this.updateBrain();
+        const distanceToChar = Math.abs(this.x - this.world.character.x);
+
+        // Nur aktiv werden, wenn der Charakter in der Nähe ist.
+        if (distanceToChar < 700) {
+            // ZUFALL: Zu 70% greift sie an, zu 30% pausiert sie. Das macht sie unberechenbar.
+            if (Math.random() > 0.3) {
+                // ANGRIFFS-AKTION
+                console.log("Schlange greift an!");
+                this.speed = 4; // Schneller für den Angriff
+                this.moveTowardsCharacterForDuration(800); // Bewegt sich für 0.8 Sekunden
+                
+                // Setzt den Cooldown für die nächste Aktion.
+                setTimeout(() => { this.actionCooldown = false; }, 1500); // 1.5s Pause nach dem Angriff
+
+            } else {
+                // PAUSEN-AKTION
+                console.log("Schlange pausiert und lauert...");
+                // Setzt den Cooldown für die nächste Aktion.
+                setTimeout(() => { this.actionCooldown = false; }, 2000); // 2s reine Pause
+            }
+        } else {
+            // Wenn der Charakter weit weg ist, warte einfach.
+            setTimeout(() => { this.actionCooldown = false; }, 500);
+        }
     }
 
     /**
-     * HELFER-FUNKTION Bewegt den endBoss in Richtung des Charakters
+     * NEUE HELFER-FUNKTION: Bewegt die Schlange für eine bestimmte Dauer.
+     * @param {number} duration - Die Dauer der Bewegung in Millisekunden.
      */
-    moveTowardsCharacter() {
-        const distanceToChar = this.x - this.world.character.x;
-        if (distanceToChar > 5) {   // "Komfortzone", um das Zittern beim Schleichen zu minimieren
-            this.moveLeft();
-        } else if (distanceToChar < -5) {
-            this.moveRight();
-        }
+    moveTowardsCharacterForDuration(duration) {
+        const direction = (this.x > this.world.character.x) ? 'left' : 'right';
+        
+        const moveInterval = setInterval(() => {
+            if (direction === 'left') {
+                this.moveLeft();
+            } else {
+                this.moveRight();
+            }
+        }, 1000 / 60);
+
+        // Stoppt die Bewegung nach der angegebenen Dauer.
+        setTimeout(() => {
+            clearInterval(moveInterval);
+        }, duration);
     }
     
-     // HIER IST DIE FEHLENDE FUNKTION:
     /**
      * Spielt eine Animation ab, indem sie durch ein Array von Bildpfaden iteriert.
      * @param {string[]} images - Das Array der Bilder, die animiert werden sollen.
@@ -117,39 +149,5 @@ class Endboss extends MovableObject {
         let path = images[i];
         this.img = this.imageCache[path]; // Setzt das zu zeichnende Bild aus dem Cache
         this.currentImage++;
-    }
-
-    /**
-     * steuert den Ablauf der Angriffs-Phasen
-     */
-    updateBrain() {
-        if (this.isDead() || this.world.isPaused) {
-            // Wenn das Spiel pausiert, wird es in 1 Sekunde erneut versucht, das Gehirn zu aktualisieren
-            setTimeout(() => this.updateBrain(), 1000);
-            return;
-        }
-
-        if (this.state === 'stalking') {
-            // endBoss schleicht für 3 Sekunden, dann...
-            setTimeout(() => {
-                this.state = 'pausing'; // ...geh/ er in den Lauer-Modus
-                this.updateBrain();     // starte den nächsten Gehirn-Zyklus
-            }, 3000);
-
-        } else if (this.state === 'pausing') {
-            // Lauert für 1.5 Sekunden, dann...
-            setTimeout(() => {
-                this.lungeDirection = (this.x > this.world.character.x) ? 'left' : 'right'; // Legt die Angriffsrichtung fest, BEVOR der Angriff startet
-                this.state = 'lunging'; // ...schnappe zu!
-                this.updateBrain();
-            }, 1500);
-
-        } else if (this.state === 'lunging') {
-            // Schnappt für eine halbe Sekunde (0.5s) zu, dann...
-            setTimeout(() => {
-                this.state = 'stalking'; // ...beginne wieder mit dem Schleichen!
-                this.updateBrain();
-            }, 500);
-        }
     }
 }
