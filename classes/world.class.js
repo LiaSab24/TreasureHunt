@@ -308,7 +308,7 @@ class World {
         // 3. Kollision Charakter mit Gegnern
         this.enemies.forEach((enemy) => {
             // Prüfen, ob Kollision stattfindet UND der Charakter nicht gerade unverwundbar ist
-            if (this.character.isColliding(enemy) && !this.character.isHurt()) {
+            if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
                 this.character.hit();                  // Charakter nimmt Schaden
                 this.updateStatusBars();               // Statusbar sofort aktualisieren
             }

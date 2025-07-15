@@ -65,11 +65,8 @@ class Endboss extends MovableObject {
      * @returns {void}
      */
     animate() {
-         // --- Gehirn-Teil 1: Die BEWEGUNG (60x pro Sekunde) ---
-        // Dieser Teil ist jetzt viel einfacher.
         setInterval(() => {
             if (this.isDead()) {
-                // Wenn tot, nur noch die Todesanimation abspielen.
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
             }
@@ -81,7 +78,7 @@ class Endboss extends MovableObject {
             if (!this.actionCooldown) {
                 this.decideNextAction();
             }
-        }, 1000 / 60);
+        }, 200);    // 1000 / 60
     }
     
     /**
@@ -95,7 +92,7 @@ class Endboss extends MovableObject {
         const distanceToChar = Math.abs(this.x - this.world.character.x);
 
         // Nur aktiv werden, wenn der Charakter in der Nähe ist.
-        if (distanceToChar < 700) {
+        if (distanceToChar < 850) {
             // ZUFALL: Zu 70% greift sie an, zu 30% pausiert sie. Das macht sie unberechenbar.
             if (Math.random() > 0.3) {
                 // ANGRIFFS-AKTION
