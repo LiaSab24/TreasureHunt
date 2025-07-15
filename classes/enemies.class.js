@@ -1,8 +1,11 @@
 class Enemy extends MovableObject {
     height = 170;
     width = 80;
-    y = 380; // Startet am Boden
-    currentImage = 0; // Aktuelles Bild für Animation
+    y = 380;                // Startet am Boden
+    currentImage = 0;       // Aktuelles Bild für Animation
+    isActuallyDead = false; // Eigenschaft, um den Tod zu speichern
+    health = 1;             // Jeder Gegner hat 1 Lebenspunkt
+
 
     IMAGES_WALKING = [
          'images/enemies/enemy/Walk/Walk1.png',
@@ -36,6 +39,24 @@ class Enemy extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.3; 
         this.animate();
 
+    }
+
+    /**
+     * prüft, ob der Gegner tot ist.
+     * @returns {boolean}
+     */
+    isDead() {
+        return this.isActuallyDead;
+    }
+
+    /**
+     * wird aufgerufen, wenn der Gegner getroffen wird
+     */
+    hit() {
+        this.health -= 1;
+        if (this.health <= 0) {
+            this.isActuallyDead = true;
+        }
     }
 
     moveLeft() {
