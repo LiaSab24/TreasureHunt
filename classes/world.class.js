@@ -1,23 +1,28 @@
+/**
+ * Die Hauptklasse, die die gesamte Spielwelt verwaltet.
+ * Sie steuert die Game Loop, initialisiert Objekte, prüft Kollisionen und zeichnet alles.
+ */
 class World {
-    worldName = "Treasure Hunt";
-    worldDescription = "2D Run and Jump Game";
-    worldAuthor = "LianeSchmuhl";
-
-    character = new Character(); 
-    enemies = [new Enemy(400), new Enemy(800), new Enemy(1200)]; 
-    clouds = [new Cloud(0),new Cloud(400),new Cloud(900)]; 
-    coins = []; 
+    // --- EIGENSCHAFTEN ---
+    character = new Character();
+    enemies = [];
+    clouds = [new Cloud(0), new Cloud(400), new Cloud(900)];
+    backgroundObjects = [];
+    coins = [];
     stones = [];
-    throwableObjects = [];     
-    canvas; 
-    ctx;    
-    keyboard = {}; 
-    camera_x = 0;               
-    gameLoopIntervalId = null;  
-    treasureChest = null;       
-    LEVEL_END = 2500;           // Level-Ende (soll dynamisch gesetzt werden)
-    gameWon = false;           
-    isPaused = false;          
+    throwableObjects = [];
+    endboss = null;
+    treasureChest = null;
+    
+    canvas;
+    ctx;
+    keyboard = {};
+    camera_x = 0;
+    
+    LEVEL_END = 2500;
+    gameWon = false;
+    isPaused = false;
+    gameLoopIntervalId = null;
 
     /**
     * Erstellt eine neue Instanz der Spielwelt.
@@ -25,30 +30,150 @@ class World {
     */
     constructor(canvas) {
         this.canvas = canvas;
-        this.canvas.width = 1000; 
-        this.canvas.height = 700; 
         this.ctx = canvas.getContext('2d');
         this.keyboard = {};
-        this.initLevel(); 
-        this.draw();
-        this.setWorld();
-        this.bindKeyboardEvents();
-        this.initButtonControls(); 
-        this.togglePause();      
+
+        this.initLevel();
+        this.bindEvents();
         this.run();
-        this.gameWon = false;    
-        this.isPaused = false;   
     }
 
+    // --- HAUPTSCHLEIFE (GAME LOOP) ---
+
+    /**
+     * Startet die Haupt-Game-Loop, die sich ca. 60 Mal pro Sekunde wiederholt.
+     */
+    run() {
+        this.gameLoopIntervalId = setInterval(() => {
+            if (this.isPaused) {
+                this.draw();
+                return;
+            }
+            if (this.gameWon) {
+                this.handleWin();
+                return;
+            }
+            if (this.character.isDead()) {
+                this.handleGameOver();
+                return;
+            }
+            
+            this.update(); // Alle Logik-Updates durchführen
+            this.draw();   // Die Welt neu zeichnen
+        }, 1000 / 60);
+    }
+
+    /**
+     * Führt alle Logik-Updates pro Frame aus: Eingaben, Kollisionen, Aufräumen.
+     */
+    update() {
+        this.checkKeyboardInput();
+        this.runCollisionChecks();
+        this.cleanupObjects();
+        this.camera_x = -this.character.x + 100;
+    }
+
+    /**
+     * Zeichnet die gesamte Spielwelt auf den Canvas.
+     */
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ctx.translate(this.camera_x, 0);
+        
+        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.clouds);
+        this.addObjectsToMap(this.coins);
+        this.addObjectsToMap(this.stones);
+        this.addObjectsToMap(this.enemies);
+        this.addObjectsToMap(this.throwableObjects);
+        this.addToMap(this.character);
+        if (this.treasureChest) this.addToMap(this.treasureChest);
+        
+        this.ctx.translate(-this.camera_x, 0);
+
+        this.drawEndbossStatusBar();
+        if (this.isPaused) {
+            this.drawPauseOverlay();
+        }
+    }
+
+    // --- KOLLISIONEN & AUFRÄUMEN ---
+
+    /**
+     * Ruft alle spezifischen Kollisionsprüfungen der Reihe nach auf.
+     */
+    runCollisionChecks() {
+        this.checkCollection(this.character, this.coins, 'collectCoin');
+        this.checkCollection(this.character, this.stones, 'collectStone');
+        this.checkCharacterEnemyCollisions();
+        this.checkThrowableObjectCollisions();
+        this.checkTreasureChestCollision();
+    }
+    
+    /**
+     * Prüft Kollisionen zwischen dem Charakter und allen Gegnern.
+     */
+    checkCharacterEnemyCollisions() {
+        this.enemies.forEach(enemy => {
+            if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
+                this.character.hit(1);
+                this.updateStatusBars();
+            }
+        });
+    }
+
+    /**
+     * Prüft Kollisionen zwischen Wurfobjekten und allen Gegnern.
+     */
+    checkThrowableObjectCollisions() {
+        this.throwableObjects.forEach(stone => {
+            this.enemies.forEach(enemy => {
+                if (stone && !stone.isDestroyed && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
+                    enemy.hit();
+                    stone.isDestroyed = true; 
+                }
+            });
+        });
+    }
+    
+    /**
+     * Prüft die Kollision des Charakters mit der Schatztruhe und löst den Sieg aus.
+     */
+    checkTreasureChestCollision() {
+        if (this.treasureChest && this.character.isColliding(this.treasureChest)) {
+            if (this.endboss && this.endboss.isDead()) {
+                this.gameWon = true;
+            }
+        }
+    }
+
+    /**
+     * Entfernt "tote" oder "zerstörte" Objekte aus den Arrays, um die Performance zu verbessern.
+     */
+    cleanupObjects() {
+        this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed);
+        this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss);
+    }
+    
+    // --- INITIALISIERUNG & LEVEL-SETUP ---
+
+    /**
+     * Initialisiert oder setzt das gesamte Level zurück in den Anfangszustand.
+     */
     initLevel() {
         this.resetGameState();
         this.initBackgroundLayers();
         this.initGameObjects();
         this.initTreasureChest();
         this.resetCharacter();
-        this.resetCamera();
+        this.setWorld();
+        this.updateStatusBars();
     }
 
+    /**
+     * Setzt alle spielrelevanten Zustände und Objekt-Arrays zurück.
+     */
     resetGameState() {
         this.isPaused = false;
         this.gameWon = false;
@@ -56,445 +181,284 @@ class World {
         this.coins = [];
         this.stones = [];
         this.enemies = [];
-        this.endboss = new Endboss(this); // Endboss wird hier initialisiert
+        this.endboss = new Endboss(this);
         this.throwableObjects = [];
+        this.resetCamera();
     }
-
-    initBackgroundLayers() {
-        const canvasWidth = this.canvas.width;
-        const layers = [
-            { path: 'images/bg-canvas/bg1.png', parallaxFactor: 0 },
- //           { path: 'images/bg-canvas/bg1.png', parallaxFactor: 0.2 },
-            { path: 'images/bg-canvas/cactus.png', parallaxFactor: 0.4 },
-            { path: 'images/bg-canvas/cactus.png', parallaxFactor: 0.6 },
-            { path: 'images/bg-canvas/piso1.png', parallaxFactor: 1 }
-        ];
-        layers.forEach(layerData => {
-            this.backgroundObjects.push(new BackgroundObject(layerData.path, 0, 0, layerData.parallaxFactor));
-            this.backgroundObjects.push(new BackgroundObject(layerData.path, canvasWidth, 0, layerData.parallaxFactor));
-            this.backgroundObjects.push(new BackgroundObject(layerData.path, canvasWidth * 2, 0, layerData.parallaxFactor));
-        });
-    }
-
+    
+    /**
+     * Ruft alle Methoden auf, die Spielobjekte wie Münzen, Gegner etc. erstellen.
+     */
     initGameObjects() {
         this.initCoins();
         this.initStones();
         this.initEnemies();
         this.initEndboss();
     }
-
-    initCoins() {
-        this.coins.push(new Coin(300, 520));
-        this.coins.push(new Coin(330, 480));
-        this.coins.push(new Coin(360, 450));
-        this.coins.push(new Coin(600, 470));
-        this.coins.push(new Coin(900, 500));
-        this.coins.push(new Coin(1300, 530));
-        this.coins.push(new Coin(1330, 480));
-        this.coins.push(new Coin(1360, 450));
-        this.coins.push(new Coin(1600, 470));
-        this.coins.push(new Coin(1900, 400));
-    }
-    initStones() {
-        this.stones.push(new Stone(500, 480));
-        this.stones.push(new Stone(550, 520));
-        this.stones.push(new Stone(700, 480));
-        this.stones.push(new Stone(850, 500));
-        this.stones.push(new Stone(1000, 530));
-        this.stones.push(new Stone(1250, 480));
-        this.stones.push(new Stone(1500, 530));
-    }   
-    initEnemies() {
-        this.enemies.push(
-            new Enemy(400, this),
-            new Enemy(700, this),
-            new Enemy(900, this),
-            new Enemy(950, this),
-            new Enemy(1200, this),
-            new Enemy(1800, this),
-            new Enemy(2300, this),
-        );
-    }
+    
     /**
-     * Initialisiert den Endboss und platziert ihn kurz vor der Schatztruhe.
-     * Der Endboss erscheint erst, wenn der Charakter nahe genug am Level-Ende ist.
+     * Erstellt die sich wiederholenden Hintergrundebenen für den Parallax-Effekt.
+     */
+    initBackgroundLayers() {
+        const canvasWidth = 1000;
+        const layers = [
+            { path: 'images/bg-canvas/bg1.png', parallaxFactor: 0 },
+            { path: 'images/bg-canvas/cactus.png', parallaxFactor: 0.4 },
+            { path: 'images/bg-canvas/piso1.png', parallaxFactor: 1 }
+        ];
+        layers.forEach(layerData => {
+            for (let i = 0; i < 3; i++) {
+                this.backgroundObjects.push(new BackgroundObject(layerData.path, canvasWidth * i, 0, layerData.parallaxFactor));
+            }
+        });
+    }
+
+    /**
+     * Platziert die Münzen im Level.
+     */
+    initCoins() {
+        this.coins.push(new Coin(300, 520), new Coin(330, 480), new Coin(360, 450), new Coin(600, 470), new Coin(900, 500), new Coin(1300, 530), new Coin(1330, 480), new Coin(1360, 450), new Coin(1600, 470), new Coin(1900, 400));
+    }
+
+    /**
+     * Platziert die aufsammelbaren Steine im Level.
+     */
+    initStones() {
+        this.stones.push(new Stone(500, 480), new Stone(550, 520), new Stone(700, 480), new Stone(850, 500), new Stone(1000, 530), new Stone(1250, 480), new Stone(1500, 530));
+    }
+
+    /**
+     * Platziert die Standard-Gegner im Level.
+     */
+    initEnemies() {
+        this.enemies.push(new Enemy(400), new Enemy(700), new Enemy(900), new Enemy(950), new Enemy(1200), new Enemy(1800), new Enemy(2300));
+    }
+
+    /**
+     * Platziert den Endboss am Ende des Levels und fügt ihn der Gegner-Liste hinzu.
      */
     initEndboss() {
-        this.endboss.x = this.LEVEL_END - 100; // 200px vor der Truhe
-        this.endboss.y = 250;
+        this.endboss.x = this.LEVEL_END - 200;
         this.enemies.push(this.endboss);
     }
 
-    initTreasureChest() {
-        const groundYForChest = 320;
-        this.treasureChest = new TreasureChest(this.LEVEL_END, groundYForChest);
-    }
-
-    resetCharacter() {
-        this.character = new Character();
-        this.setWorld();
-    }
-
-    resetCamera() {
-        this.camera_x = 0;
-    }
-
-    setWorld() {
-        this.character.world = this;
+    /**
+     * Platziert die Schatztruhe am Level-Ende.
+     */
+    initTreasureChest() { 
+        this.treasureChest = new TreasureChest(this.LEVEL_END, 320); 
     }
 
     /**
-     * Bindet die Event Listener für Tastatureingaben.
-     * @memberof World
+     * Erstellt eine neue Charakter-Instanz.
+     */
+    resetCharacter() { 
+        this.character = new Character(); 
+    }
+
+    /**
+     * Setzt die Kamera-Position auf den Anfang zurück.
+     */
+    resetCamera() { 
+        this.camera_x = 0; 
+    }
+
+    /**
+     * Übergibt dem Charakter eine Referenz auf die Welt, damit er mit ihr interagieren kann.
+     */
+    setWorld() { 
+        this.character.world = this; 
+    }
+
+    // --- EVENT HANDLING & STEUERUNG ---
+
+    /**
+     * Bündelt die Initialisierung aller Event-Listener.
+     */
+    bindEvents() {
+        this.bindKeyboardEvents();
+        this.initButtonControls();
+    }
+
+    /**
+     * Registriert die Event-Listener für Tastatur-Eingaben (Drücken und Loslassen).
      */
     bindKeyboardEvents() {
         window.addEventListener('keydown', (e) => {
-            this.keyboard[e.key] = true;                // Speichert den gedrückten Zustand
-            if (e.key === 'p' || e.key === 'P') {
+            this.keyboard[e.key] = true;
+            if (e.key.toLowerCase() === 'p') {
                this.togglePause();
             }
-
         });
-
         window.addEventListener('keyup', (e) => {
-            this.keyboard[e.key] = false;               // Entfernt den gedrückten Zustand
+            this.keyboard[e.key] = false;
         });
     }
 
     /**
-     * Initialisiert die Event-Listener für die In-Game-Steuerungsbuttons.
-     * Nutzt eine Konfigurations-Map, um den Code sauber und erweiterbar zu halten.
+     * Initialisiert die Event-Listener für die UI-Buttons (für Touch-Geräte).
      */
     initButtonControls() {
-        // ButtonID-Konfiguration zu den SteuerungsAktionen.
         const controlButtonMap = {
-            'leftButton': 'TOUCH_LEFT',
-            'rightButton': 'TOUCH_RIGHT',
-            'upButton': 'TOUCH_JUMP',
-            'wurfButton': 'TOUCH_THROW'
+            'leftButton': 'TOUCH_LEFT', 'rightButton': 'TOUCH_RIGHT',
+            'upButton': 'TOUCH_JUMP', 'wurfButton': 'TOUCH_THROW'
         };
-
-        // B. Registrierung: Geht durch die Map und bindet die Events für jeden Button.
         for (const buttonId in controlButtonMap) {
-            const actionKey = controlButtonMap[buttonId];
-            this.bindPressAndHoldEvents(buttonId, actionKey);
+            this.bindPressAndHoldEvents(buttonId, controlButtonMap[buttonId]);
         }
     }
 
     /**
-     * BINDET HELFER-METHODE: Bindet "Gedrückt halten" und "Loslassen"-Events
-     * für Maus und Touch an einen einzelnen UI-Button.
-     * @param {string} buttonId - Die ID des HTML-Button-Elements.
-     * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
+     * Bindet Maus- und Touch-Events an einen UI-Button, um Gedrückthalten zu simulieren.
+     * @param {string} buttonId - Die ID des HTML-Elements.
+     * @param {string} actionKey - Der Schlüssel, der im `keyboard`-Objekt gesetzt wird.
      */
     bindPressAndHoldEvents(buttonId, actionKey) {
         const button = document.getElementById(buttonId);
-        if (!button) return;                    // Bricht ab, wenn der Button nicht existiert
-
+        if (!button) return;
         const setActionState = (isPressed) => (event) => {
             event.preventDefault();
             this.keyboard[actionKey] = isPressed;
         };
-
-        // Events für "Button gedrückt"
         button.addEventListener('mousedown', setActionState(true));
         button.addEventListener('touchstart', setActionState(true), { passive: false });
-
-        // Events für "Button losgelassen"
         button.addEventListener('mouseup', setActionState(false));
         button.addEventListener('mouseleave', setActionState(false));
         button.addEventListener('touchend', setActionState(false), { passive: false });
     }
 
-    // --- Methode zum Umschalten des Pause-Zustands ---
-    togglePause() {
-        this.isPaused = !this.isPaused;
-        if (this.isPaused) {
-            console.log("Spiel pausiert.");
-            // Hintergrundmusik pausieren (kommt bei Soundeffekten)
-        } else {
-            console.log("Spiel fortgesetzt.");
-            // Hintergrundmusik fortsetzen
-        }
-    }
-
-    // Startet die Haupt-Game-Loop
-    run() {
-        if (this.gameLoopIntervalId) {
-            clearInterval(this.gameLoopIntervalId);
-        }
-        this.gameLoopIntervalId = setInterval(() => {
-            if (this.isPaused) {
-              this.draw();
-              return; 
-            }
-            if (this.character.isDead()) { 
-                 this.handleGameOver();
-                 return;
-             }
-            if (this.gameWon) { 
-                clearInterval(this.gameLoopIntervalId);
-                this.gameLoopIntervalId = null;
-                return;
-            }
-
-            this.checkKeyboardInput();               
-            this.character.applyGravity();  // Muss VOR Kollisionscheck sein, damit y-Pos aktuell ist
-            this.checkCollisions();         // Kollisionen prüfen
-            this.draw();                    // Zeichnen der Objekte 
-        }, 1000 / 60);
-    }
-
-    handleGameOver() {
-        clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
-        this.gameLoopIntervalId = null;
-        // Ruft die globale Funktion aus game.js auf, um das Overlay anzuzeigen
-        showGameOverScreen();
-    }
-
-    // Überprüft Tastatureingaben und löst Charakteraktionen aus
-    checkKeyboardInput() {
-        if (this.keyboard['ArrowRight'] || this.keyboard['TOUCH_RIGHT']) { 
-            this.character.moveRight();
-        }
-        if (this.keyboard['ArrowLeft'] || this.keyboard['TOUCH_LEFT']) {
-            this.character.moveLeft();
-        }
-        if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) {
-            this.character.jump();
-        }
-        if (this.keyboard['d'] || this.keyboard['D']  || this.keyboard['TOUCH_THROW']) { // Taste D für Werfen
-            this.character.throwStone();
-        }
-         this.camera_x = -this.character.x + 100; // 100 Pixel Offset vom linken Rand
-    }
-
-    // Methode zum Hinzufügen von Wurfobjekten ---
-    addThrowableObject(stone) {
-        this.throwableObjects.push(stone);
-        console.log('Stein zur Welt hinzugefügt. Anzahl:', this.throwableObjects.length); // Debug
-    }
-
-    // Methode für den Gewinnfall ---
-    handleWin() {
-        if (!this.gameWon) {                            // Nur einmal ausführen
-             this.gameWon = true;
-             clearInterval(this.gameLoopIntervalId);    // Stoppt die Game Loop
-             this.gameLoopIntervalId = null;
-             this.keyboard = {}; // Tastatureingaben ignorieren
-             // Rufe die globale Funktion aus game.js auf, um das Overlay anzuzeigen
-             showWinScreen();
-        }
-    }
-    checkCollisions() {
-        // 1. Kollision Charakter mit Münzen
-        this.coins.forEach((coin, index) => {
-            if (this.character.isColliding(coin)) {
-                this.character.collectCoin();           // Methode in Character aufrufen
-                this.coins.splice(index, 1);            // Münze aus dem Array entfernen
-                this.updateStatusBars();                // Statusbar sofort aktualisieren
-            }
-        });
-
-        // 2. Kollision Charakter mit Steinen
-        this.stones.forEach((stone, index) => {
-            if (this.character.isColliding(stone)) {
-                this.character.collectStone();          // Methode in Character aufrufen
-                this.stones.splice(index, 1);           // Stein aus dem Array entfernen
-                this.updateStatusBars();                // Statusbar sofort aktualisieren
-            }
-        });
-
-        // 3. Kollision Charakter mit Gegnern
-        this.enemies.forEach((enemy) => {
-            // Prüfen, ob Kollision stattfindet UND der Charakter nicht gerade unverwundbar ist
-            if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
-                this.character.hit();                  // Charakter nimmt Schaden
-                this.updateStatusBars();               // Statusbar sofort aktualisieren
-            }
-        });
-
-        // 4. Kollision Steine mit Gegnern
-        this.throwableObjects.forEach((stone) => {
-            this.enemies.forEach((enemy) => {
-                if (stone && enemy && !enemy.isDead && stone.isColliding(enemy)) {
-                    enemy.hit();
-                    stone.isDestroyed = true; // Markiere den Stein zum Entfernen
-                }
-            });
-        });
-
-        // 5. Kollision Charakter mit Endboss
-        if (this.endboss && this.character.isColliding(this.endboss) && !this.endboss.isDead()) {
-            // Endboss muss zuerst besiegt werden, bevor die Truhe erreichbar ist
-            // Prüfen, ob der Charakter von OBEN auf den Boss springt
-            if (!this.character.isOnGround && this.character.speedY < 0) {
-                this.endboss.hit();         // Der Boss kriegt Schaden
-                this.character.bounce();    // Der Charakter springt ab wie ein Flummi
-
-            } else {
-                if (!this.character.isHurt()) {
-                    this.character.hit();
-                    this.updateStatusBars();
-                }
-            }
-        }
-
-        // 6. Kollision Steine mit Endboss
-        if (this.endboss && !this.endboss.isDead) {
-            this.throwableObjects.forEach((stone) => {
-                if (stone && stone.isColliding(this.endboss)) {
-                    this.endboss.hit();
-                    stone.isDestroyed = true;
-                }
-            });
-        }
-
-        // 7. Kollision Charakter mit Schatztruhe NUR wenn Endboss tot ist
-        if (this.treasureChest && this.character.isColliding(this.treasureChest)) {
-            if (this.endboss && !this.endboss.isDead) {
-                // Truhe ist blockiert, solange Endboss lebt
-                // Optional: Feedback anzeigen
-                return;
-            } else {
-                this.handleWin(); // Gewinnzustand auslösen
-            }
-        }
-
-        // --- Aufräumen: Objekte entfernen ---
-        // Entferne Steine, die aus dem Bild geflogen sind (Performance)
-        this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed)
-
-        // Entferne "tote" Gegner (die getroffen wurden)
-        this.enemies = this.enemies.filter(enemy => !enemy.isDead || enemy instanceof Endboss); // Behalte nur lebende Gegner
-    }
-
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // --- 1. Hintergrund mit Parallax zeichnen ---
-        this.backgroundObjects.forEach(layer => {
-            let effectiveX = layer.x + this.camera_x * layer.parallaxFactor;
-
-            // --- Kachellogik ---
-            // Wenn eine Kachel komplett links aus dem Bild ist (unter Berücksichtigung ihrer Geschwindigkeit)
-            // Beispiel: Kachelbreite 720. Wenn effectiveX < -720, ist sie links raus.
-            // Wir verschieben sie dann um 3 Kachelbreiten nach rechts (da wir 3 Kacheln pro Ebene haben)
-            if (effectiveX <= -layer.width) {
-                layer.x += layer.width * 3; // Verschiebe diese Kachel weit nach rechts
-            } else if (effectiveX > layer.width * 2) { // Optional: Falls man auch nach links scrollen könnte
-                layer.x -= layer.width * 3;
-            }
-
-             // Zeichne die Kachel an ihrer *aktuellen* Position (layer.x),
-             // aber verschoben durch die Kamera-Simulation für den Parallax-Effekt
-             this.ctx.drawImage(layer.img, effectiveX, layer.y, layer.width, layer.height);
-        });
-        // --- 2. Kamera für Spielobjekte verschieben ---
-        this.ctx.translate(this.camera_x, 0);
-         // --- Pause-Overlay zeichnen, WENN pausiert ---
-         if (this.isPaused) {
-            this.drawPauseOverlay();
-        }
-
-        // --- 3. Zeichne Elemente ---
-        this.drawObjects(this.clouds);
-        this.drawObjects(this.coins); 
-        this.drawObjects(this.stones);
-        this.drawObjects(this.enemies);
-        this.drawObjects(this.throwableObjects);
-        this.character.draw(this.ctx);
-        if (this.treasureChest) {                       // Zeichnet die Truhe, falls sie existiert
-            this.treasureChest.draw(this.ctx);
-        }
-        // --- 4. Kamera-Translation zurücksetzen ---
-        this.ctx.translate(-this.camera_x, 0);
-
-        // --- 5. Statusleiste ENDBOSS zeichnen ---
-        this.drawEndbossStatusBar();
-    }
-
-     /**
-     * Hilfsfunktion zum Zeichnen eines Arrays von MovableObjects
-     * @param {MovableObject[]} objects - Das Array der zu zeichnenden Objekte
+    /**
+     * Prüft in jedem Frame, welche Tasten gedrückt sind und löst Charakter-Aktionen aus.
      */
-    drawObjects(objects) {
-        objects.forEach(obj => {
-            obj.draw(this.ctx);
-        });
-    }
-
-     // Methode zum Zeichnen des Pause-Overlays 
-     drawPauseOverlay() {
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          // Halbtransparentes Grau
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);       // Über den ganzen Canvas
-
-        this.ctx.font = "48px 'Arial'";
-        this.ctx.fillStyle = "white";
-        this.ctx.textAlign = "center"; 
-        this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
-
-        this.ctx.font = "24px 'Arial'";
-        this.ctx.fillText("Drücke 'P' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+    checkKeyboardInput() {
+        if (this.keyboard['ArrowRight'] || this.keyboard['TOUCH_RIGHT']) this.character.moveRight();
+        if (this.keyboard['ArrowLeft'] || this.keyboard['TOUCH_LEFT']) this.character.moveLeft();
+        if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) this.character.jump();
+        if (this.keyboard['d'] || this.keyboard['D'] || this.keyboard['TOUCH_THROW']) this.character.throwStone();
     }
 
     /**
-     * Zeichnet und aktualisiert die Statusanzeige des Endbosses.
-     * Wird nur angezeigt, wenn der Charakter in der Nähe ist.
+     * Fügt ein neues Wurfobjekt (Stein) zur Welt hinzu. Wird vom Charakter aufgerufen.
+     * @param {ThrowableObject} stone - Die Instanz des geworfenen Steins.
+     */
+    addThrowableObject(stone) {
+        this.throwableObjects.push(stone);
+    }
+
+    // --- SPIELZUSTAND & UI ---
+
+    /**
+     * Behandelt den "Game Over"-Zustand, stoppt die Loop und zeigt den Endbildschirm.
+     */
+    handleGameOver() {
+        clearInterval(this.gameLoopIntervalId);
+        showGameOverScreen();
+    }
+
+    /**
+     * Behandelt den "Gewinn"-Zustand, stoppt die Loop und zeigt den Siegesbildschirm.
+     */
+    handleWin() {
+        clearInterval(this.gameLoopIntervalId);
+        showWinScreen();
+    }
+
+    /**
+     * Schaltet den Pause-Zustand des Spiels um.
+     */
+    togglePause() {
+        this.isPaused = !this.isPaused;
+    }
+
+    /**
+     * Zeichnet ein halbtransparentes Overlay mit Text, wenn das Spiel pausiert ist.
+     */
+    drawPauseOverlay() {
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.font = "48px 'Arial'";
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
+    }
+
+    /**
+     * Zeichnet die Lebensleiste des Endbosses, aber nur, wenn der Spieler in der Nähe ist.
      */
     drawEndbossStatusBar() {
-        if (!this.endboss) return;              // Nur ausführen, wenn es einen Endboss gibt
-
+        if (!this.endboss) return;
         const distance = this.endboss.x - this.character.x;
         const statusBar = document.getElementById('endbossStatus');
         const healthBar = document.getElementById('endbossHealthBar');
-
-        // Zeigt die Leiste nur an, wenn der Boss in der Nähe und am Leben ist
         if (distance < 800 && !this.endboss.isDead()) {
             statusBar.style.display = 'flex';
-            // Berechne, wie viel Prozent Leben der Boss noch hat
-            const healthPercentage = (this.endboss.health / this.endboss.maxHealth) * 100; // 5 ist die maximale Gesundheit
+            const healthPercentage = (this.endboss.energy / this.endboss.maxEnergy) * 100;
             healthBar.style.width = healthPercentage + '%';
-
-            // Wenn die Leben niedrig sind, färbt sich der Balken rot!
-            if (healthPercentage < 40) {
-                healthBar.style.backgroundColor = 'red';
-            } else {
-                healthBar.style.backgroundColor = 'green';
-            }
-
+            healthBar.style.backgroundColor = healthPercentage < 40 ? 'red' : 'green';
         } else {
-            statusBar.style.display = 'none'; // Sonst verstecken
+            statusBar.style.display = 'none';
         }
     }
 
-     /**
-      * Aktualisiert die Textinhalte der Statusbar-Elemente im HTML
-      */
+    /**
+     * Aktualisiert die Text- und Statusanzeigen im HTML (Leben, Münzen, etc.).
+     */
     updateStatusBars() {
         document.getElementById('livesStatus').innerText = this.character.lives;
         document.getElementById('coinsStatus').innerText = this.character.coins;
         document.getElementById('stonesStatus').innerText = this.character.stones;
         const buyButton = document.getElementById('buyLifeButton');
-        if(this.character.coins >= 5) {
-           buyButton.style.display = 'inline-block'; 
-           buyButton.disabled = false;
-           buyButton.innerText = 'Kaufe Leben (5 Münzen)';
+        if (this.character.coins >= 5) {
+            buyButton.disabled = false;
+            buyButton.innerText = 'Kaufe Leben (5 Münzen)';
         } else {
-            buyButton.style.display = 'inline-block';
             buyButton.disabled = true;
-            buyButton.innerText = `Kaufe Leben (${5-this.character.coins} Münzen fehlen)`;
+            buyButton.innerText = `Kaufe Leben (${5 - this.character.coins} Münzen fehlen)`;
         }
-        // Man könnte ihn auch ganz ausblenden:
-        // if(this.character.coins < 5) buyButton.style.display = 'none';
     }
 
-      // Platzhalter für die Kauf-Logik
+    /**
+     * Logik für den Kauf eines Lebens mit Münzen.
+     */
     buyLife() {
         if (this.character.coins >= 5 && !this.character.isDead()) {
             this.character.coins -= 5;
             this.character.lives += 1;
-            this.updateStatusBars();                                        // Anzeige sofort aktualisieren
-        }  
+            this.updateStatusBars();
+        }
+    }
+    
+    // --- HELFERMETHODEN ---
+
+    /**
+     * Eine Hilfsmethode, um ein einzelnes Objekt zu zeichnen.
+     * @param {MovableObject} obj - Das zu zeichnende Objekt.
+     */
+    addToMap(obj) {
+        obj.draw(this.ctx);
+    }
+
+    /**
+     * Eine Hilfsmethode, um alle Objekte in einem Array zu zeichnen.
+     * @param {MovableObject[]} objects - Das Array von Objekten.
+     */
+    addObjectsToMap(objects) {
+        objects.forEach(obj => this.addToMap(obj));
+    }
+
+    /**
+     * Eine generische Methode, um das Aufsammeln von Items zu prüfen.
+     * @param {Character} collector - Der Charakter, der sammelt.
+     * @param {MovableObject[]} items - Das Array der sammelbaren Items.
+     * @param {string} collectionMethod - Die Methode im Charakter, die aufgerufen wird (z.B. 'collectCoin').
+     */
+    checkCollection(collector, items, collectionMethod) {
+        items.forEach((item, index) => {
+            if (collector.isColliding(item)) {
+                collector[collectionMethod]();
+                items.splice(index, 1);
+                this.updateStatusBars();
+            }
+        });
     }
 }

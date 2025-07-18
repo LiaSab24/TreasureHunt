@@ -1,72 +1,141 @@
+/**
+ * Stellt eine Basisklasse für alle beweglichen Objekte im Spiel dar.
+ * Sie kümmert sich um Position, Bewegung, Animation, Kollision und Lebensenergie.
+ */
 class MovableObject {
     x = 120;
     y = 280;
     height = 150;
     width = 100;
-    img;                                // Variable für das Bild-Objekt
-    imageCache = {};                    // Cache für geladene Bilder
-    currentImage = 0;                   // Index für Animationen
+    img;
+    imageCache = {};
+    currentImage = 0;
+    speed = 0.15;
+    speedY = 0;
+    acceleration = 2.5; // Simuliert die Schwerkraft
+    energy = 100;
+    lastHit = 0;
 
-    // Lädt ein Bild
+    /**
+     * Definiert die Kollisionsbox des Objekts. Die Werte werden von den Rändern
+     * nach innen gemessen, um eine präzisere Trefferzone zu schaffen.
+     * @type {{top: number, bottom: number, left: number, right: number}}
+     */
+    offset = {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+    };
+
+    /**
+     * Lädt ein einzelnes Bild und setzt es als aktuelles Bild (`this.img`).
+     * @param {string} path - Der Pfad zur Bilddatei.
+     */
     loadImage(path) {
-        this.img = new Image();         // Standard JS Image Objekt
-        this.img.onload = () => {       // Bild erfolgreich geladen
-        };
-        this.img.onerror = () => {
-            // Fehler beim Laden des Bildes
-            console.error(`FEHLER: Bild konnte nicht geladen werden: ${path}. Bitte Pfad und Datei überprüfen!`);
-            // Optional: Setze ein Platzhalterbild oder markiere das Objekt als "defekt"
-            // this.img = new Image(); // Erstelle ein leeres Bild, um weitere Fehler zu vermeiden
-            // this.img.src = 'img/placeholder_error.png'; // Pfad zu einem Fehler-Platzhalterbild
-        };
+        this.img = new Image();
         this.img.src = path;
     }
 
-     /**
-     * Lädt mehrere Bilder in den imageCache.
-     * @param {string[]} arr - Ein Array von Bildpfaden (z.B. für Animationen)
+    /**
+     * Lädt ein Array von Bildern in den Cache (`this.imageCache`) für flüssige Animationen.
+     * @param {string[]} arr - Ein Array von Bildpfaden.
      */
-     loadImages(arr) {
+    loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();
-            img.onload = () => {
-                // console.log(`Animationsbild erfolgreich geladen: ${path}`); // Optional
-            };
-            img.onerror = () => {
-                console.error(`FEHLER: Animationsbild konnte nicht geladen werden: ${path}.`);
-            };
             img.src = path;
-            this.imageCache[path] = img; // Speichert Bild im Cache unter seinem Pfad
+            this.imageCache[path] = img;
         });
     }
 
+    /**
+     * Wendet Gravitation auf das Objekt an, wenn es sich in der Luft befindet.
+     * Sorgt dafür, dass Objekte nach einem Sprung wieder fallen.
+     */
+    applyGravity() {
+        setInterval(() => {
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }
+        }, 1000 / 25);
+    }
 
-    // Methode zum Zeichnen (wird von World aufgerufen)
-    // Muss in Unterklassen oft überschrieben werden
+    /**
+     * Prüft, ob sich das Objekt über dem Boden befindet.
+     * Kann in Unterklassen für fliegende oder andersartige Objekte überschrieben werden.
+     * @returns {boolean} - True, wenn das Objekt in der Luft ist.
+     */
+    isAboveGround() {
+        if (this instanceof ThrowableObject) {
+            return true; // Wurfobjekte fallen immer weiter nach unten.
+        }
+        return this.y < 380; // Standard-Bodenhöhe für Charaktere und Gegner.
+    }
+
+    /**
+     * Zeichnet das aktuelle Bild des Objekts auf den Canvas.
+     * @param {CanvasRenderingContext2D} ctx - Der 2D-Kontext des Canvas.
+     */
     draw(ctx) {
         if (this.img) {
-             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        } else {
-            // Fallback: Zeichne ein einfaches Rechteck, wenn kein Bild geladen ist
-             ctx.fillStyle = 'grey';
-             ctx.fillRect(this.x, this.y, this.width, this.height);
-             console.warn('Kein Bild zum Zeichnen für Objekt an x:', this.x, 'y:', this.y);
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
         }
     }
 
-     // Einfache Bewegungsfunktionen (Beispiele)
-     moveRight() {
-     }
+    /**
+     * Spielt eine Animationssequenz ab, indem das Bild zyklisch aus einem Bilder-Array gewechselt wird.
+     * @param {string[]} images - Das Array der Bilder für die aktuelle Animation.
+     */
+    playAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }
 
-     moveLeft() {
-     }
+    /**
+     * Prüft, ob dieses Objekt mit einem anderen Objekt kollidiert.
+     * Berücksichtigt dabei die definierten Offsets für eine präzisere Kollisionsbox.
+     * @param {MovableObject} obj - Das andere Objekt, mit dem die Kollision geprüft wird.
+     * @returns {boolean} - True, wenn eine Kollision stattfindet.
+     */
+    isColliding(obj) {
+        return (this.x + this.width - this.offset.right) > (obj.x + obj.offset.left) &&
+            (this.y + this.height - this.offset.bottom) > (obj.y + obj.offset.top) &&
+            (this.x + this.offset.left) < (obj.x + obj.width - obj.offset.right) &&
+            (this.y + this.offset.top) < (obj.y + obj.height - obj.offset.bottom);
+    }
 
-     // Grundlegende Kollisionserkennung (Rechteck-Kollision)
-     // obj: Das andere MovableObject, mit dem die Kollision geprüft wird
-     isColliding(obj) {
-        return this.x + this.width > obj.x &&
-               this.y + this.height > obj.y &&
-               this.x < obj.x + obj.width &&
-               this.y < obj.y + obj.height;
-     }
+    /**
+     * Verarbeitet einen Treffer, reduziert die Energie des Objekts und setzt einen Zeitstempel.
+     * @param {number} damage - Die Menge an Schaden, die zugefügt wird.
+     */
+    hit(damage = 1) {
+        this.energy -= damage;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+
+    /**
+     * Prüft, ob das Objekt keine Energie mehr hat (d.h. "tot" ist).
+     * @returns {boolean} - True, wenn die Energie 0 ist.
+     */
+    isDead() {
+        return this.energy === 0;
+    }
+    
+    /**
+     * Prüft, ob das Objekt kürzlich verletzt wurde (für kurzzeitige Unverwundbarkeit).
+     * @returns {boolean} - True, wenn der letzte Treffer weniger als 1 Sekunde zurückliegt.
+     */
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit; // Differenz in ms
+        timepassed = timepassed / 1000; // Differenz in s
+        return timepassed < 1;
+    }
 }
