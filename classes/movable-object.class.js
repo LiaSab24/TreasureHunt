@@ -54,12 +54,12 @@ class MovableObject {
      * Sorgt dafür, dass Objekte nach einem Sprung wieder fallen.
      */
     applyGravity() {
-        setInterval(() => {
+    //    setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-        }, 1000 / 25);
+    //    }, 1000 / 25);
     }
 
     /**
@@ -71,7 +71,10 @@ class MovableObject {
         if (this instanceof ThrowableObject) {
             return true; // Wurfobjekte fallen immer weiter nach unten.
         }
-        return this.y < 380; // Standard-Bodenhöhe für Charaktere und Gegner.
+        // es wird eine spezifischere Bodenhöhe für den Charakter angenommen.
+        // Der Charakter hat y=280, also ist er in der Luft, wenn y kleiner ist.
+        // Gegner haben eine andere y-Position (380), daher wird das hier nicht angewendet.
+        return this.y < 280; // 380 ist die Bodenhöhe für Gegner, 280 für den Charakter.
     }
 
     /**
