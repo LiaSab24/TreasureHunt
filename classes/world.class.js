@@ -308,55 +308,85 @@ class World {
         });
 
         // 3. Kollision Charakter mit Gegnern
+        //this.enemies.forEach((enemy) => {
+        //    // Prüfen, ob Kollision stattfindet UND der Charakter nicht gerade unverwundbar ist
+        //    if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
+        //        this.character.hit();                  // Charakter nimmt Schaden
+        //        this.updateStatusBars();               // Statusbar sofort aktualisieren
+        //    }
+        //});
+
         this.enemies.forEach((enemy) => {
-            // Prüfen, ob Kollision stattfindet UND der Charakter nicht gerade unverwundbar ist
-            if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
-                this.character.hit();                  // Charakter nimmt Schaden
-                this.updateStatusBars();               // Statusbar sofort aktualisieren
+        // Prüft, ob es sich um den Endboss handelt und ob der Charakter von oben springt
+        if (enemy instanceof Endboss && this.character.isColliding(enemy) && !enemy.isDead()) {
+            // Sprung von oben auf den Boss
+            if (this.character.isAboveGround() && this.character.speedY < 0) { // Bessere Prüfung: speedY ist negativ beim Fallen
+                enemy.hit();                // Boss nimmt Schaden
+                this.character.bounce();    // Charakter springt zurück
+            } 
+            // Normale Kollision (von der Seite/unten)
+            else if (!this.character.isHurt()) {
+                this.character.hit();
+                this.updateStatusBars();
             }
-        });
+        } 
+        // Kollision mit normalen Gegnern
+        else if (!(enemy instanceof Endboss) && this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
+            this.character.hit();
+            this.updateStatusBars();
+        }
+    });
 
         // 4. Kollision Steine mit Gegnern
+        //this.throwableObjects.forEach((stone) => {
+        //    this.enemies.forEach((enemy) => {
+        //        if (stone && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
+        //            enemy.hit();
+        //            stone.isDestroyed = true; // Markiere den Stein zum Entfernen
+        //        }
+        //    });
+        //});
+
+        // 4. Kollision Steine mit ALLEN Gegnern (inklusive Endboss)
         this.throwableObjects.forEach((stone) => {
             this.enemies.forEach((enemy) => {
-                if (stone && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
-                    enemy.hit();
-                    stone.isDestroyed = true; // Markiere den Stein zum Entfernen
+                if (stone && !stone.isDestroyed && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
+                    enemy.hit(); // Trifft jeden Gegner, auch den Endboss
+                    stone.isDestroyed = true; // Markiert den Stein zum Entfernen
                 }
             });
         });
 
         // 5. Kollision Charakter mit Endboss
-        if (this.endboss && this.character.isColliding(this.endboss) && !this.endboss.isDead()) {
-            // Endboss muss zuerst besiegt werden, bevor die Truhe erreichbar ist
-            // Prüfen, ob der Charakter von OBEN auf den Boss springt
-            if (!this.character.isOnGround && this.character.speedY < 0) {
-                this.endboss.hit();         // Der Boss kriegt Schaden
-                this.character.bounce();    // Der Charakter springt ab wie ein Flummi
-
-            } else {
-                if (!this.character.isHurt()) {
-                    this.character.hit();
-                    this.updateStatusBars();
-                }
-            }
-        }
-
-        // 6. Kollision Steine mit Endboss
-        if (this.endboss && !this.endboss.isDead) {
-            this.throwableObjects.forEach((stone) => {
-                if (stone && stone.isColliding(this.endboss)) {
-                    this.endboss.hit();
-                    stone.isDestroyed = true;
-                }
-            });
-        }
+        //if (this.endboss && this.character.isColliding(this.endboss) && !this.endboss.isDead()) {
+        //    // Endboss muss zuerst besiegt werden, bevor die Truhe erreichbar ist
+        //    // Prüfen, ob der Charakter von OBEN auf den Boss springt
+        //    if (!this.character.isOnGround && this.character.speedY < 0) {
+        //        this.endboss.hit();         // Der Boss kriegt Schaden
+        //        this.character.bounce();    // Der Charakter springt ab wie ein Flummi
+//
+        //    } else {
+        //        if (!this.character.isHurt()) {
+        //            this.character.hit();
+        //            this.updateStatusBars();
+        //        }
+        //    }
+        //}
+//
+        //// 6. Kollision Steine mit Endboss
+        //if (this.endboss && !this.endboss.isDead) {
+        //    this.throwableObjects.forEach((stone) => {
+        //        if (stone && stone.isColliding(this.endboss)) {
+        //            this.endboss.hit();
+        //            stone.isDestroyed = true;
+        //        }
+        //    });
+        //}
 
         // 7. Kollision Charakter mit Schatztruhe NUR wenn Endboss tot ist
         if (this.treasureChest && this.character.isColliding(this.treasureChest)) {
-            if (this.endboss && !this.endboss.isDead) {
+            if (this.endboss && !this.endboss.isDead()) {
                 // Truhe ist blockiert, solange Endboss lebt
-                // Optional: Feedback anzeigen
                 return;
             } else {
                 this.handleWin(); // Gewinnzustand auslösen
@@ -364,11 +394,11 @@ class World {
         }
 
         // --- Aufräumen: Objekte entfernen ---
-        // Entferne Steine, die aus dem Bild geflogen sind (Performance)
         this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed)
 
-        // Entferne "tote" Gegner (die getroffen wurden)
-        this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss); // Behalte nur lebende Gegner
+        // Entfernt "tote" Gegner (die getroffen wurden)
+        // Endboss im Array behalten, auch wenn er tot ist, damit die Todesanimation gezeigt werden kann
+        this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss); 
     }
 
     draw() {
