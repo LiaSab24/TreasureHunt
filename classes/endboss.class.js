@@ -9,8 +9,8 @@ class Endboss extends MovableObject {
         
         this.Speed = 1.5; // Grundgeschwindigkeit
 
-        this.health = 5;
-        this.maxHealth = 5;
+        this.health = 3;    // Lebenspunkte des Endbosses
+        this.maxHealth = 3; // Maximale Lebenspunkte
         this.isActuallyDead = false;
         this.actionColldown = false; 
         this.hasDescended = false; // Flag, ob sich die Schlange schon 'abwärts' zum character bewegt hat
@@ -34,13 +34,16 @@ class Endboss extends MovableObject {
     }
 
     hit() {
-        if (this.isDead() || this.world.isPaused) {
+        if (this.isActuallyDead || this.world.isPaused) {
             return; // Wenn Endboss tot ist oder Spiel pausiert, passiert nichts
         }
         
-        this.health -= 1;                   // Reduziert Leben des Endbosses um 1  
+        this.health -= 1;                                               // Reduziert Leben des Endbosses um 1  
+        console.log("Endboss getroffen! Leben übrig:", this.health);    // Gutes Feedback für die Konsole
         if (this.health <= 0) {
+            this.health = 0;                                            // Verhindert negative Werte
             this.isActuallyDead = true;
+            console.log("Endboss ist besiegt!");
         }
     }
     
