@@ -193,6 +193,15 @@ class Character extends MovableObject {
     }
 
     /**
+     * Prüft, ob der Charakter sich in der Luft befindet (d.h. nicht auf dem Boden steht).
+     * Dies ist die Grundlage für die Sprunganimation und für Sprung-Angriffe.
+     * @returns {boolean} - true, wenn der Charakter in der Luft ist, sonst false.
+     */
+    isAboveGround() {
+        return this.y < 380; 
+    }
+
+    /**
      * Lässt den Charakter nach einem erfolgreichen Sprung auf einen Gegner abprallen.
      */
     bounce() {
