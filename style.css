@@ -182,7 +182,7 @@ canvas {
 .endboss-bar {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 120px;
   display: none;
   /* Am Anfang ist sie unsichtbar! */
 }
