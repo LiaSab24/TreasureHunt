@@ -486,7 +486,7 @@ class World {
         if (distance < 800 && !this.endboss.isDead()) {
             statusBar.style.display = 'flex';
             // Berechne, wie viel Prozent Leben der Boss noch hat
-            const healthPercentage = (this.endboss.health / this.endboss.maxHealth) * 100; // 5 ist die maximale Gesundheit
+            const healthPercentage = (this.endboss.health / this.endboss.maxHealth) * 100; // 3 ist die maximale Gesundheit
             healthBar.style.width = healthPercentage + '%';
 
             // Wenn die Leben niedrig sind, färbt sich der Balken rot!

@@ -146,10 +146,10 @@ class Endboss extends MovableObject {
 
     // Bewegt die Schlange langsam nach unten
     descendToGround() {
-        const targetY = 380; // Die Zielhöhe, wie character Höhe
+        const targetY = 380;                            // Die Zielhöhe, wie character Höhe
         const descendInterval = setInterval(() => {
             if (this.y < targetY) {
-                this.y += 0.5; // Geschwindigkeit des Heruntergleitens
+                this.y += 0.5;                          // Geschwindigkeit des Heruntergleitens
             } else {
                 this.y = targetY;
                 clearInterval(descendInterval);
