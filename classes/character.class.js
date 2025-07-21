@@ -196,7 +196,7 @@ class Character extends MovableObject {
      * Lässt den Charakter nach einem erfolgreichen Sprung auf einen Gegner abprallen.
      */
     bounce() {
-        this.speedY = 15; // Gibt ihm einen kleinen Schubs nach oben
+        this.speedY = 15; // Setzt die vertikale Geschwindigkeit, um einen kleinen Sprung nach oben zu simulieren
     }
 
    /**
