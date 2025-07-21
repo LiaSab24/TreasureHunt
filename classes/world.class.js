@@ -316,11 +316,12 @@ class World {
         //    }
         //});
 
+        // 3. Kollision Charakter mit Gegnern und Endboss
         this.enemies.forEach((enemy) => {
-        // Prüft, ob es sich um den Endboss handelt und ob der Charakter von oben springt
-        if (enemy instanceof Endboss && this.character.isColliding(enemy) && !enemy.isDead()) {
-            // Sprung von oben auf den Boss
-            if (this.character.isAboveGround() && this.character.speedY < 0) { // Bessere Prüfung: speedY ist negativ beim Fallen
+        // Prüft Kollision und ob Gegner noch lebt
+        if (this.character.isColliding(enemy) && !enemy.isDead()) {
+            // Sprungamgriff auf den Boss
+            if (enemy instanceof Endboss && this.character.isAboveGround() && this.character.speedY < 0) { // isAboveGround() prüft, ob er in der Luft ist, speedY < 0 prüft, ob er fällt 
                 enemy.hit();                // Boss nimmt Schaden
                 this.character.bounce();    // Charakter springt zurück
             } 
