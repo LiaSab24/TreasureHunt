@@ -93,7 +93,7 @@ class World {
         this.coins.push(new Coin(1330, 480));
         this.coins.push(new Coin(1360, 450));
         this.coins.push(new Coin(1600, 470));
-        this.coins.push(new Coin(1900, 400));
+        this.coins.push(new Coin(1700, 400));
     }
     initStones() {
         this.stones.push(new Stone(500, 480));
@@ -101,7 +101,10 @@ class World {
         this.stones.push(new Stone(700, 480));
         this.stones.push(new Stone(850, 500));
         this.stones.push(new Stone(1000, 530));
-        this.stones.push(new Stone(1250, 480));
+        this.stones.push(new Stone(1150, 480));
+        this.stones.push(new Stone(1300, 530));
+        this.stones.push(new Stone(1350, 530));
+        this.stones.push(new Stone(1400, 480));
         this.stones.push(new Stone(1500, 530));
     }   
     initEnemies() {
@@ -109,7 +112,7 @@ class World {
             new Enemy(550, this),
             new Enemy(700, this),
             new Enemy(900, this),
-            new Enemy(950, this),
+            new Enemy(1050, this),
             new Enemy(1200, this),
             new Enemy(1350, this),
         );
