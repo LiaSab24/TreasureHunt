@@ -17,7 +17,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 70px;
- /* height: 100vh;  */
+  width: 100%;              /**/
+  height: 100vh;            /**/
+  overflow: hidden;         /**/
+  color: #333;            /**/
 }
 .info {
   font-size: 1.5rem;
@@ -33,6 +36,10 @@ h1 {
 }
 h2 {
   font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 1.75rem;
 }
 
 .overlay {
@@ -71,8 +78,8 @@ h2 {
 }
 .game-info {
   margin-top: 150px;
-  max-width: 600px;
-  width: 100%;
+  min-width: 400px;
+  max-width: 1000px;
   color: #af5567;
   position: relative;
   display: grid;
@@ -88,12 +95,16 @@ h2 {
   }
   .content {
     position: absolute;
-    top: 60px;
+    top: 50px;
     text-align: center;
-    display: grid;
+  /*  display: grid;
     place-items: center;
-    gap: 10px;
+    gap: 10px;  */
     padding-right: 25px;
+    p {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
   }
 }
 
