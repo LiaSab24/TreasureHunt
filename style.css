@@ -198,6 +198,56 @@ canvas {
   /* Am Anfang ist sie unsichtbar! */
 }
 
+/* --- CSS für den Endboss-Statusbalken --- */
+/* Der graue "Hintergrund"-Balken, der immer sichtbar ist, wenn die Leiste aktiv ist */
+.status-bar {
+  height: 20px;
+  /* Gibt dem Balken eine Höhe */
+  width: 70%;
+  /* Nimmt 70% der Breite des Containers ein */
+  background-color: #555555;
+  /* Dunkelgrauer Hintergrund für den leeren Teil */
+  border: 1px solid #ffffff;
+  /* Ein feiner weißer Rand sieht oft gut aus */
+  border-radius: 5px;
+  /* Abgerundete Ecken */
+}
+
+/* Der grüne/rote "Füll"-Balken, dessen Breite per JavaScript gesteuert wird */
+.status-bar-fill, .health {
+  height: 100%;
+  /* Füllt die volle Höhe des Eltern-Elements (.status-bar) aus */
+  background-color: green;
+  /* Standardfarbe ist grün, JS ändert sie zu rot */
+  border-radius: 4px;
+  /* Leicht abgerundete Ecken, passt zum Rand */
+  transition: width 0.3s ease-in-out;
+  /* Schöner Übergangseffekt, wenn Leben verloren geht */
+}
+
+.status-bar-container, .endboss-bar {
+  display: none;
+  /* Wichtig: Standardmäßig ausblenden */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 250px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid #8B0000;
+  /* Dunkelroter Rand für den Boss */
+
+  /* Flexbox-Einstellungen für die Ausrichtung von "ENDBOSS" und dem Balken */
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  /* Abstand zwischen Text und Balken */
+}
+
+/* -- Ende Endboss style -- */
+
 .gameInfo {
   padding-top: 20px;
   .game-buttons {

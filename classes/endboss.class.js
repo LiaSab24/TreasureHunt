@@ -39,11 +39,11 @@ class Endboss extends MovableObject {
         }
         
         this.health -= 1;                                               // Reduziert Leben des Endbosses um 1  
-        console.log("Endboss getroffen! Leben übrig:", this.health);    // Gutes Feedback für die Konsole
+        console.log("Schlange getroffen! Leben übrig:", this.health);    // Gutes Feedback für die Konsole
         if (this.health <= 0) {
             this.health = 0;                                            // Verhindert negative Werte
             this.isActuallyDead = true;
-            console.log("Endboss ist besiegt!");
+            console.log("Schlange ist besiegt!");
         }
     }
     

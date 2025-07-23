@@ -478,7 +478,7 @@ class World {
     drawEndbossStatusBar() {
         if (!this.endboss) return;              // Nur ausführen, wenn es einen Endboss gibt
 
-        const distance = this.endboss.x - this.character.x;
+        const distance = Math.abs(this.endboss.x - this.character.x); 
         const statusBar = document.getElementById('endbossStatus');
         const healthBar = document.getElementById('endbossHealthBar');
 
