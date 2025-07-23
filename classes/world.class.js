@@ -5,7 +5,7 @@ class World {
 
     character = new Character(); 
     enemies = [new Enemy(400), new Enemy(800), new Enemy(1200)]; 
-    clouds = [new Cloud(0),new Cloud(400),new Cloud(900)]; 
+    clouds = [new Cloud(0),new Cloud(400),new Cloud(900), new Cloud(1300), new Cloud(1700), new Cloud(2100)]; 
     coins = []; 
     stones = [];
     throwableObjects = [];     
@@ -17,7 +17,8 @@ class World {
     treasureChest = null;       
     LEVEL_END = 2500;           // Level-Ende (soll dynamisch gesetzt werden)
     gameWon = false;           
-    isPaused = false;          
+    isPaused = false; 
+    audioManager = new AudioManager(); // Instanz der Audio-Klasse         
 
     /**
     * Erstellt eine neue Instanz der Spielwelt.
@@ -213,10 +214,10 @@ class World {
         this.isPaused = !this.isPaused;
         if (this.isPaused) {
             console.log("Spiel pausiert.");
-            // Hintergrundmusik pausieren (kommt bei Soundeffekten)
+            //this.audioManager.stop('background'); // NEU -- fehlt noch
         } else {
             console.log("Spiel fortgesetzt.");
-            // Hintergrundmusik fortsetzen
+            //this.audioManager.play('background'); // NEU -- fehlt noch
         }
     }
 
@@ -225,6 +226,9 @@ class World {
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
         }
+        // NEU: Startet die Hintergrundmusik, sobald das Spiel läuft
+        //this.audioManager.play('background'); <--> fehlt noch
+        // Startet die Game Loop, die alle 16.67ms (60 FPS) läuft
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
               this.draw();
@@ -250,7 +254,9 @@ class World {
     handleGameOver() {
         clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
         this.gameLoopIntervalId = null;
-        // Ruft die globale Funktion aus game.js auf, um das Overlay anzuzeigen
+       // NEU: Stoppt die Musik und spielt den Game-Over-Sound
+       //this.audioManager.stop('background'); <--> fehlt noch
+       //this.audioManager.play('game_over');  <--> fehlt noch
         showGameOverScreen();
     }
 
@@ -263,10 +269,16 @@ class World {
             this.character.moveLeft();
         }
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) {
-            this.character.jump();
+            //this.character.jump();
+            if (this.character.jump()) { // wenn jump() gibt true zurück bei Erfolg
+                 this.audioManager.play('jump'); // NEU
+            }
         }
         if (this.keyboard['d'] || this.keyboard['D']  || this.keyboard['TOUCH_THROW']) { // Taste D für Werfen
-            this.character.throwStone();
+            //this.character.throwStone();
+            if (this.character.throwStone()) { // wenn throwStone() gibt bei Erfolg true zurück
+                this.audioManager.play('throw');    // NEU
+            }
         }
          this.camera_x = -this.character.x + 100; // 100 Pixel Offset vom linken Rand
     }
@@ -284,7 +296,9 @@ class World {
              clearInterval(this.gameLoopIntervalId);    // Stoppt die Game Loop
              this.gameLoopIntervalId = null;
              this.keyboard = {}; // Tastatureingaben ignorieren
-             // Rufe die globale Funktion aus game.js auf, um das Overlay anzuzeigen
+             // NEU: Stoppe die Musik und spiele den Gewinn-Sound
+             //this.audioManager.stop('background'); <--> fehlt noch
+             this.audioManager.play('win');
              showWinScreen();
         }
     }
@@ -295,6 +309,7 @@ class World {
                 this.character.collectCoin();           // Methode in Character aufrufen
                 this.coins.splice(index, 1);            // Münze aus dem Array entfernen
                 this.updateStatusBars();                // Statusbar sofort aktualisieren
+                this.audioManager.play('coin');         // NEU
             }
         });
 
@@ -322,13 +337,15 @@ class World {
         if (this.character.isColliding(enemy) && !enemy.isDead()) {
             // Sprungamgriff auf den Boss
             if (enemy instanceof Endboss && this.character.isAboveGround() && this.character.speedY < 0) { // isAboveGround() prüft, ob er in der Luft ist, speedY < 0 prüft, ob er fällt 
-                enemy.hit();                // Boss nimmt Schaden
+                enemy.hit();                // Gegner nimmt Schaden
                 this.character.bounce();    // Charakter springt zurück
+                //this.audioManager.play('enemy_death'); // NEU: Sound für Treffer auf Gegner -- fehlt noch
             } 
             // Normale Kollision (von der Seite/unten)
             else if (!this.character.isHurt()) {
                 this.character.hit();
                 this.updateStatusBars();
+                //this.audioManager.play('character_hit'); // NEU -- fehlt noch
             }
         } 
         // Kollision mit normalen Gegnern
@@ -354,6 +371,7 @@ class World {
                 if (stone && !stone.isDestroyed && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
                     enemy.hit(); // Trifft jeden Gegner, auch den Endboss
                     stone.isDestroyed = true; // Markiert den Stein zum Entfernen
+                    //this.audioManager.play('enemy_death'); // NEU -- fehlt noch
                 }
             });
         });
