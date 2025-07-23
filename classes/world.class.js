@@ -269,16 +269,18 @@ class World {
             this.character.moveLeft();
         }
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) {
-            //this.character.jump();
-            if (this.character.jump()) { // wenn jump() gibt true zurück bei Erfolg
-                 this.audioManager.play('jump'); // NEU
-            }
+            this.character.jump();
+            // packe ich doch in die character.class.js
+            //if (this.character.jump()) { // wenn jump() gibt true zurück bei Erfolg
+            //     this.audioManager.play('jump'); // NEU
+            //} 
         }
         if (this.keyboard['d'] || this.keyboard['D']  || this.keyboard['TOUCH_THROW']) { // Taste D für Werfen
-            //this.character.throwStone();
-            if (this.character.throwStone()) { // wenn throwStone() gibt bei Erfolg true zurück
-                this.audioManager.play('throw');    // NEU
-            }
+            this.character.throwStone();
+            // packe ich doch in die character.class.js
+            //if (this.character.throwStone()) { // wenn throwStone() gibt bei Erfolg true zurück
+            //    this.audioManager.play('throw');    // NEU
+            //}
         }
          this.camera_x = -this.character.x + 100; // 100 Pixel Offset vom linken Rand
     }

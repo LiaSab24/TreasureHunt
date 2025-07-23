@@ -182,13 +182,18 @@ class Character extends MovableObject {
     */
    /**
      * Löst einen Sprung aus, wenn der Charakter am Boden ist.
-     * Setzt die vertikale Geschwindigkeit, um den Charakter nach oben zu bewegen.
+     * setzt die vertikale Geschwindigkeitund spielt den Sound ab
      */
     jump() {         
         if (this.isOnGround && !this.isDead()) {        // Springen nur erlauben, wenn der Charakter am Boden ist und nicht tot
             this.speedY = 20;                           // Positive Geschwindigkeit nach oben 
           /*  this.speedX = 10;    */                   // Horizontale Geschwindigkeit zurücksetzen 
             this.isOnGround = false;
+            // NEU: Spielt den Sprung-Sound direkt hier ab
+            // Charakter hat über `this.world` Zugriff auf den audioManager
+            if (this.world && this.world.audioManager) {
+                this.world.audioManager.play('jump');
+            }
         }
     }
 
@@ -226,6 +231,10 @@ class Character extends MovableObject {
         }
     }
 
+     /**
+     * Löst den Wurf eines Steins aus, wenn die Bedingungen erfüllt sind.
+     * Verbraucht einen Stein, startet einen Cooldown und spielt den Wurf-Sound.
+     */
     throwStone() {
         const now = new Date().getTime();
         // Prüfen: Genug Steine? Nicht tot? Cooldown abgelaufen?
@@ -237,6 +246,11 @@ class Character extends MovableObject {
             setTimeout(() => {
                 this.isThrowing = false;
             }, 350); // 350ms reichen für eine kurze Wurf-Animation
+
+            // NEU: Spielt den Wurf-Sound direkt hier ab
+            if (this.world && this.world.audioManager) {
+                this.world.audioManager.play('throw');
+            }
 
             // Startposition des Steins (z.B. Mitte des Charakters)
             let startX = this.x + (this.facingDirection === 'right' ? this.width - 30 : 0); // Etwas vor dem Charakter starten
