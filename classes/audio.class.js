@@ -1,5 +1,4 @@
 class AudioManager {
-    // Ein Objekt, das alle Audio-Elemente speichert
     sounds = {};
     isMuted = false;
 
@@ -12,10 +11,8 @@ class AudioManager {
         // noch fehlende Sounds
         //this.loadSound('character_hit', 'audio/character-hit.mp3'); 
         //this.loadSound('game_over', 'audio/game_over.mp3'); // Sound für das Spielende
-        //this.loadSound('enemy_death', 'audio/enemy_death.mp3'); // Sound, wenn ein Gegner besiegt wird
-
-        // Die Hintergrundmusik wird mit speziellen Optionen (loop, volume) geladen
-        //this.loadSound('background', 'audio/background_music.mp3', true, 0.2);
+        //this.loadSound('enemy_death', 'audio/enemy_death.mp3'); // Sound, wenn ein Gegner besiegt wir       
+        //this.loadSound('background', 'audio/background_music.mp3', true, 0.2);  // Hintergrundmusik mit speziellen Optionen (loop, volume)
     }
 
     /**
@@ -44,7 +41,7 @@ class AudioManager {
             this.sounds[name].currentTime = 0;
             this.sounds[name].play().catch(e => {
                 // Autoplay kann durch den Browser blockiert werden, bis der User interagiert.
-                // Dieser catch-Block verhindert Fehler in der Konsole.
+                // catch-Block verhindert Fehler in der Konsole.
                 console.warn(`Audio '${name}' konnte nicht abgespielt werden. Warte auf User-Interaktion.`);
             });
         }
@@ -72,6 +69,6 @@ class AudioManager {
         console.log(this.isMuted ? "Audio stummgeschaltet" : "Audio aktiviert");
 
         // durchgestrichener Lautsprecher
-        document.getElementById('muteButtonIcon').src = this.isMuted ? 'icons/mute.png' : 'icons/unmute.png';
+        document.getElementById('audioOnOffButton').src = this.isMuted ? 'icons/mute.png' : 'icons/unmute.png';
     }
 }
