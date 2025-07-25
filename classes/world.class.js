@@ -265,10 +265,10 @@ class World {
         this.isPaused = !this.isPaused;
         if (this.isPaused) {
             console.log("Spiel pausiert.");
-            //this.audioManager.stop('background'); // -- fehlt noch
+            this.audioManager.stop('background'); 
         } else {
             console.log("Spiel fortgesetzt.");
-            //this.audioManager.play('background'); // -- fehlt noch
+            this.audioManager.play('background'); 
         }
     }
 
@@ -285,7 +285,7 @@ class World {
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
         }
-        //this.audioManager.play('background');     // Startet die Hintergrundmusik, sobald das Spiel läuft <--> fehlt noch
+        this.audioManager.play('background');     // Startet die Hintergrundmusik, sobald das Spiel läuft
         // Startet die Game Loop, die alle 16.67ms (60 FPS) läuft
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
@@ -319,7 +319,7 @@ class World {
     handleGameOver() {
         clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
         this.gameLoopIntervalId = null;
-       //this.audioManager.stop('background'); // Stoppt die backgroundMusik <--> fehlt noch
+        this.audioManager.stop('background'); // Stoppt die backgroundMusik 
        //this.audioManager.play('game_over');  // spielt den Game-Over-Sound <--> fehlt noch
         showGameOverScreen();
     }
@@ -362,7 +362,7 @@ class World {
              clearInterval(this.gameLoopIntervalId);    // Stoppt die Game Loop
              this.gameLoopIntervalId = null;
              this.keyboard = {};                        // Tastatureingaben ignorieren
-             //this.audioManager.stop('background');    // Stoppt die Musik und spielt den Gewinn-Sound <--> fehlt noch
+             this.audioManager.stop('background');      // Stoppt die Musik und spielt den Gewinn-Sound
              this.audioManager.play('win');
              showWinScreen();
         }
