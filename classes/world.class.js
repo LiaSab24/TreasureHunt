@@ -40,7 +40,14 @@ class World {
         this.gameWon = false;    
         this.isPaused = false;   
     }
-
+    /**
+     * Initialisiert das Level, setzt den Spielzustand zurück und initialisiert alle Objekte
+     * wie Hintergrund, Münzen, Steine, Gegner und den Endboss.
+     * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.
+     * Diese Methode wird in der Konstruktor-Methode aufgerufen.
+     * @function initLevel
+     * @memberof World
+     */
     initLevel() {
         this.resetGameState();
         this.initBackgroundLayers();
@@ -49,7 +56,13 @@ class World {
         this.resetCharacter();
         this.resetCamera();
     }
-
+    /**
+     * Setzt den Spielzustand zurück, einschließlich aller Objekte und des Endbosses.
+     * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.  
+     * Diese Methode löscht alle Objekte und setzt den Endboss neu.
+     * Sie wird in der initLevel() aufgerufen.
+     * @memberof World
+     */
     resetGameState() {
         this.isPaused = false;
         this.gameWon = false;
@@ -61,6 +74,10 @@ class World {
         this.throwableObjects = [];
     }
 
+    /** 
+     * Zeichnet den Hintergrund auf dem Canvas.
+     * Sie wird in der initLevel() aufgerufen.
+     */
     initBackgroundLayers() {
         const canvasWidth = this.canvas.width;
         const layers = [
@@ -76,7 +93,10 @@ class World {
             this.backgroundObjects.push(new BackgroundObject(layerData.path, canvasWidth * 2, 0, layerData.parallaxFactor));
         });
     }
-
+    /**
+     * Initialisiert alle Spielobjekte wie Münzen, Steine, Gegner und den Endboss.
+     * Diese Methode wird in der initLevel() aufgerufen.
+     */
     initGameObjects() {
         this.initCoins();
         this.initStones();
@@ -118,6 +138,7 @@ class World {
             new Enemy(1350, this),
         );
     }
+
     /**
      * Initialisiert den Endboss und platziert ihn kurz vor der Schatztruhe.
      * Der Endboss erscheint erst, wenn der Charakter nahe genug am Level-Ende ist.
@@ -127,33 +148,44 @@ class World {
         this.endboss.y = 250;
         this.enemies.push(this.endboss);
     }
+
     /**
      * Initialisiert die Schatztruhe
      * am LEVEL_END-Punkt, 320 Pixel über dem Boden
+     * Diese Methode wird in der initLevel() aufgerufen.
      */
     initTreasureChest() {
         const groundYForChest = 320;
         this.treasureChest = new TreasureChest(this.LEVEL_END, groundYForChest);
     }
+
     /**
      * Setzt den Charakter zurück und bindet ihn an die Welt.
      * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.
+     * Diese Methode wird in der initLevel() aufgerufen.
+     * @param {Character} character - Der Charakter, der in der Welt platziert wird.
+     * @memberof World
      */
     resetCharacter() {
         this.character = new Character();
         this.setWorld();
     }
+
     /**
-     * Setzt die Kamera-Position zurück.
      * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.
+     * Diese Methode wird in der initLevel() aufgerufen.
+     * Sie setzt die Kamera-Position auf 0, sodass der Charakter immer am linken Rand des Canvas beginnt.
+     * @memberof World
      */
     resetCamera() {
         this.camera_x = 0;
     }
+
     /**
      * Setzt die Welt-Referenz im Charakter-Objekt.
      * Diese Methode wird aufgerufen, um die Referenz zur Welt zu setzen,
      * damit der Charakter auf die Welt zugreifen kann.
+     * Diese Methode wird in der Konstruktor-Methode aufgerufen.
      */
     setWorld() {
         this.character.world = this;
@@ -161,6 +193,10 @@ class World {
 
     /**
      * Bindet die Event Listener für Tastatureingaben.
+     * Diese Methode registriert 'keydown' und 'keyup' Events,
+     * um den Zustand der Tasten im `this.keyboard`-Objekt zu speichern.
+     * Außerdem wird die Pause-Funktionalität an die Taste 'p' gebunden.
+     * Diese Methode wird in der Konstruktor-Methode aufgerufen.
      * @memberof World
      */
     bindKeyboardEvents() {
@@ -180,9 +216,10 @@ class World {
     /**
      * Initialisiert die Event-Listener für die In-Game-Steuerungsbuttons.
      * Nutzt eine Konfigurations-Map, um den Code sauber und erweiterbar zu halten.
+     * Mit ButtonID-Konfiguration zu den SteuerungsAktionen.
+     * Diese Methode wird in der Konstruktor-Methode aufgerufen.
      */
     initButtonControls() {
-        // ButtonID-Konfiguration zu den SteuerungsAktionen.
         const controlButtonMap = {
             'leftButton': 'TOUCH_LEFT',
             'rightButton': 'TOUCH_RIGHT',
@@ -202,6 +239,7 @@ class World {
      * für Maus und Touch an einen einzelnen UI-Button.
      * @param {string} buttonId - Die ID des HTML-Button-Elements.
      * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
+     * wird in der initButtonControls() aufgerufen.
      */
     bindPressAndHoldEvents(buttonId, actionKey) {
         const button = document.getElementById(buttonId);
@@ -234,7 +272,15 @@ class World {
         }
     }
 
-    // Startet die Haupt-Game-Loop
+    /**
+     * Startet die Game Loop, die alle 16.67ms (60 FPS) läuft.
+     * Diese Methode wird in der Konstruktor-Methode aufgerufen.
+     * Die Game Loop prüft Tastatureingaben, wendet Schwerkraft an,
+     * prüft Kollisionen und zeichnet die Objekte auf dem Canvas.
+     * @memberof World
+     * @function run
+     * @returns {void}
+     */
     run() {
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
@@ -263,6 +309,13 @@ class World {
         }, 1000 / 60);
     }
 
+    /**
+     * Stoppt die Game Loop und zeigt den Game-Over-Bildschirm an.
+     * Diese Methode wird aufgerufen, wenn der Charakter stirbt.
+     * Sie setzt die Game Loop ID auf null, um zu verhindern, dass sie erneut gestartet wird.
+     * Außerdem wird der Hintergrund gestoppt und der Game-Over-Sound abgespielt.
+     * Diese Methode wird in der run() aufgerufen, wenn der Charakter tot ist.
+     */
     handleGameOver() {
         clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
         this.gameLoopIntervalId = null;
@@ -271,7 +324,15 @@ class World {
         showGameOverScreen();
     }
 
-    // Überprüft Tastatureingaben und löst Charakteraktionen aus
+    /**
+     * Überprüft Tastatureingaben und löst Charakteraktionen aus
+     * je nach gedrückten Tasten.
+     * Diese Methode wird in der run() aufgerufen, um die Eingaben zu verarbeiten
+     * und die Kamera-Position entsprechend dem Charakter zu aktualisieren.
+     * @memberof World
+     * @function checkKeyboardInput
+     * @returns {void} 
+     */ 
     checkKeyboardInput() {
         if (this.keyboard['ArrowRight'] || this.keyboard['TOUCH_RIGHT']) { 
             this.character.moveRight();
