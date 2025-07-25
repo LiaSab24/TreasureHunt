@@ -35,13 +35,20 @@ class AudioManager {
      * @param {string} name 
      */
     play(name) {
-        if (this.isMuted) return; // wenn stummgeschaltet, nicht abspielen 
-
-        if (this.sounds[name]) {
+        //if (this.isMuted) return; // wenn stummgeschaltet, nicht abspielen 
+        //if (this.sounds[name]) {
+        //    this.sounds[name].currentTime = 0;
+        //    this.sounds[name].play().catch(e => {
+        //        // Autoplay kann durch den Browser blockiert werden, bis der User interagiert.
+        //        // catch-Block verhindert Fehler in der Konsole.
+        //        console.warn(`Audio '${name}' konnte nicht abgespielt werden. Warte auf User-Interaktion.`);
+        //    });
+        //}
+        
+        // Nur abspielen, wenn NICHT stummgeschaltet
+        if (!this.isMuted && this.sounds[name]) {
             this.sounds[name].currentTime = 0;
             this.sounds[name].play().catch(e => {
-                // Autoplay kann durch den Browser blockiert werden, bis der User interagiert.
-                // catch-Block verhindert Fehler in der Konsole.
                 console.warn(`Audio '${name}' konnte nicht abgespielt werden. Warte auf User-Interaktion.`);
             });
         }
@@ -60,15 +67,32 @@ class AudioManager {
 
     /**
      * Schaltet alle Sounds on/off
+     * aktualisiert das audioIcon
+     * Stoppt die Hintergrundmusik beim Stummschalten und startet sie wieder,
+     * um Browser-Probleme mit .muted zu umgehen
      */
     toggleMute() {
-        this.isMuted = !this.isMuted;
-        for (const key in this.sounds) {
-            this.sounds[key].muted = this.isMuted;
+        this.isMuted = !this.isMuted;   // Zustand umschalten (true -> false, false -> true)
+        const audioIcon = document.getElementById('audioIcon'); // !NEU! Das <img>-Element holen
+        
+        if (this.isMuted) {
+            // --- TON AUS ---
+            for (const key in this.sounds) {
+                this.sounds[key].pause(); // Alle Sounds anhalten   //muted = this.isMuted;
+            }
+            if (audioIcon) {
+                audioIcon.src = 'images/button/speakerOff.PNG'; // Bild auf "AUS" setzen
+            }
+             console.log("Audio stummgeschaltet");
+        } else {
+            // --- TON AN ---
+            for (const key in this.sounds) {
+                this.sounds[key].play(); // Alle Sounds abspielen
+            }
+            if (audioIcon) {
+                audioIcon.src = 'images/button/speakerOn.PNG'; // Bild auf "AN" setzen
+            }
+            console.log("Audio eingeschaltet");
         }
-        console.log(this.isMuted ? "Audio stummgeschaltet" : "Audio aktiviert");
-
-        // durchgestrichener Lautsprecher
-        document.getElementById('audioOnOffButton').src = this.isMuted ? 'icons/mute.png' : 'icons/unmute.png';
     }
 }

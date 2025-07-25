@@ -232,6 +232,14 @@ class World {
             const actionKey = controlButtonMap[buttonId];
             this.bindPressAndHoldEvents(buttonId, actionKey);
         }
+        // NEU: Event Listener für den Audio-Toggle-Button hinzufügen
+        const audioButton = document.getElementById('audioToggleButton');
+        if (audioButton) {
+            audioButton.addEventListener('click', () => {
+                // Ruft die Methode auf dem audioManager auf, der zur Welt gehört
+                this.audioManager.toggleMute();
+            });
+        }
     }
 
     /**
