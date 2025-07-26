@@ -233,7 +233,7 @@ class World {
             this.bindPressAndHoldEvents(buttonId, actionKey);
         }
         // NEU: Event Listener für den Audio-Toggle-Button hinzufügen
-        const audioButton = document.getElementById('audioToggleButton');
+        const audioButton = document.getElementById('audioOnOffButton');
         if (audioButton) {
             audioButton.addEventListener('click', () => {
                 // Ruft die Methode auf dem audioManager auf, der zur Welt gehört
