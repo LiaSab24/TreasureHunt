@@ -1,0 +1,54 @@
+.smartphone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: grid;
+  place-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.4s ease, visibility 0.5s;
+}
+
+.smartphone img {
+  max-width: 480px;
+  width: 90%;
+  height: auto;
+}
+
+/* Schließen-Button */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  background: none;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* Nur anzeigen bei kleiner Bildschirmbreite */
+@media (max-width: 666px) {
+  .smartphone {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transform: scale(1);
+  }
+
+  .smartphone.closing {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.95);
+  }
+}
