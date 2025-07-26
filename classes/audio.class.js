@@ -86,8 +86,7 @@ class AudioManager {
              console.log("Audio stummgeschaltet");
         } else {
             // --- TON AN ---
-            //for (const key in this.sounds) {
-            //    this.sounds[key].play(); // Alle Sounds abspielen
+            for (const key in this.sounds) {
               this.play('background');
             }
             if (audioIcon) {
