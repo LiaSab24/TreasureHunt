@@ -85,6 +85,7 @@ h3 {
   display: grid;
   place-items: center;
   transform: translateY(-50px);
+  overflow: scroll;
   img {
     margin: 0 auto;
     opacity: 0.85;
