@@ -86,8 +86,9 @@ class AudioManager {
              console.log("Audio stummgeschaltet");
         } else {
             // --- TON AN ---
-            for (const key in this.sounds) {
-                this.sounds[key].play(); // Alle Sounds abspielen
+            //for (const key in this.sounds) {
+            //    this.sounds[key].play(); // Alle Sounds abspielen
+              this.play('background');
             }
             if (audioIcon) {
                 audioIcon.src = 'images/button/speakerOn.PNG'; // Bild auf "AN" setzen
