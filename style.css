@@ -95,7 +95,7 @@ h3 {
   transform: translateY(-50px);
   contain: paint; */
   width: 90%;
-  max-width: 600px;
+  max-width: 500px;
   color: #af5567;
   position: relative;
   display: grid;
