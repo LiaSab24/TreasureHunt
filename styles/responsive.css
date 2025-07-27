@@ -5,13 +5,9 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.85);
-  display: none; /*grid;*/
+  display: none; /* grid;*/
   place-content: center;
   z-index: 9999;
- /* opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.5s ease, transform 0.4s ease, visibility 0.5s; */
 }
 
 .smartphone img {
@@ -36,75 +32,55 @@
   color: red;
 }
 
-/* Nur anzeigen bei kleiner Bildschirmbreite 
-@media (max-width: 666px) {
+/*
+  Diese Regel sorgt dafür, dass die "Bitte drehen"-Meldung
+  angezeigt wird, sobald das Gerät hochkant gehalten wird.
+*/
+@media (orientation: portrait) {
   .smartphone {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: all;
-    transform: scale(1);
+    display: grid;
   }
 
-  .smartphone.closing {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: scale(0.95);
+  /* Diese Regel versteckt zur Sicherheit alles andere */
+  body>*:not(.smartphone) {
+    display: none !important;
   }
-} */
+}
 
 /* --- RESPONSIVE STYLES FÜR QUERFORMAT (landscape) --- */
-
 /* 
-  Diese Regeln gelten für Bildschirme, die schmaler als 1024px sind 
-  (also Tablets und Smartphones im Querformat)
+  Diese Regeln gelten für Tablets und Smartphones im Querformat)
 */
 @media (max-width: 1024px) and (orientation: landscape) {
 
-  /* Body anpassen für besseres Layout im Spiel */
   body {
     gap: 20px;
-    /* Weniger Abstand */
-    /* Wir entfernen justify-content, damit der Inhalt oben startet */
     justify-content: flex-start;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
+    padding: 1vh 0;
     height: auto;
-    /* Höhe automatisch anpassen lassen */
     min-height: 100vh;
   }
 
-  /* Der Game Container wird flexibel */
   #gameContainer {
     width: 95vw;
-    /* Nutzt 95% der Bildschirmbreite */
     max-width: 1000px;
-    /* Aber wird nicht breiter als das Original */
     height: auto;
-    /* Höhe passt sich dem Inhalt an */
   }
 
-  /* Das Canvas skaliert mit, behält aber sein Seitenverhältnis! */
   canvas {
     width: 100%;
-    /* Füllt die Breite des #gameContainer */
     height: auto;
-    /* Höhe wird automatisch berechnet */
-    aspect-ratio: 1000 / 700;
-    /* DAS IST DER MAGISCHE TEIL! Behält das 10:7 Verhältnis */
+    aspect-ratio: 1000 / 700; /* DAS IST DER MAGISCHE TEIL! Behält das 10:7 Verhältnis */
   }
 
   /* Die Steuerungsbuttons kleiner machen */
-  .gameInfo.game-buttons {
+  .gameInfo .game-buttons {
     gap: 10px;
-    /* Weniger Abstand zwischen den Buttons */
     flex-wrap: wrap;
-    /* Erlaubt Umbruch, falls nicht alle nebeneinander passen */
   }
 
-  .gameInfo.game-button img {
+  .gameInfo .game-button img {
     width: 60px;
-    /* Macht die Button-Bilder kleiner */
   }
 
   /* Schriftgröße der Statusleiste anpassen */
