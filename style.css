@@ -17,11 +17,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 70px;
-  width: 100%;              /**/
-  height: auto;            /**/
-  min-height: 100vh;   /**/
-  /* overflow: hidden;         */
-  color: #333;            /**/
+  width: 100%;             
+  height: auto;            
+  min-height: 100vh;       
+  color: #333;            
 }
 .info {
   font-size: 1.5rem;
@@ -41,6 +40,7 @@ h2 {
 
 h3 {
   font-size: 1.75rem;
+  margin-bottom: 10px;
 }
 
 .overlay {
@@ -53,8 +53,6 @@ h3 {
   background-size: cover;
   background-position: center;
   background-color: rgba(0, 0, 0, 0.6); 
-  /*display: grid;
-  place-items: center; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,7 +60,7 @@ h3 {
   gap: 20px;
   z-index: 100;  
   color: white;
-  overflow-y: auto; /* vertikales Scrollen NUR wenn nötig */
+  overflow-y: auto;   /* vertikales Scrollen NUR wenn nötig */
     padding: 40px 0;  /* oben und unten etwas "Luft" zum Scrollen */
   .img-text-flex {
     display: flex;
@@ -85,15 +83,6 @@ h3 {
   }
 }
 .game-info {
- /* margin-top: 150px;
-  min-width: 400px;
-  max-width: 1000px;
-  color: #af5567;
-  position: relative;
-  display: grid;
-  place-items: center;
-  transform: translateY(-50px);
-  contain: paint; */
   width: 90%;
   max-width: 500px;
   color: #af5567;
@@ -115,25 +104,18 @@ h3 {
     width: 100%;
     height: 100%;
     text-align: center;
-   /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
     padding: 12% 8% 8%;
-    color: #632d3c; /* besseren Kontrast */
-    text-shadow: 0 0 5px white;/* Text noch besser lesbar */
-    z-index: 100; /* Damit der Text über dem Bild liegt */
-    h3 {
-      margin-bottom: 10px;
-    }
+    color: #632d3c; 
+    text-shadow: 0 0 5px white;
+    z-index: 100; 
     p {
         font-size: 1rem;
         line-height: 1.6;
         img {
           width: 16px;
           height: 16px;
-          vertical-align: middle; /* Richtet die Bilder schön am Text aus */
-          margin: 0 4px;  /* Ein kleiner Abstand zum Text */
+          vertical-align: middle;
+          margin: 0 4px;  
         }
       }
   }
@@ -184,8 +166,6 @@ h3 {
 
 
 #gameContainer {
- /* position: relative;
-  width: 1000px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -230,39 +210,28 @@ canvas {
   top: 20px;
   right: 120px;
   display: none;
-  /* Am Anfang ist sie unsichtbar! */
 }
 
 /* --- CSS für den Endboss-Statusbalken --- */
 /* Der graue "Hintergrund"-Balken, der immer sichtbar ist, wenn die Leiste aktiv ist */
 .status-bar {
   height: 20px;
-  /* Gibt dem Balken eine Höhe */
   width: 70%;
-  /* Nimmt 70% der Breite des Containers ein */
   background-color: #555555;
-  /* Dunkelgrauer Hintergrund für den leeren Teil */
   border: 1px solid #ffffff;
-  /* Ein feiner weißer Rand sieht oft gut aus */
   border-radius: 5px;
-  /* Abgerundete Ecken */
 }
 
 /* Der grüne/rote "Füll"-Balken, dessen Breite per JavaScript gesteuert wird */
 .status-bar-fill, .health {
   height: 100%;
-  /* Füllt die volle Höhe des Eltern-Elements (.status-bar) aus */
   background-color: green;
-  /* Standardfarbe ist grün, JS ändert sie zu rot */
   border-radius: 4px;
-  /* Leicht abgerundete Ecken, passt zum Rand */
   transition: width 0.3s ease-in-out;
-  /* Schöner Übergangseffekt, wenn Leben verloren geht */
 }
 
 .status-bar-container, .endboss-bar {
   display: none;
-  /* Wichtig: Standardmäßig ausblenden */
   position: absolute;
   top: 10px;
   right: 10px;
@@ -272,19 +241,13 @@ canvas {
   padding: 8px;
   border-radius: 5px;
   border: 2px solid #8B0000;
-  /* Dunkelroter Rand für den Boss */
-
-  /* Flexbox-Einstellungen für die Ausrichtung von "ENDBOSS" und dem Balken */
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  /* Abstand zwischen Text und Balken */
 }
-
 /* -- Ende Endboss style -- */
 
 .gameInfo {
-  /*padding-top: 20px;*/
   width: 100%;
   .game-buttons {
     display: flex;
@@ -297,7 +260,6 @@ canvas {
       border:none;
       img {
         width: 80px;
-    /*    box-shadow: 0 0 10px 4px rgb(175, 85, 103);  */
       }
       &:hover {
         transform: scale(1.2);
@@ -344,12 +306,10 @@ canvas {
   font-size: 3em;
   margin-bottom: 20px;
   color: #FF4136;
-  /* Rot für Game Over */
 }
 
 #winOverlay h2 {
   color: #2ECC40;
-  /* Grün für Sieg */
 }
 
 
