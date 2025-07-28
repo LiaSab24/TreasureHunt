@@ -10,7 +10,7 @@ class AudioManager {
         
         // noch fehlende Sounds
         //this.loadSound('character_hit', 'audio/character-hit.mp3'); 
-        //this.loadSound('game_over', 'audio/game_over.mp3'); // Sound für das Spielende
+        this.loadSound('game_over', 'audio/game_over.wav'); // Sound für das Spielende
         //this.loadSound('enemy_death', 'audio/enemy_death.mp3'); // Sound, wenn ein Gegner besiegt wir       
         this.loadSound('background', 'audio/background_music.mp3', true, 0.2);  // Hintergrundmusik mit speziellen Optionen (loop, volume)
     }

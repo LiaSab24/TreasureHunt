@@ -328,7 +328,7 @@ class World {
         clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
         this.gameLoopIntervalId = null;
         this.audioManager.stop('background'); // Stoppt die backgroundMusik 
-       //this.audioManager.play('game_over');  // spielt den Game-Over-Sound <--> fehlt noch
+        this.audioManager.play('game_over');  // spielt den Game-Over-Sound <--> fehlt noch
         showGameOverScreen();
     }
 
