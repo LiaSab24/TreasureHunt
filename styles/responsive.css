@@ -1,0 +1,128 @@
+/* responsive.css */
+.smartphone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: none; /* grid;*/
+  place-content: center;
+  z-index: 9999;
+}
+
+.smartphone img {
+  max-width: 480px;
+  width: 90%;
+  height: auto;
+}
+
+/* Schließen-Button */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  background: none;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/*
+  Diese Regel sorgt dafür, dass die "Bitte drehen"-Meldung
+  angezeigt wird, sobald das Gerät hochkant gehalten wird.
+*/
+@media (orientation: portrait) {
+  .smartphone {
+    display: grid;
+  }
+
+  /* Diese Regel versteckt zur Sicherheit alles andere */
+  body>*:not(.smartphone) {
+    display: none !important;
+  }
+}
+
+/* --- RESPONSIVE STYLES FÜR QUERFORMAT (landscape) --- */
+/* gelten für Tablets und Smartphones im Querforma */
+@media (max-width: 1024px) and (orientation: landscape) {
+
+  body {
+    gap: 10px; 
+    justify-content: flex-start;
+    padding: 1vh 0;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  #gameContainer {
+    width: 95vw; 
+    max-width: 1000px;
+    height: auto;
+  }
+
+  canvas {
+    width: 70%;
+    height: auto;
+    aspect-ratio: 1000 / 700; /* DAS IST DER MAGISCHE TEIL! Behält das 10:7 Verhältnis */
+    margin-inline: auto;
+  }
+
+  /* Statusleisten anpassen */
+  #statusBarContainer,
+  .status-bar-container.endboss-bar {
+    padding: 5px;
+    gap: 8px;
+    top: 5px;
+  }
+
+  #statusBarContainer {
+    left: 5px;
+    .statusBar {
+      font-size: 0.9em;
+    }
+  }
+
+  #buyLifeButton {
+    margin-left: 10px;
+    padding: 0;
+  }
+
+  .status-bar-container.endboss-bar {
+    width: 150px;
+    right: 5px;
+  }
+
+  .endboss-bar {
+    span {
+      font-size: 0.75em;
+    }
+  }
+
+  /* Balken in der Endboss-Leiste anpassen */
+  .status-bar-container .status-bar {
+    height: 10px;
+  }
+
+  /* Steuerungsbuttons anpassen .gameInfo */
+  .gameInfo {
+    .game-buttons {
+      padding: 5px 0;
+      gap: 5px;
+      flex-wrap: wrap;
+      .game-button {
+        img {
+          width: 60px;
+          height: 60px;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+}
