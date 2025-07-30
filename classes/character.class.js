@@ -90,7 +90,7 @@ class Character extends MovableObject {
             }else if (!this.isOnGround) {
                 imagesToPlay = this.IMAGES_JUMPING;
                 this.lastIdleTime = new Date().getTime(); 
-            } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'])) {
+            } else if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft'] || this.world.keyboard['TOUCH_RIGHT'] || this.world.keyboard['TOUCH_LEFT'])) {
                 imagesToPlay = this.IMAGES_WALKING;
                 this.lastIdleTime = new Date().getTime(); 
             } else {
@@ -185,13 +185,11 @@ class Character extends MovableObject {
      * setzt die vertikale Geschwindigkeitund spielt den Sound ab
      */
     jump() {         
-        if (this.isOnGround && !this.isDead()) {        // Springen nur erlauben, wenn der Charakter am Boden ist und nicht tot
-            this.speedY = 20;                           // Positive Geschwindigkeit nach oben 
-          /*  this.speedX = 10;    */                   // Horizontale Geschwindigkeit zurücksetzen 
+        if (this.isOnGround && !this.isDead()) {            // Springen nur erlauben, wenn der Charakter am Boden ist und nicht tot
+            this.speedY = 20;                               // Positive Geschwindigkeit nach oben 
+          /*  this.speedX = 10;    */                       // Horizontale Geschwindigkeit zurücksetzen 
             this.isOnGround = false;
-            // NEU: Spielt den Sprung-Sound direkt hier ab
-            // Charakter hat über `this.world` Zugriff auf den audioManager
-            if (this.world && this.world.audioManager) {
+            if (this.world && this.world.audioManager) {    // Charakter hat über `this.world` Zugriff auf den audioManager
                 this.world.audioManager.play('jump');
             }
         }
