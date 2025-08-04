@@ -327,7 +327,7 @@ class World {
             console.log("Spiel pausiert.");
             this.drawPauseOverlay();                // Zeigt den Pause-Screen auf dem Canvas
             // Buttons werden aktualisiert
-            document.getElementById('pauseButton').style.display = 'none';
+           // document.getElementById('pauseButton').style.display = 'none';
             document.getElementById('playButton').style.display = 'inline-block';
         }
     }
@@ -342,7 +342,7 @@ class World {
             this.audioManager.play('background');
             console.log("Spiel fortgesetzt.");
             // Buttons werden aktualisiert
-            document.getElementById('playButton').style.display = 'none';
+          //  document.getElementById('playButton').style.display = 'none';
             document.getElementById('pauseButton').style.display = 'inline-block';
         }
     }
