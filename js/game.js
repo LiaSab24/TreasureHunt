@@ -15,7 +15,7 @@ let canvas;
  */
 function initGame() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas);
+    world = new World(canvas, showIntroScreen);       // 'showIntroScreen' wird als zweiten Parameter übergeben
     document.getElementById('introOverlay').style.display = 'none';
     document.getElementById('gameContainer').style.display = 'block';
     document.getElementById('gameOverOverlay').style.display = 'none';
@@ -47,7 +47,7 @@ const buttonEventMap = {
     'restartButtonWin': restartGame,
     'backButton': () => window.location.href = 'index.html',
     'impButton': () => window.location.href = 'impressum.html',
-    'pauseButton': () => world?.togglePause(), 
+   // 'pauseButton': () => world?.togglePause(), 
     'buyLifeButton': () => world?.buyLife(),
     'helpButton': toggleHelpText
 };
@@ -102,8 +102,8 @@ window.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
-/** * Zeigt den Game Over-Bildschirm an, wenn das Spiel verloren ist.
- * Diese Funktion wird aufgerufen, wenn der Spieler keine Leben mehr hat.
+/** Zeigt den Game Over-Bildschirm an, wenn das Spiel verloren ist.
+ *  Diese Funktion wird aufgerufen, wenn der Spieler keine Leben mehr hat.
  */
 function showGameOverScreen() {
      const gameOverOverlay = document.getElementById('gameOverOverlay');
@@ -121,4 +121,26 @@ function showWinScreen() {
     if(winOverlay) {
        winOverlay.style.display = 'flex';
     }
+}
+
+/**
+ * Zeigt den Intro-Bildschirm an und versteckt das Spiel.
+ * Wird von der stopGame() Methode in der World-Klasse aufgerufen.
+ */
+function showIntroScreen() {
+    document.getElementById('introOverlay').style.display = 'flex';
+    document.getElementById('gameContainer').style.display = 'none';
+    document.getElementById('gameOverOverlay').style.display = 'none'; // Sicherheitshalber auch ausblenden
+    document.getElementById('winOverlay').style.display = 'none';      // Sicherheitshalber auch ausblenden
+}
+
+/** 
+ * Zeigt den Game Over-Bildschirm an, wenn das Spiel verloren ist.
+ * Diese Funktion wird aufgerufen, wenn der Spieler keine Leben mehr hat.
+ */
+function showGameOverScreen() {
+     const gameOverOverlay = document.getElementById('gameOverOverlay');
+     if(gameOverOverlay) {
+        gameOverOverlay.style.display = 'flex';
+     }
 }

@@ -15,27 +15,30 @@ class World {
     camera_x = 0;               
     gameLoopIntervalId = null;  
     treasureChest = null;       
-    LEVEL_END = 2500;           // Level-Ende (soll dynamisch gesetzt werden)
+    LEVEL_END = 2500;                   // Level-Ende (soll dynamisch gesetzt werden)
     gameWon = false;           
     isPaused = false; 
-    audioManager = new AudioManager(); // Instanz der Audio-Klasse         
+    audioManager = new AudioManager();  // Instanz der Audio-Klasse
+    onStopGameCallback = null;          // Neue Property, um die Funktion zu speichern         
 
     /**
     * Erstellt eine neue Instanz der Spielwelt.
     * @param {HTMLCanvasElement} canvas - Das Canvas-Element, auf dem das Spiel gezeichnet wird.
+    * @param {Function} onStopGame - Eine Callback-Funktion, die aufgerufen wird, wenn das Spiel gestoppt wird.
     */
-    constructor(canvas) {
+    constructor(canvas, onStopGame) { // <-- Neuer Parameter hier
         this.canvas = canvas;
         this.canvas.width = 1000; 
         this.canvas.height = 700; 
         this.ctx = canvas.getContext('2d');
+        this.onStopGameCallback = onStopGame; // <-- Speichert die Funktion
         this.keyboard = {};
         this.initLevel(); 
         this.draw();
         this.setWorld();
         this.bindKeyboardEvents();
         this.initButtonControls(); 
-        this.togglePause();      
+    //    this.togglePause();      
         this.run();
         this.gameWon = false;    
         this.isPaused = false;   
@@ -93,6 +96,7 @@ class World {
             this.backgroundObjects.push(new BackgroundObject(layerData.path, canvasWidth * 2, 0, layerData.parallaxFactor));
         });
     }
+    
     /**
      * Initialisiert alle Spielobjekte wie Münzen, Steine, Gegner und den Endboss.
      * Diese Methode wird in der initLevel() aufgerufen.
@@ -203,7 +207,17 @@ class World {
         window.addEventListener('keydown', (e) => {
             this.keyboard[e.key] = true;                // Speichert den gedrückten Zustand
             if (e.key === 'p' || e.key === 'P') {
-               this.togglePause();
+              // this.togglePause();
+              if (this.isPaused) {
+                   this.resumeGame();
+               } else {
+                   this.pauseGame();
+               }
+            }
+            // NEU: Leertaste zum Stoppen des Spiels
+            if (e.key === ' ') {                        // ' ' ist die Leertaste
+                e.preventDefault();                     // Verhindert Standard-Aktionen wie Scrollen
+                this.stopGame();
             }
 
         });
@@ -232,11 +246,33 @@ class World {
             const actionKey = controlButtonMap[buttonId];
             this.bindPressAndHoldEvents(buttonId, actionKey);
         }
-        // NEU: Event Listener für den Audio-Toggle-Button hinzufügen
+        // alt: Event Listener für den Audio-Toggle-Button hinzufügen
+        //const audioButton = document.getElementById('audioOnOffButton');
+        //if (audioButton) {
+        //    audioButton.addEventListener('click', () => {
+        //        // Ruft die Methode auf dem audioManager auf, der zur Welt gehört
+        //        this.audioManager.toggleMute();
+        //    });
+        //}
+
+        // NEU: Event-Listener für Pause, Play, Stop
+        const pauseButton = document.getElementById('pauseButton');
+        const playButton = document.getElementById('playButton');
+        const stopButton = document.getElementById('stopButton');
         const audioButton = document.getElementById('audioOnOffButton');
+
+        if (pauseButton) {
+            pauseButton.addEventListener('click', () => this.pauseGame());
+        }
+        if (playButton) {
+            playButton.addEventListener('click', () => this.resumeGame());
+           // playButton.style.display = 'none'; // Play-Button am Anfang ausblenden
+        }
+        if (stopButton) {
+            stopButton.addEventListener('click', () => this.stopGame());
+        }
         if (audioButton) {
             audioButton.addEventListener('click', () => {
-                // Ruft die Methode auf dem audioManager auf, der zur Welt gehört
                 this.audioManager.toggleMute();
             });
         }
@@ -269,14 +305,62 @@ class World {
     }
 
     // --- Methode zum Umschalten des Pause-Zustands ---
-    togglePause() {
-        this.isPaused = !this.isPaused;
-        if (this.isPaused) {
+    //togglePause() {
+    //    this.isPaused = !this.isPaused;
+    //    if (this.isPaused) {
+    //        console.log("Spiel pausiert.");
+    //        this.audioManager.stop('background'); 
+    //    } else {
+    //        console.log("Spiel fortgesetzt.");
+    //        this.audioManager.play('background'); 
+    //    }
+    //}
+
+    /**
+     * pausiert das Spiel, 
+     * stoppt die Hintergrundmusik und zeigt den Play-Button an
+     */
+    pauseGame() {
+        if (!this.isPaused) {                       // Nur pausieren, wenn es läuft
+            this.isPaused = true;
+            this.audioManager.stop('background');
             console.log("Spiel pausiert.");
-            this.audioManager.stop('background'); 
-        } else {
+            this.drawPauseOverlay();                // Zeigt den Pause-Screen auf dem Canvas
+            // Buttons werden aktualisiert
+            document.getElementById('pauseButton').style.display = 'none';
+            document.getElementById('playButton').style.display = 'inline-block';
+        }
+    }
+
+    /**
+     * setzt das Spiel fort, 
+     * startet die Hintergrundmusik und zeigt den Pause-Button an
+     */
+    resumeGame() {
+        if (this.isPaused) {                        // Nur fortsetzen, wenn es pausiert ist
+            this.isPaused = false;
+            this.audioManager.play('background');
             console.log("Spiel fortgesetzt.");
-            this.audioManager.play('background'); 
+            // Buttons werden aktualisiert
+            document.getElementById('playButton').style.display = 'none';
+            document.getElementById('pauseButton').style.display = 'inline-block';
+        }
+    }
+
+    /**
+     * Beendet das Spiel komplett, 
+     * stoppt die Game Loop und ruft den Callback auf,
+     * zeigt den Intro-Bildschirm an.
+     */
+    stopGame() {
+        console.log("Spiel gestoppt und beendet.");
+        if (this.gameLoopIntervalId) {
+            clearInterval(this.gameLoopIntervalId);
+            this.gameLoopIntervalId = null;
+        }
+        this.audioManager.stop('background'); 
+        if (typeof this.onStopGameCallback === 'function') {
+            this.onStopGameCallback();      // Ruft die gespeicherte Funktion auf
         }
     }
 
@@ -294,7 +378,6 @@ class World {
             clearInterval(this.gameLoopIntervalId);
         }
         this.audioManager.play('background');     // Startet die Hintergrundmusik, sobald das Spiel läuft
-        // Startet die Game Loop, die alle 16.67ms (60 FPS) läuft
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
               this.draw();
@@ -508,13 +591,13 @@ class World {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          // Halbtransparentes Grau
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);       // Über den ganzen Canvas
 
-        this.ctx.font = "48px 'Arial'";
-        this.ctx.fillStyle = "white";
-        this.ctx.textAlign = "center"; 
-        this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
-
-        this.ctx.font = "24px 'Arial'";
-        this.ctx.fillText("Drücke den button 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+      //  this.ctx.font = "48px 'Arial'";
+      //  this.ctx.fillStyle = "white";
+      //  this.ctx.textAlign = "center"; 
+      //  this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
+//
+      //  this.ctx.font = "24px 'Arial'";
+      //  this.ctx.fillText("Drücke den button 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
     }
 
     /**
