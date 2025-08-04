@@ -80,6 +80,7 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world && this.world.isPaused) { return; }
             let imagesToPlay;
             if (this.isDead()) {
                 imagesToPlay = this.IMAGES_DEAD;

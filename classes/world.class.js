@@ -393,8 +393,8 @@ class World {
                 return;
             }
 
-            this.checkKeyboardInput();               
-            this.character.applyGravity();  
+            this.checkKeyboardInput();      // für Characterbewegung u Kamera-Update        
+            this.character.applyGravity();  // Characterbewegugn im Sprung
             this.checkCollisions();         // Kollisionen prüfen
             this.draw();                    // Zeichnen der Objekte 
         }, 1000 / 60);
@@ -544,7 +544,7 @@ class World {
             // Wir verschieben sie dann um 3 Kachelbreiten nach rechts (da wir 3 Kacheln pro Ebene haben)
             if (effectiveX <= -layer.width) {
                 layer.x += layer.width * 3; // Verschiebe diese Kachel weit nach rechts
-            } else if (effectiveX > layer.width * 2) { // Optional: Falls man auch nach links scrollen könnte
+            } else if (effectiveX > layer.width * 2) { // Optional: Falls man auch nach links scrollt
                 layer.x -= layer.width * 3;
             }
 
@@ -574,6 +574,9 @@ class World {
 
         // --- 5. Statusleiste ENDBOSS zeichnen ---
         this.drawEndbossStatusBar();
+        if (this.isPaused) {
+        this.drawPauseOverlay();
+        }
     }
 
      /**
@@ -591,13 +594,13 @@ class World {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          // Halbtransparentes Grau
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);       // Über den ganzen Canvas
 
-      //  this.ctx.font = "48px 'Arial'";
-      //  this.ctx.fillStyle = "white";
-      //  this.ctx.textAlign = "center"; 
-      //  this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
-//
-      //  this.ctx.font = "24px 'Arial'";
-      //  this.ctx.fillText("Drücke den button 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+        this.ctx.font = "48px 'Arial'";
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center"; 
+        this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
+
+        this.ctx.font = "24px 'Arial'";
+        this.ctx.fillText("Drücke den button 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
     }
 
     /**

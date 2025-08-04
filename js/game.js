@@ -97,6 +97,29 @@ function setupInitialUI() {
 // C. Haupt-Initialisierung 
 // ============================================================================
 
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        // Prüfen, ob der Intro-Screen sichtbar ist, um zu vermeiden,
+        // dass man das Spiel neustartet, wenn man im Spiel Enter drückt.
+        const introOverlay = document.getElementById('introOverlay');
+        if (introOverlay.style.display !== 'none') {
+            initGame();
+        }
+
+        // Enter auch zum Neustarten auf dem Game-Over-Screen
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        if (gameOverOverlay.style.display !== 'none') {
+            restartGame();
+        }
+
+        // Enter auch zum Neustarten auf dem Win-Screen
+        const winOverlay = document.getElementById('winOverlay');
+        if (winOverlay.style.display !== 'none') {
+            restartGame();
+        }
+    }
+});
+
 window.addEventListener('DOMContentLoaded', () => {
     setupInitialUI();
     setupEventListeners();
