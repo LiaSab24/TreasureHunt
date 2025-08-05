@@ -1,11 +1,28 @@
 class World {
+    /** 
+     * Repräsentiert die Spielwelt.
+     * Diese Klasse verwaltet den Charakter, Gegner, Wolken, Münzen, Steine,
+     * Schatztruhe und die Hintergrundebenen.
+     * Sie enthält Methoden zum Initialisieren des Levels, Zeichnen der Objekte,
+     * Verarbeiten von Tastatureingaben, Kollisionen und dem Spielablauf.
+     * @class World
+     * @property {string} worldName - Der Name der Spielwelt.
+     * @property {string} worldDescription - Eine kurze Beschreibung der Spielwelt.
+     * @property {string} worldAuthor - Der Autor der Spielwelt.
+     * @property {Character} character - Der Hauptcharakter des Spiels.
+     * @property {Enemy[]} enemies - Array von Gegnern im Spiel.
+     * @property {Cloud[]} clouds - Array von Wolken, die sich im Hintergrund bewegen.
+     * @property {Coin[]} coins - Array von Münzen, die der Charakter sammeln kann.
+     * @property {Stone[]} stones - Array von Steinen, die der Charakter sammeln kann   
+    */
     worldName = "Treasure Hunt";
     worldDescription = "2D Run and Jump Game";
     worldAuthor = "LianeSchmuhl";
 
     character = new Character(); 
     enemies = [new Enemy(400), new Enemy(800), new Enemy(1200)]; 
-    clouds = [new Cloud(0),new Cloud(400),new Cloud(900), new Cloud(1300), new Cloud(1700), new Cloud(2100)]; 
+    //clouds = [new Cloud(0),new Cloud(400),new Cloud(900), new Cloud(1300), new Cloud(1700), new Cloud(2100)]; 
+    clouds = []; // Wolken werden dynamisch generiert
     coins = []; 
     stones = [];
     throwableObjects = [];     
@@ -25,6 +42,12 @@ class World {
     * Erstellt eine neue Instanz der Spielwelt.
     * @param {HTMLCanvasElement} canvas - Das Canvas-Element, auf dem das Spiel gezeichnet wird.
     * @param {Function} onStopGame - Eine Callback-Funktion, die aufgerufen wird, wenn das Spiel gestoppt wird.
+    * @memberof World
+    * @constructor
+    * @description Initialisiert die Spielwelt, setzt die Canvas-Größe, erstellt den Kontext,
+    * und bindet die Event-Listener für Tastatureingaben und Steuerungsbuttons.
+    * Diese Methode startet die Game Loop und initialisiert den Charakter.
+    * @returns {void}
     */
     constructor(canvas, onStopGame) { // <-- Neuer Parameter hier
         this.canvas = canvas;
@@ -37,19 +60,19 @@ class World {
         this.draw();
         this.setWorld();
         this.bindKeyboardEvents();
-        this.initButtonControls(); 
-    //    this.togglePause();      
+        this.initButtonControls();     
         this.run();
         this.gameWon = false;    
         this.isPaused = false;   
     }
     /**
-     * Initialisiert das Level, setzt den Spielzustand zurück und initialisiert alle Objekte
-     * wie Hintergrund, Münzen, Steine, Gegner und den Endboss.
-     * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.
      * Diese Methode wird in der Konstruktor-Methode aufgerufen.
      * @function initLevel
      * @memberof World
+     * @returns {void}
+     * @description Setzt den Spielzustand zurück, initialisiert die Hintergrundebenen,
+     * erstellt die Spielobjekte (Wolken, Münzen, Steine, Gegner, Endboss) und platziert die Schatztruhe.
+     * Diese Methode sorgt dafür, dass das Level frisch und spielbereit ist.    
      */
     initLevel() {
         this.resetGameState();
@@ -60,11 +83,12 @@ class World {
         this.resetCamera();
     }
     /**
-     * Setzt den Spielzustand zurück, einschließlich aller Objekte und des Endbosses.
-     * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.  
-     * Diese Methode löscht alle Objekte und setzt den Endboss neu.
      * Sie wird in der initLevel() aufgerufen.
      * @memberof World
+     * @function resetGameState
+     * @returns {void}
+     * @description Setzt den Spielzustand zurück, einschließlich aller Objekte und des Endbosses.
+     * Diese Methode löscht alle Objekte und setzt den Endboss neu.
      */
     resetGameState() {
         this.isPaused = false;
@@ -78,8 +102,13 @@ class World {
     }
 
     /** 
-     * Zeichnet den Hintergrund auf dem Canvas.
      * Sie wird in der initLevel() aufgerufen.
+     * @param {number} canvasWidth - Die Breite des Canvas, um die Hintergrundebenen zu positionieren.
+     * @memberof World
+     * @function initBackgroundLayers
+     * @returns {void}
+     * @description Erstellt mehrere Hintergrundebenen, die sich mit unterschiedlichen Geschwindigkeiten bewegen,
+     * um einen Parallax-Effekt zu erzeugen.
      */
     initBackgroundLayers() {
         const canvasWidth = this.canvas.width;
@@ -98,16 +127,53 @@ class World {
     }
     
     /**
-     * Initialisiert alle Spielobjekte wie Münzen, Steine, Gegner und den Endboss.
-     * Diese Methode wird in der initLevel() aufgerufen.
+     * wird in der initLevel() aufgerufen.
+     * @memberof World
+     * @function initGameObjects
+     * @returns {void}
+     * @description Erstellt und initialisiert alle Spielobjekte
      */
     initGameObjects() {
+        this.initClouds();
         this.initCoins();
         this.initStones();
         this.initEnemies();
         this.initEndboss();
     }
 
+    /**
+     * wird in der initLevel() aufgerufen
+     * @memberof World  
+     * @function initClouds
+     * @returns {void}
+     * @description Erstellt mehrere Wolken, die sich langsam im Hintergrund bewegen.
+     * Die Wolken werden an zufälligen horizontalen Positionen generiert,
+     * um eine dynamische Atmosphäre zu schaffen.
+     * fügt Wolken dem `this.clouds`-Array hinzu.
+     * @param {number} x - Die initiale Basis-Position auf der x-Achse.
+     * @param {World} world - Die Welt, in der die Wolken erstellt werden.
+     */
+    initClouds() {
+        this.clouds = [
+            new Cloud(0, this),
+            new Cloud(400, this),
+            new Cloud(900, this),
+            new Cloud(1300, this),
+            new Cloud(1700, this),
+            new Cloud(2100, this)
+        ];
+    }
+
+    /**
+     * wird in der initLevel() aufgerufen.
+     * @memberof World
+     * @function initCoins
+     * @returns {void}
+     * Diese Methode erstellt mehrere Münzen an vordefinierten Positionen.
+     * Sie fügt die Münzen dem `this.coins`-Array hinzu.
+     * @param {number} x - Die initiale Basis-Position auf der x-Achse.
+     * @param {number} y - Die initiale Basis-Position auf der y-Achse.
+     */
     initCoins() {
         this.coins.push(new Coin(300, 520));
         this.coins.push(new Coin(330, 480));
@@ -120,6 +186,16 @@ class World {
         this.coins.push(new Coin(1600, 470));
         this.coins.push(new Coin(1700, 400));
     }
+    /**
+     * wird in der initLevel() aufgerufen
+     * @memberof World
+     * @function initStones
+     * @returns {void}
+     * @description Erstellt mehrere Steine an vordefinierten Positionen.
+     * Sie fügt die Steine dem `this.stones`-Array hinzu.
+     * @param {number} x - Die initiale Basis-Position auf der x-Achse.
+     * @param {number} y - Die initiale Basis-Position auf der y-Achse.
+     */
     initStones() {
         this.stones.push(new Stone(500, 480));
         this.stones.push(new Stone(550, 520));
@@ -131,7 +207,21 @@ class World {
         this.stones.push(new Stone(1350, 530));
         this.stones.push(new Stone(1400, 480));
         this.stones.push(new Stone(1500, 530));
-    }   
+    } 
+
+    /** 
+     * wird in der initLevel() aufgerufen.
+     * @memberof World
+     * @function initEnemies
+     * @returns {void}
+     * @description Erstellt mehrere Gegner an vordefinierten Positionen.
+     * Sie fügt die Gegner dem `this.enemies`-Array hinzu.
+     * @param {number} x - Die initiale Basis-Position auf der x-Achse.
+     * @param {World} world - Die Welt, in der die Gegner erstellt werden.
+     * @param {Enemy} enemy - Die Gegner-Instanz, die erstellt wird.
+     * @param {void}
+     * 
+    */
     initEnemies() {
         this.enemies.push(
             new Enemy(550, this),
@@ -144,7 +234,12 @@ class World {
     }
 
     /**
-     * Initialisiert den Endboss und platziert ihn kurz vor der Schatztruhe.
+     * wird in der initLevel() aufgerufen.
+     * @memberof World
+     * @function initEndboss
+     * @returns {void}
+     * @description Setzt die Position des Endbosses auf LEVEL_END - 100 Pixel
+     * und platziert ihn 250 Pixel über dem Boden.
      * Der Endboss erscheint erst, wenn der Charakter nahe genug am Level-Ende ist.
      */
     initEndboss() {
@@ -154,9 +249,13 @@ class World {
     }
 
     /**
-     * Initialisiert die Schatztruhe
-     * am LEVEL_END-Punkt, 320 Pixel über dem Boden
-     * Diese Methode wird in der initLevel() aufgerufen.
+     * wird in der initLevel() aufgerufen.
+     * @param {number} x - Die x-Position der Schatztruhe, standardmäßig auf LEVEL_END gesetzt.
+     * @memberof World
+     * @function initTreasureChest
+     * @returns {void}
+     * @description Erstellt eine Instanz der TreasureChest-Klasse und platziert sie am LEVEL_END-Punkt.
+     * Die Truhe wird 320 Pixel über dem Boden platziert.
      */
     initTreasureChest() {
         const groundYForChest = 320;
@@ -164,11 +263,13 @@ class World {
     }
 
     /**
-     * Setzt den Charakter zurück und bindet ihn an die Welt.
-     * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.
      * Diese Methode wird in der initLevel() aufgerufen.
      * @param {Character} character - Der Charakter, der in der Welt platziert wird.
      * @memberof World
+     * @function resetCharacter
+     * @returns {void}
+     * @description Erstellt eine neue Instanz des Charakters und bindet ihn an die Welt.
+     * Dadurch kann der Charakter auf die Welt zugreifen und mit ihr interagieren.
      */
     resetCharacter() {
         this.character = new Character();
@@ -176,50 +277,65 @@ class World {
     }
 
     /**
-     * Diese Methode wird aufgerufen, wenn das Spiel neu gestartet wird.
      * Diese Methode wird in der initLevel() aufgerufen.
-     * Sie setzt die Kamera-Position auf 0, sodass der Charakter immer am linken Rand des Canvas beginnt.
      * @memberof World
+     * @function resetCamera
+     * @returns {void}
+     * @description Setzt die Kamera-Position auf 0, um den Charakter am linken Rand des Canvas zu starten.
+     * Dadurch wird die Kamera zurückgesetzt und der Charakter erscheint immer am
      */
     resetCamera() {
         this.camera_x = 0;
     }
 
     /**
-     * Setzt die Welt-Referenz im Charakter-Objekt.
-     * Diese Methode wird aufgerufen, um die Referenz zur Welt zu setzen,
-     * damit der Charakter auf die Welt zugreifen kann.
      * Diese Methode wird in der Konstruktor-Methode aufgerufen.
+     * @memberof World
+     * @function setWorld
+     * @returns {void}
+     * @description Setzt die Welt-Referenz im Charakter-Objekt, damit der Charakter auf die Welt zugreifen kann.
+     * Dies ist wichtig für Kollisionen, Bewegungen und andere Interaktionen.
      */
     setWorld() {
         this.character.world = this;
     }
 
     /**
-     * Bindet die Event Listener für Tastatureingaben.
-     * Diese Methode registriert 'keydown' und 'keyup' Events,
-     * um den Zustand der Tasten im `this.keyboard`-Objekt zu speichern.
-     * Außerdem wird die Pause-Funktionalität an die Taste 'p' gebunden.
      * Diese Methode wird in der Konstruktor-Methode aufgerufen.
      * @memberof World
+     * @function bindKeyboardEvents
+     * @returns {void}
+     * @description Erstellt Event-Listener für Tastatureingaben,
+     * um den Zustand der Tasten im `this.keyboard`-Objekt zu speichern.
+     * Diese Methode ermöglicht die Steuerung des Charakters über die Tastatur.
+     * @param {KeyboardEvent} e - Das KeyboardEvent-Objekt, das die gedrückte Taste enthält.
      */
     bindKeyboardEvents() {
         window.addEventListener('keydown', (e) => {
-            this.keyboard[e.key] = true;                // Speichert den gedrückten Zustand
+            this.keyboard[e.key] = true; 
+
+            if (e.key === 'Enter') {
+            e.preventDefault();                         // Verhindert Standard-Aktionen wie das Neuladen der Seite
+            this.stopGame();
+            }
+
+            // Speichert den gedrückten Zustand
             if (e.key === 'p' || e.key === 'P') {
-              // this.togglePause();
               if (this.isPaused) {
                    this.resumeGame();
                } else {
                    this.pauseGame();
                }
             }
-            // NEU: Leertaste zum Stoppen des Spiels
+            // Leertaste für Pause/Resume des Spiels
             if (e.key === ' ') {                        // ' ' ist die Leertaste
                 e.preventDefault();                     // Verhindert Standard-Aktionen wie Scrollen
-                this.stopGame();
+                if (this.isPaused) {
+                this.resumeGame();
+                } else {
+                    this.pauseGame();
+                }
             }
-
         });
 
         window.addEventListener('keyup', (e) => {
@@ -228,10 +344,18 @@ class World {
     }
 
     /**
-     * Initialisiert die Event-Listener für die In-Game-Steuerungsbuttons.
-     * Nutzt eine Konfigurations-Map, um den Code sauber und erweiterbar zu halten.
-     * Mit ButtonID-Konfiguration zu den SteuerungsAktionen.
      * Diese Methode wird in der Konstruktor-Methode aufgerufen.
+     * @memberof World
+     * @function initButtonControls
+     * @returns {void}
+     * @description Erstellt Event-Listener für die Steuerungsbuttons,
+     * um die entsprechenden Aktionen im `this.keyboard`-Objekt zu setzen.
+     * Diese Methode ermöglicht die Steuerung des Charakters über Touch-Buttons.
+     * @param {string} buttonId - Die ID des HTML-Button-Elements, das gedrückt wird.
+     * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
+     * @description Diese Methode bindet "Gedrückt halten" und "Loslassen"-Events
+     * für Maus und Touch an einen einzelnen UI-Button.
+     * Sie wird in der initButtonControls() aufgerufen, um die Steuerung des Charakters zu ermöglichen.
      */
     initButtonControls() {
         const controlButtonMap = {
@@ -246,16 +370,8 @@ class World {
             const actionKey = controlButtonMap[buttonId];
             this.bindPressAndHoldEvents(buttonId, actionKey);
         }
-        // alt: Event Listener für den Audio-Toggle-Button hinzufügen
-        //const audioButton = document.getElementById('audioOnOffButton');
-        //if (audioButton) {
-        //    audioButton.addEventListener('click', () => {
-        //        // Ruft die Methode auf dem audioManager auf, der zur Welt gehört
-        //        this.audioManager.toggleMute();
-        //    });
-        //}
 
-        // NEU: Event-Listener für Pause, Play, Stop
+        // Event-Listener für Pause, Play, Stop
         const pauseButton = document.getElementById('pauseButton');
         const playButton = document.getElementById('playButton');
         const stopButton = document.getElementById('stopButton');
@@ -279,11 +395,13 @@ class World {
     }
 
     /**
-     * BINDET HELFER-METHODE: Bindet "Gedrückt halten" und "Loslassen"-Events
-     * für Maus und Touch an einen einzelnen UI-Button.
+     * wird in der initButtonControls() aufgerufen.
      * @param {string} buttonId - Die ID des HTML-Button-Elements.
      * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
-     * wird in der initButtonControls() aufgerufen.
+     * @memberof World
+     * @function bindPressAndHoldEvents
+     * @returns {void}
+     * @description Bindet "Gedrückt halten" und "Loslassen"-Events für einen einzelnen UI-Button.
      */
     bindPressAndHoldEvents(buttonId, actionKey) {
         const button = document.getElementById(buttonId);
@@ -304,28 +422,22 @@ class World {
         button.addEventListener('touchend', setActionState(false), { passive: false });
     }
 
-    // --- Methode zum Umschalten des Pause-Zustands ---
-    //togglePause() {
-    //    this.isPaused = !this.isPaused;
-    //    if (this.isPaused) {
-    //        console.log("Spiel pausiert.");
-    //        this.audioManager.stop('background'); 
-    //    } else {
-    //        console.log("Spiel fortgesetzt.");
-    //        this.audioManager.play('background'); 
-    //    }
-    //}
-
     /**
-     * pausiert das Spiel, 
-     * stoppt die Hintergrundmusik und zeigt den Play-Button an
+     * wird in der bindKeyboardEvents() und initButtonControls() aufgerufen
+     * @param {void}
+     * @memberof World
+     * @function pauseGame
+     * @returns {void}
+     * @description Diese Methode wird aufgerufen, wenn der Pause-Button geklickt wird
+     * oder die Taste 'p' gedrückt wird.
+     * Sie setzt den Spielzustand auf pausiert, stoppt die Hintergrundmusik,  
      */
     pauseGame() {
         if (!this.isPaused) {                       // Nur pausieren, wenn es läuft
             this.isPaused = true;
             this.audioManager.stop('background');
             console.log("Spiel pausiert.");
-            this.drawPauseOverlay();                // Zeigt den Pause-Screen auf dem Canvas
+            //this.drawPauseOverlay();                // Zeigt den Pause-Screen auf dem Canvas
             // Buttons werden aktualisiert
            // document.getElementById('pauseButton').style.display = 'none';
             document.getElementById('playButton').style.display = 'inline-block';
@@ -333,8 +445,13 @@ class World {
     }
 
     /**
+     * wird in der bindKeyboardEvents() und initButtonControls() aufgerufen
+     * @memberof World
+     * @function resumeGame
+     * @returns {void}
+     * @description Diese Methode prüft, ob das Spiel pausiert ist,
      * setzt das Spiel fort, 
-     * startet die Hintergrundmusik und zeigt den Pause-Button an
+     * startet die Hintergrundmusik
      */
     resumeGame() {
         if (this.isPaused) {                        // Nur fortsetzen, wenn es pausiert ist
@@ -348,9 +465,15 @@ class World {
     }
 
     /**
-     * Beendet das Spiel komplett, 
-     * stoppt die Game Loop und ruft den Callback auf,
-     * zeigt den Intro-Bildschirm an.
+     * wird in der bindKeyboardEvents() und initButtonControls() aufgerufen 
+     * @memberof World
+     * @function stopGame
+     * @returns {void}
+     * @description Diese Methode wird aufgerufen, wenn der Stop-Button geklickt wird
+     * oder die Taste 'Escape' gedrückt wird.
+     * Sie stoppt die Game Loop, setzt den Spielzustand zurück und zeigt den Intro-Bildschirm an.
+     * Außerdem wird die Hintergrundmusik gestoppt und der Callback aufgerufen
+     * um das Spiel zu beenden.
      */
     stopGame() {
         console.log("Spiel gestoppt und beendet.");
@@ -365,13 +488,13 @@ class World {
     }
 
     /**
-     * Startet die Game Loop, die alle 16.67ms (60 FPS) läuft.
      * Diese Methode wird in der Konstruktor-Methode aufgerufen.
-     * Die Game Loop prüft Tastatureingaben, wendet Schwerkraft an,
-     * prüft Kollisionen und zeichnet die Objekte auf dem Canvas.
      * @memberof World
      * @function run
      * @returns {void}
+     * @description Diese Methode startet die Game Loop, die alle 16.67ms (60 FPS) läuft.   
+     * Sie prüft Tastatureingaben, wendet Schwerkraft an,   
+     * prüft Kollisionen und zeichnet die Objekte auf dem Canvas.
      */
     run() {
         if (this.gameLoopIntervalId) {
@@ -401,11 +524,15 @@ class World {
     }
 
     /**
-     * Stoppt die Game Loop und zeigt den Game-Over-Bildschirm an.
-     * Diese Methode wird aufgerufen, wenn der Charakter stirbt.
+     * wird in der run() aufgerufen
+     * @memberof World
+     * @function handleGameOver
+     * @returns {void}
+     * @description Diese Methode stoppt die Game Loop,
+     * zeigt den Game-Over-Bildschirm an.
+     * Sie wird aufgerufen, wenn der Charakter stirbt.
      * Sie setzt die Game Loop ID auf null, um zu verhindern, dass sie erneut gestartet wird.
      * Außerdem wird der Hintergrund gestoppt und der Game-Over-Sound abgespielt.
-     * Diese Methode wird in der run() aufgerufen, wenn der Charakter tot ist.
      */
     handleGameOver() {
         clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
@@ -416,13 +543,17 @@ class World {
     }
 
     /**
-     * Überprüft Tastatureingaben und löst Charakteraktionen aus
-     * je nach gedrückten Tasten.
-     * Diese Methode wird in der run() aufgerufen, um die Eingaben zu verarbeiten
-     * und die Kamera-Position entsprechend dem Charakter zu aktualisieren.
+     * wird in der run() aufgerufen
      * @memberof World
      * @function checkKeyboardInput
      * @returns {void} 
+     * @description Diese Methode prüft die Tastatureingaben und löst die entsprechenden Aktionen des Charakters aus.
+     * Sie ermöglicht die Bewegung des Charakters nach links und rechts,
+     * das Springen und Werfen von Steinen.
+     * und die Kamera-Position entsprechend dem Charakter zu aktualisieren.
+     * @param {KeyboardEvent} e - Das KeyboardEvent-Objekt, das die gedrückte Taste enthält.
+     * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
+     * @param {void}
      */ 
     checkKeyboardInput() {
         if (this.keyboard['ArrowRight'] || this.keyboard['TOUCH_RIGHT']) { 
@@ -440,13 +571,28 @@ class World {
          this.camera_x = -this.character.x + 100; // 100 Pixel Offset vom linken Rand
     }
 
-    // Methode zum Hinzufügen von Wurfobjekten ---
+    /**
+     * @param {Stone} stone - Das Wurfobjekt, das zur Welt hinzugefügt wird.
+     * @memberof World  
+     * @function addThrowableObject
+     * @returns {void}
+     * @description Diese Methode fügt ein Wurfobjekt (Stein) zur Welt hinzu.
+     * Sie wird aufgerufen, wenn der Charakter einen Stein wirft.
+     */
     addThrowableObject(stone) {
         this.throwableObjects.push(stone);
         console.log('Stein zur Welt hinzugefügt. Anzahl:', this.throwableObjects.length); // Debug
     }
 
-    // Methode für den Gewinnfall ---
+    /**
+     * wird in der handleWin() aufgerufen
+     * @memberof World
+     * @function handleWin
+     * @returns {void}
+     * @description Diese Methode wird aufgerufen, wenn der Charakter die Schatztruhe erreicht.
+     * Sie stoppt die Game Loop und spielt den Gewinn-Sound ab.
+     * Sie zeigt den Gewinnbildschirm an und setzt den Spielzustand auf gewonnen.
+     */
     handleWin() {
         if (!this.gameWon) {                            // Nur einmal ausführen
              this.gameWon = true;
@@ -458,6 +604,21 @@ class World {
              showWinScreen();
         }
     }
+
+    /**
+     * Diese Methode wird in der run() aufgerufen.
+     * @memberof World
+     * @function checkCollisions
+     * @returns {void}
+     * @description Diese Methode prüft Kollisionen zwischen dem Charakter und anderen Objekten in der Welt.
+     * Sie überprüft Kollisionen mit Münzen, Steinen, Gegnern und dem Endboss.
+     * Sie entfernt gesammelte Münzen und Steine aus den Arrays
+     * und aktualisiert die Statusleisten des Charakters.
+     * Sie behandelt auch Kollisionen mit der Schatztruhe, um den Gewinnzustand auszulösen.
+     * Sie prüft Kollisionen zwischen Steinen und Gegnern, um Schaden zu verursachen.
+     * Sie entfernt "tote" Gegner aus dem Array, behält aber den Endboss für die Todesanimation.
+     * @param {void}
+     */
     checkCollisions() {
         // 1. Kollision Charakter mit Münzen
         this.coins.forEach((coin, index) => {
@@ -531,10 +692,29 @@ class World {
         this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss); 
     }
 
+    /**
+     * wird in der run() aufgerufen.
+     * @memberof World
+     * @function draw
+     * @returns {void}
+     * @param {void}
+     * @description Diese Methode ist der Hauptzeichnungszyklus des Spiels.
+     * Sie wird in der Game Loop aufgerufen und führt die folgenden Schritte aus:
+     * 1. Löscht den Canvas, um die vorherigen Zeichnungen zu entfernen.
+     * 2. Zeichnet den Hintergrund mit Parallax-Effekt, indem es die Hintergrundebenen durchläuft
+     *    und sie entsprechend der Kamera-Position anzeigt.
+     * 3. Verschiebt die Kamera, um den Charakter im Fokus zu halten.
+     * 4. Zeichnet alle Spielobjekte (Wolken, Münzen, Steine, Gegner, Wurfobjekte, Charakter und Schatztruhe).
+     * 5. Setzt die Kamera-Translation zurück, um die Position für die nächsten Zeichnungen zu korrigieren.
+     * 6. Zeichnet die Statusleiste des Endbosses, wenn der Endboss existiert und in der Nähe ist.
+     * 7. Wenn das Spiel pausiert ist, wird ein Pause-Overlay gezeichnet.
+     * 8. Aktualisiert die Statusleisten des Charakters (Leben, Münzen, Steine).
+     */
     draw() {
+        // --- 1. Canvas löschen ---
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // --- 1. Hintergrund mit Parallax zeichnen ---
+        // --- 2. Hintergrund mit Parallax zeichnen ---
         this.backgroundObjects.forEach(layer => {
             let effectiveX = layer.x + this.camera_x * layer.parallaxFactor;
 
@@ -543,8 +723,8 @@ class World {
             // Beispiel: Kachelbreite 720. Wenn effectiveX < -720, ist sie links raus.
             // Wir verschieben sie dann um 3 Kachelbreiten nach rechts (da wir 3 Kacheln pro Ebene haben)
             if (effectiveX <= -layer.width) {
-                layer.x += layer.width * 3; // Verschiebe diese Kachel weit nach rechts
-            } else if (effectiveX > layer.width * 2) { // Optional: Falls man auch nach links scrollt
+                layer.x += layer.width * 3;             // Verschiebe diese Kachel weit nach rechts
+            } else if (effectiveX > layer.width * 2) {  // Optional: Falls man auch nach links scrollt
                 layer.x -= layer.width * 3;
             }
 
@@ -552,14 +732,10 @@ class World {
              // aber verschoben durch die Kamera-Simulation für den Parallax-Effekt
              this.ctx.drawImage(layer.img, effectiveX, layer.y, layer.width, layer.height);
         });
-        // --- 2. Kamera für Spielobjekte verschieben ---
+        // --- 3. Kamera für Spielobjekte verschieben ---
         this.ctx.translate(this.camera_x, 0);
-         // --- Pause-Overlay zeichnen, WENN pausiert ---
-         if (this.isPaused) {
-            this.drawPauseOverlay();
-        }
 
-        // --- 3. Zeichnet Elemente ---
+        // --- 4. Zeichnet Elemente ---
         this.drawObjects(this.clouds);
         this.drawObjects(this.coins); 
         this.drawObjects(this.stones);
@@ -569,19 +745,24 @@ class World {
         if (this.treasureChest) {                       // Zeichnet die Truhe, falls sie existiert
             this.treasureChest.draw(this.ctx);
         }
-        // --- 4. Kamera-Translation zurücksetzen ---
+        // --- 5. Kamera-Translation zurücksetzen ---
         this.ctx.translate(-this.camera_x, 0);
 
-        // --- 5. Statusleiste ENDBOSS zeichnen ---
+        // --- 6. Statusleiste ENDBOSS zeichnen ---
         this.drawEndbossStatusBar();
         if (this.isPaused) {
-        this.drawPauseOverlay();
+        this.drawPauseOverlay(); // --- 7. Zeichnet das Pause-Overlay ---
         }
     }
 
      /**
-     * Hilfsfunktion zum Zeichnen eines Arrays von MovableObjects
-     * @param {MovableObject[]} objects - Das Array der zu zeichnenden Objekte
+     * wird in der draw() Methode aufgerufen, --- 4. Zeichnet Elemente ---
+     * @memberof World
+     * @function drawObjects
+     * @description Diese Methode nimmt ein Array von Objekten und zeichnet jedes Objekt auf dem Canvas.
+     * Sie wird verwendet, um die Wiederholung des Zeichnens von Objekten zu vermeiden.
+     * @param {MovableObject[]} objects - Ein Array von MovableObjects, die gezeichnet werden sollen.
+     * @returns {void}
      */
     drawObjects(objects) {
         objects.forEach(obj => {
@@ -589,7 +770,15 @@ class World {
         });
     }
 
-     // Methode zum Zeichnen des Pause-Overlays 
+    /**
+     * wird in der draw() Methode aufgerufen, --- 7. Zeichnet das Pause-Overlay ---
+     * @memberof World
+     * @function drawPauseOverlay
+     * @returns {void}
+     * @description Diese Methode zeichnet ein halbtransparentes Overlay über den Canvas,
+     * um anzuzeigen, dass das Spiel pausiert ist.
+     * Sie zeigt den Text "Pause" und eine Anweisung zum Fortsetzen des Spiels an.
+     */
      drawPauseOverlay() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          // Halbtransparentes Grau
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);       // Über den ganzen Canvas
@@ -600,12 +789,19 @@ class World {
         this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
 
         this.ctx.font = "24px 'Arial'";
-        this.ctx.fillText("Drücke den button 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+        this.ctx.fillText("Drücke 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
     }
 
     /**
-     * Zeichnet und aktualisiert die Statusanzeige des Endbosses.
-     * Wird nur angezeigt, wenn der Charakter in der Nähe ist.
+     * wird in der draw() Methode aufgerufen, --- 6. Statusleiste ENDBOSS zeichnen ---
+     * @memberof World
+     * @function drawEndbossStatusBar
+     * @returns {void}
+     * @description Diese Methode zeichnet die Statusanzeige des Endbosses.
+     * Sie zeigt den Gesundheitsbalken des Endbosses an, wenn der Charakter in der Nähe ist.
+     * Der Balken wird grün, wenn der Boss mehr als 40% Gesundheit hat,
+     * und rot, wenn er weniger als 40% Gesundheit hat.
+     * Die Anzeige wird nur angezeigt, wenn der Endboss existiert und nicht tot ist.
      */
     drawEndbossStatusBar() {
         if (!this.endboss) return;              // Nur ausführen, wenn es einen Endboss gibt
@@ -634,7 +830,20 @@ class World {
     }
 
      /**
-      * Aktualisiert die Textinhalte der Statusbar-Elemente im HTML
+      * Diese Methode wird in der checkCollisions() und buyLife() aufgerufen.
+      * @memberof World 
+      * @function updateStatusBars
+      * @returns {void} 
+      * @description Diese Methode aktualisiert die Textinhalte der Statusleisten-Elemente im HTML.
+      * Sie zeigt die aktuellen Werte für Leben, Münzen und Steine des Charakters an.
+      * Außerdem wird der "Kaufe Leben"-Button aktualisiert, um anzuzeigen,
+      * ob der Charakter genug Münzen hat, um ein Leben zu kaufen.
+      * Wenn der Charakter genug Münzen hat, wird der Button aktiviert und zeigt den Preis an.
+      * Wenn nicht genug Münzen vorhanden sind, wird der Button deaktiviert und zeigt an,
+      * wie viele Münzen fehlen, um ein Leben zu kaufen.
+      * Diese Methode wird aufgerufen, wenn der Charakter Münzen oder Steine sammelt,
+      * wenn er ein Leben kauft oder wenn sich der Charakterzustand ändert.
+      * @param {void}
       */
     updateStatusBars() {
         document.getElementById('livesStatus').innerText = this.character.lives;
@@ -652,7 +861,16 @@ class World {
         }
     }
 
-      // Platzhalter für die Kauf-Logik
+    /**
+     * Diese Methode wird aufgerufen, wenn der Charakter genug Münzen hat, um ein Leben zu kaufen.
+     * Sie wird durch den "Kaufe Leben"-Button im HTML ausgelöst.
+     * @memberof World
+     * @function buyLife
+     * @returns {void}
+     * @description Diese Methode prüft, ob der Charakter genug Münzen hat, um ein Leben zu kaufen.
+     * Wenn ja, werden 5 Münzen abgezogen und ein Leben hinzugefügt.
+     * Die Statusleisten werden sofort aktualisiert, um die Änderungen anzuzeigen.
+     */
     buyLife() {
         if (this.character.coins >= 5 && !this.character.isDead()) {
             this.character.coins -= 5;

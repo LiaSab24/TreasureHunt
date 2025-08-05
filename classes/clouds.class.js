@@ -1,5 +1,5 @@
 /**
- * Repräsentiert eine Wolke, die sich langsam im Hintergrund bewegt.
+ * Repräsentiert Wolken, die sich langsam im Hintergrund bewegen
  * Trägt zur Atmosphäre des Spiels bei.
  */
 class Cloud extends MovableObject {
@@ -8,13 +8,15 @@ class Cloud extends MovableObject {
     height = 100;
     width = 300;
     speed = 0.1;                        // Wolken bewegen sich langsam
+    world;
 
     /**
     * Erstellt eine Instanz einer Wolke an einer zufälligen horizontalen Position.
     * @param {number} x - Die initiale Basis-Position auf der x-Achse.
     */
-    constructor(x) {
+    constructor(x, world) {
         super().loadImage('images/clouds/cloudWhite.png'); 
+        this.world = world;
         this.x = x + Math.random() * 600; 
         this.animate();
     }
@@ -24,7 +26,10 @@ class Cloud extends MovableObject {
     */
     animate() {
         setInterval(() => {
-            this.moveLeft();
+           if (this.world && this.world.isPaused) {
+            } else {
+                 this.moveLeft();
+            }
         }, 1000 / 60); 
     }
 
