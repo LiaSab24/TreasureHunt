@@ -31,8 +31,10 @@ class World {
     keyboard = {}; 
     camera_x = 0;               
     gameLoopIntervalId = null;  
-    treasureChest = null;       
-    LEVEL_END = 2500;                   // Level-Ende (soll dynamisch gesetzt werden)
+    //treasureBag = null;                     // treasure-bag.png
+    treasureChest = null;                   // treasure-chest.png
+  //  mast = null;                            // mast.png
+    LEVEL_END = 2500;                       // Level-Ende (soll dynamisch gesetzt werden)
     gameWon = false;           
     isPaused = false; 
     audioManager = new AudioManager();  // Instanz der Audio-Klasse
@@ -254,11 +256,11 @@ class World {
      * @memberof World
      * @function initTreasureChest
      * @returns {void}
-     * @description Erstellt eine Instanz der TreasureChest-Klasse und platziert sie am LEVEL_END-Punkt.
+     * @description Erstellt eine Instanz der treasureChest-Klasse und platziert sie am LEVEL_END-Punkt.
      * Die Truhe wird 320 Pixel über dem Boden platziert.
      */
     initTreasureChest() {
-        const groundYForChest = 320;
+        const groundYForChest = 150;
         this.treasureChest = new TreasureChest(this.LEVEL_END, groundYForChest);
     }
 

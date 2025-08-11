@@ -3,8 +3,8 @@
  * Wenn der Charakter dieses Objekt berührt, ist das Spiel gewonnen.
  */
 class TreasureChest extends MovableObject {
-  height = 100;
-  width = 100;
+  height = 300; //100;
+  width = 520;//100;
 
   /**
    * Erstellt eine Instanz der Schatztruhe an einer bestimmten Position.
@@ -12,7 +12,8 @@ class TreasureChest extends MovableObject {
    * @param {number} y - Die Position auf der y-Achse.
    */
   constructor(x, y) {
-    super().loadImage('images/objects/treasure/treasure-bag.png');
+    super();
+    this.loadImage('images/objects/treasure/treasure.png');
     this.x = x;
     this.y = y; 
   }
