@@ -44,3 +44,11 @@ main {
 p {
   margin-bottom: 8px
 }
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .impressum-content {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.75rem;
+  }
+}
