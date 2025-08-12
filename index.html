@@ -26,14 +26,7 @@
     <script src="classes/world.class.js"></script>
     <script src="js/game.js"></script> </body>
 </head>
-<body>
-<!--    <div class="info">
-        <h1>Treasure Hunt</h1>
-        <p>Finde den Schatz!</p>
-        <p>Nimm dich in acht vor den Gegnern.</p>
-        <p>Vergiss nicht, mit 5 Münzen kannst du dein Leben verlängern!</p>  
-    </div>
--->
+<body> 
     <div id="introOverlay" class="overlay">
 
         <div class="game-info">
@@ -53,7 +46,7 @@
         <div class="button">
             <div id="startButton" class="start-button"></div>
             <div id="helpButton" class="help-button"></div>
-            <div id="impButton" class="imp-button"></div>
+            
             <div id="helpText" class="info-text" style="display: none;">
                 <p>Steuerung:</p>
                 <p>⬅️ / ➡️ = Laufen</p>
@@ -69,7 +62,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="imp-container">
+            <div id="impButton" class="imp-button"></div>
+        </div>
     </div>
 
     <div id="gameContainer" style="display: none;">

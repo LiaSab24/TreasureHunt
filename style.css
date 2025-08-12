@@ -128,8 +128,8 @@ h3 {
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.85;
-  width: 150px;
-  height: 75px;
+  width: 100px;
+  height: 50px;
   display: inline-block;
   margin: 0 12px;
   cursor: pointer;
@@ -143,8 +143,14 @@ h3 {
 .help-button {
   background-image: url('images/bg/button/helpMap.png');
 }
-.imp-button {
-  background-image: url('images/bg/button/impMap.png');
+
+.imp-container {
+  display: grid;
+  place-self: center;
+  .imp-button {
+      background-image: url('images/bg/button/impMap.png');
+      background-size: contain;
+    }
 }
 
 .info-text {
