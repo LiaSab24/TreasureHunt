@@ -17,22 +17,6 @@
   height: auto;
 }
 
-/* Schließen-Button */
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 2rem;
-  background: none;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  color: red;
-}
-
 /*
   Diese Regel sorgt dafür, dass die "Bitte drehen"-Meldung
   angezeigt wird, sobald das Gerät hochkant gehalten wird.
