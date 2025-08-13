@@ -9,8 +9,8 @@ class Endboss extends MovableObject {
         
         this.Speed = 1.5; // Grundgeschwindigkeit
 
-        this.health = 3;    // Lebenspunkte des Endbosses
-        this.maxHealth = 3; // Maximale Lebenspunkte
+        this.health = 5;    // Lebenspunkte des Endbosses
+        this.maxHealth = 5; // Maximale Lebenspunkte
         this.isActuallyDead = false;
         this.actionColldown = false; 
         this.hasDescended = false; // Flag, ob sich die Schlange schon 'abwärts' zum character bewegt hat

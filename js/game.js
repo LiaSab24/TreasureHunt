@@ -1,7 +1,3 @@
-/**
- * Globale Variable, die die Instanz der Hauptspielwelt enthält.
- * @type {world}
- */
 let world;
 /**
  * Globale Variable für das HTML-Canvas-Element.
@@ -29,6 +25,11 @@ function restartGame() {
     window.location.reload();
 }
 
+/**
+ * Öffnet die Impressum-Seite.
+ * @param {*} url 
+ */
+
 function goToImpressum(url) {
   window.location.href = url;
 }
@@ -47,7 +48,6 @@ const buttonEventMap = {
     'restartButtonWin': restartGame,
     'backButton': () => window.location.href = 'index.html',
     'impButton': () => window.location.href = 'impressum.html',
-   // 'pauseButton': () => world?.togglePause(), 
     'buyLifeButton': () => world?.buyLife(),
     'helpButton': toggleHelpText
 };
@@ -109,21 +109,21 @@ window.addEventListener('keydown', (event) => {
          else if (getComputedStyle(gameOverOverlay).display !== 'none' || getComputedStyle(winOverlay).display !== 'none') {
             restartGame();
         }
-
-        // Enter auch zum Neustarten auf dem Game-Over-Screen
-        //const gameOverOverlay = document.getElementById('gameOverOverlay');
-        //if (gameOverOverlay.style.display !== 'none') {
-        //    restartGame();
-        //}
-//
-        //// Enter auch zum Neustarten auf dem Win-Screen
-        //const winOverlay = document.getElementById('winOverlay');
-        //if (winOverlay.style.display !== 'none') {
-        //    restartGame();
-        //}
     }
 });
 
+/**
+ * Fenstergröße ändern/anpassen
+ */
+window.addEventListener('resize', () => {
+    if (world) {
+        world.resize();
+    }
+});
+
+/**
+ * DOMContentLoaded
+ */
 window.addEventListener('DOMContentLoaded', () => {
     setupInitialUI();
     setupEventListeners();

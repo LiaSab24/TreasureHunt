@@ -21,41 +21,41 @@ class Character extends MovableObject {
     isThrowing = false;                         // Ist der Charakter gerade am Werfen?
 
     IMAGES_IDLE = [
-        'images/character/Idle/1.png',
-        'images/character/Idle/2.png',
-        'images/character/Idle/3.png',
-        'images/character/Idle/4.png'
+        'images/character_neu/Idle/1.png',
+        'images/character_neu/Idle/2.png',
+        'images/character_neu/Idle/3.png',
+        'images/character_neu/Idle/4.png'
     ];
     IMAGES_WALKING = [
-        'images/character/Walk/1.png',
-        'images/character/Walk/2.png',
-        'images/character/Walk/3.png',
-        'images/character/Walk/4.png',
-        'images/character/Walk/5.png',
-        'images/character/Walk/6.png'
+        'images/character_neu/Walk/1.png',
+        'images/character_neu/Walk/2.png',
+        'images/character_neu/Walk/3.png',
+        'images/character_neu/Walk/4.png',
+        'images/character_neu/Walk/5.png',
+        'images/character_neu/Walk/6.png'
     ];
     IMAGES_JUMPING = [ 
-        'images/character/Jump/1.png',
-        'images/character/Jump/2.png',
-        'images/character/Jump/3.png',
-        'images/character/Jump/4.png',
-        'images/character/Jump/5.png',
-        'images/character/Jump/6.png'
+        'images/character_neu/Jump/1.png',
+        'images/character_neu/Jump/2.png',
+        'images/character_neu/Jump/3.png',
+        'images/character_neu/Jump/4.png',
+        'images/character_neu/Jump/5.png',
+        'images/character_neu/Jump/6.png'
     ];
     IMAGES_HURT = [
-        'images/character/Hurt/1.png',
-        'images/character/Hurt/2.png'
+        'images/character_neu/Hurt/1.png',
+        'images/character_neu/Hurt/2.png'
     ];
     IMAGES_DEAD = [
-        'images/character/Faint/1.png', 
-        'images/character/Faint/2.png',
-        'images/character/Faint/3.png',
-        'images/character/Faint/4.png'
+        'images/character_neu/Faint/1.png', 
+        'images/character_neu/Faint/2.png',
+        'images/character_neu/Faint/3.png',
+        'images/character_neu/Faint/4.png'
     ];
     IMAGES_THROW = [
-        'images/character/Throw/1.png',
-        'images/character/Throw/2.png',
-        'images/character/Throw/3.png'
+        'images/character_neu/Throw/1.png',
+        'images/character_neu/Throw/2.png',
+        'images/character_neu/Throw/3.png'
     ];
 
     // Zeitstempel für Idle-Animation
