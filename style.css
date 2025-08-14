@@ -293,8 +293,8 @@ canvas {
 .arrow-right {transform: rotate(180deg);}
 
 /* Game Over / Win Overlays */
-#gameOverOverlay,
-#winOverlay {
+.game-over-overlay,
+.win-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -306,28 +306,53 @@ canvas {
   justify-content: center;
   align-items: center;
   z-index: 100;
-  color: white;
-  text-align: center;
+/* color: white;
+  text-align: center; */
 }
 
-#gameOverOverlay h2,
-#winOverlay h2 {
+/*.game-over-overlay h2,
+.win-overlay h2 {
   font-size: 3em;
   margin-bottom: 20px;
   color: #FF4136;
 }
 
-#winOverlay h2 {
+.win-overlay h2 {
   color: #2ECC40;
+} */
+
+.game-over-img {
+  background-image: url('images/bg/gameOver.png');
+  background-size: cover;
+  background-position: center;
+  width: 60%;
+  height: 60%;
+  position: relative;
 }
 
+.win-overlay-img {
+  background-image: url('images/bg/gewonnen.png');
+  background-size: cover;
+  background-position: center;
+  width: 60%;
+  height: 60%;
+  position: relative;
 
-#gameOverOverlay button,
-#winOverlay button {
-  padding: 15px 30px;
-  font-size: 1.5em;
-  cursor: pointer;
-  margin-top: 20px;
+}
+.game-over-overlay,
+.win-overlay {
+  button {
+  /*  padding: 15px 30px;
+    font-size: 1.5em; */
+    cursor: pointer;
+  /*  margin-top: 20px; */
+    background: none;
+    border: none;
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 .d-none {

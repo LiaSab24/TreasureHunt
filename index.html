@@ -108,16 +108,25 @@
 
     </div>
 
-    <div id="gameOverOverlay" style="display: none;">
-        <h2>Game Over!</h2>
-        <button id="restartButton">Neustart</button>
+    <div id="gameOverOverlay" class="game-over-overlay" style="display: none;">
+        <!--<h2>Game Over!</h2> -->
+        <div class="game-over-img">
+            <button id="restartButton" class="restart-button">
+                <img src="images/bg/button/neuesSpiel.png" alt="neues Spiel Button" width="40%">
+            </button>
+        </div>
     </div>
 
-    <div id="winOverlay" style="display: none;">
-        <h2>Gewonnen!</h2>
+    <div id="winOverlay" class="win-overlay" style="display: none;">
+        <div class="win-overlay-img">
+            <button id="restartButtonWin" class="restart-button">
+                <img src="images/bg/button/neuesSpiel.png" alt="neues Spiel Button" width="40%">
+            </button>
+        </div>
+    <!-- <img src="images/bg/gewonnen.png" alt="gewonnen Overlay" width="60%"> -->   
+    <!--    <h2>Gewonnen!</h2>
         <h3>Super</h3>
-        <p>Du hast den Schatz gefunden!</p>
-        <button id="restartButtonWin">Neues Spiel</button>
+        <p>Du hast den Schatz gefunden!</p>  -->
     </div>
 
     <div class="smartphone" id="smartphone">

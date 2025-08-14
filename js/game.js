@@ -115,11 +115,11 @@ window.addEventListener('keydown', (event) => {
 /**
  * Fenstergröße ändern/anpassen
  */
-window.addEventListener('resize', () => {
-    if (world) {
-        world.resize();
-    }
-});
+//window.addEventListener('resize', () => {
+//    if (world) {
+//        world.resize();
+//    }
+//});
 
 /**
  * DOMContentLoaded
