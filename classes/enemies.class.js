@@ -3,26 +3,9 @@ class Enemy extends MovableObject {
     width = 80;
     y = 380;
     health = 1;
-
-    //IMAGES_WALKING = [
-    //    'images/enemies/enemy/enemy1/Walk/Walk1.png',
-    //    'images/enemies/enemy/enemy1/Walk/Walk2.png',
-    //    'images/enemies/enemy/enemy1/Walk/Walk3.png',
-    //    'images/enemies/enemy/enemy1/Walk/Walk4.png',
-    //    'images/enemies/enemy/enemy1/Walk/Walk5.png'
-    //];
-//
-    //IMAGES_DEAD = [
-    //    'images/enemies/enemy/enemy1/Faint/1.png',
-    //    'images/enemies/enemy/enemy1/Faint/2.png',
-    //    'images/enemies/enemy/enemy1/Faint/3.png',
-    //    'images/enemies/enemy/enemy1/Faint/4.png',
-    //    'images/enemies/enemy/enemy1/Faint/5.png'
-    //];
-
     movementIntervalId = null;
     animationIntervalId = null;
-    world; // Referenz auf die Welt
+    world; 
 
     /**
      * Erstellt eine neue Instanz eines Gegners.
@@ -34,9 +17,6 @@ class Enemy extends MovableObject {
         this.world = world;
         this.x = startX + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.3;
-        //this.loadImage(this.IMAGES_WALKING[0]);
-        //this.loadImages(this.IMAGES_WALKING);
-        //this.loadImages(this.IMAGES_DEAD);
         this.startAnimation();
     }
 
@@ -79,10 +59,10 @@ class Enemy extends MovableObject {
 
     /**
      * Verarbeitet einen Treffer auf den Gegner.
+     * Verhindert, dass ein bereits toter Gegner erneut getroffen wird
      * Reduziert die Lebenspunkte und löst bei 0 HP den Tod aus.
      */
     hit() {
-        // Verhindert, dass ein bereits toter Gegner erneut getroffen wird
         if (this.isDead()) return;
 
         this.health -= 1;
@@ -102,17 +82,16 @@ class Enemy extends MovableObject {
 
     /**
      * Leitet die Todessequenz ein.
-     * Stoppt die Bewegung und startet die Todesanimation.
+     * Stoppt die Bewegungs- und Animationsintervalle,
      */
     die() {
         clearInterval(this.movementIntervalId);
         clearInterval(this.animationIntervalId);
 
-        this.currentImage = 0; // Setzt den Animationszähler für die Todesanimation zurück
+        this.currentImage = 0; 
         const deathAnimation = setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
 
-            // Stoppt die Todesanimation, nachdem sie einmal durchgelaufen ist
             if (this.currentImage >= this.IMAGES_DEAD.length) {
                 clearInterval(deathAnimation);
             }
