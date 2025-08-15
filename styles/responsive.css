@@ -6,7 +6,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.85);
-  display: none; /* grid;*/
+  display: none; 
   place-content: center;
   z-index: 9999;
 }
@@ -45,7 +45,6 @@
   }
 
   .game-info {
-    /*  width: 50%; */
     margin-top: 100px;
     .content {
       h3 {
@@ -67,7 +66,7 @@
   canvas {
     width: 70%;
     height: auto;
-    aspect-ratio: 1000 / 700; /* DAS IST DER MAGISCHE TEIL! Behält das 10:7 Verhältnis */
+    aspect-ratio: 1000 / 700; 
     margin-inline: auto;
   }
 
