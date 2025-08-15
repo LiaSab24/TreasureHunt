@@ -311,9 +311,9 @@ class World {
     bindKeyboardEvents() {
         window.addEventListener('keydown', (e) => {
             this.keyboard[e.key] = true; 
-
+            // Verhindert Standard-Aktionen wie das Neuladen der Seite
             if (e.key === 'Enter') {
-            e.preventDefault();                         // Verhindert Standard-Aktionen wie das Neuladen der Seite
+            e.preventDefault();                         
             this.stopGame();
             }
 
@@ -326,8 +326,8 @@ class World {
                }
             }
             // Leertaste für Pause/Resume des Spiels
-            if (e.key === ' ') {                        // ' ' ist die Leertaste
-                e.preventDefault();                     // Verhindert Standard-Aktionen wie Scrollen
+            if (e.key === ' ') {                        
+                e.preventDefault();                     
                 if (this.isPaused) {
                 this.resumeGame();
                 } else {
@@ -335,9 +335,9 @@ class World {
                 }
             }
         });
-
+        // Entfernt den gedrückten Zustand
         window.addEventListener('keyup', (e) => {
-            this.keyboard[e.key] = false;               // Entfernt den gedrückten Zustand
+            this.keyboard[e.key] = false;               
         });
     }
 
