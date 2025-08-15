@@ -62,7 +62,6 @@ main {
   /*  font-size: 1rem; */
     font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);
     color: #703347;
-    outline: #703347 dashed 1px;
   }
 }
 p {
