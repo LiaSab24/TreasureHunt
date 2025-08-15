@@ -3,11 +3,11 @@
  * Trägt zur Atmosphäre des Spiels bei.
  */
 class Cloud extends MovableObject {
-    y = 80;                             // Startposition weit oben
-    x = 0;                              // Startposition links
+    y = 80;                             
+    x = 0;                              
     height = 100;
     width = 300;
-    speed = 0.1;                        // Wolken bewegen sich langsam
+    speed = 0.1;                        
     world;
 
     /**
@@ -40,7 +40,7 @@ class Cloud extends MovableObject {
      moveLeft() {
         this.x -= this.speed;
          if (this.x + this.width < 0) {
-             this.x = 1000 + Math.random() * 500; // Canvasbreite + Zufall
+             this.x = 1000 + Math.random() * 500; 
          }
     }
 }

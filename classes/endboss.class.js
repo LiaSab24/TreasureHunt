@@ -7,13 +7,13 @@ class Endboss extends MovableObject {
         this.width = 200;
         this.height = 200;
         
-        this.Speed = 1.5; // Grundgeschwindigkeit
+        this.Speed = 1.5; 
 
-        this.health = 5;    // Lebenspunkte des Endbosses
-        this.maxHealth = 5; // Maximale Lebenspunkte
+        this.health = 5;    
+        this.maxHealth = 5; 
         this.isActuallyDead = false;
         this.actionColldown = false; 
-        this.hasDescended = false; // Flag, ob sich die Schlange schon 'abwärts' zum character bewegt hat
+        this.hasDescended = false; 
 
         this.IMAGES_WALKING = [
             'images/enemies/endboss/cobra-snake.png',
@@ -35,31 +35,27 @@ class Endboss extends MovableObject {
 
     hit() {
         if (this.isActuallyDead || this.world.isPaused) {
-            return; // Wenn Endboss tot ist oder Spiel pausiert, passiert nichts
+            return; 
         }
         
-        this.health -= 1;                                               // Reduziert Leben des Endbosses um 1  
-        console.log("Schlange getroffen! Leben übrig:", this.health);    // Gutes Feedback für die Konsole
+        this.health -= 1;                                               
+        console.log("Schlange getroffen! Leben übrig:", this.health);   
         if (this.health <= 0) {
-            this.health = 0;                                            // Verhindert negative Werte
+            this.health = 0;                                            
             this.isActuallyDead = true;
             console.log("Schlange ist besiegt!");
         }
     }
-    
-     // HINZUGEFÜGT: Stellt sicher, dass die Bewegung funktioniert.
+
     moveRight() {
         this.x += this.speed;
     }
 
-    // HINZUGEFÜGT: Stellt sicher, dass die Bewegung funktioniert.
     moveLeft() {
         this.x -= this.speed;
     }
 
     /**
-     * neuer Ansatz für animate() LOGIK mit unterschiedlichen Angriffsphasen
-     * 
      * steuert die Bewegungen und Animationen des Endbosses
      * prüft den Zustand des Endbosses und wendet die passende Geschwindigkeit an
      * Zustand des Endbosses wird regelmäßig aktualisiert, um das Verhalten zu steuern
@@ -146,10 +142,10 @@ class Endboss extends MovableObject {
 
     // Bewegt die Schlange langsam nach unten
     descendToGround() {
-        const targetY = 380;                            // Die Zielhöhe, wie character Höhe
+        const targetY = 380;                            
         const descendInterval = setInterval(() => {
             if (this.y < targetY) {
-                this.y += 0.5;                          // Geschwindigkeit des Heruntergleitens
+                this.y += 0.5;                          
             } else {
                 this.y = targetY;
                 clearInterval(descendInterval);
@@ -162,10 +158,9 @@ class Endboss extends MovableObject {
      * @param {string[]} images - Das Array der Bilder, die animiert werden sollen.
      */
     playAnimation(images) {
-        // Modulo (%) sorgt dafür, dass der Index immer im gültigen Bereich des Arrays bleibt
         let i = this.currentImage % images.length;
         let path = images[i];
-        this.img = this.imageCache[path]; // Setzt das zu zeichnende Bild aus dem Cache
+        this.img = this.imageCache[path]; 
         this.currentImage++;
     }
 }

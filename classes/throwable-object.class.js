@@ -3,13 +3,13 @@
  * Erbt von MovableObject und fügt eine Flugbahn-Logik (Gravitation) hinzu.
  */
 class ThrowableObject extends MovableObject {
-    speedX = 15;                                                // Horizontale Geschwindigkeit des Wurfs
-    speedY = 15;                                                // Anfängliche vertikale Geschwindigkeit (für den Bogen)
-    acceleration = 0.5;                                         // Gravitation für den Stein
-    rotation = 0;                                               // Für eine kleine Dreh-Animation (optional)
-    trajectorIntervalId = null;                                 // Intervall-ID für die Flugbahn-Animation
+    speedX = 15;                                                
+    speedY = 15;                                                
+    acceleration = 0.5;                                         
+    rotation = 0;                                               
+    trajectorIntervalId = null;                                 
     world;   
-    isDestroyed = false;                                        // Referenz auf die Welt, in der sich das Objekt befindet
+    isDestroyed = false;                                        
 
     /**
      * Erstellt eine Instanz eines Wurfobjekts.
@@ -24,9 +24,9 @@ class ThrowableObject extends MovableObject {
         this.y = y;
         this.height = 30;
         this.width = 30;
-        this.world = world;                                     // Setze die Welt-Referenz
-        this.applyGravity();                                    // Starte den "Fall" (Bogen) sofort
-        this.throw(direction);                                  // Setze die horizontale Richtung
+        this.world = world;                                   
+        this.applyGravity();                                  
+        this.throw(direction);                                
     }
 
     /**
@@ -35,9 +35,8 @@ class ThrowableObject extends MovableObject {
      */
     throw(direction) {
         if (direction === 'left') {
-            this.speedX = -this.speedX;                         // Negative Geschwindigkeit für Wurf nach links
+            this.speedX = -this.speedX;                        
         }
-        // Die initiale speedY sorgt für den Bogen nach oben
     }
 
      /**
@@ -47,14 +46,14 @@ class ThrowableObject extends MovableObject {
     applyGravity() {
         this.trajectorIntervalId = setInterval(() => {
             if (this.world && !this.world.isPaused) {  
-                if (this.y < 400) {                                 // Nur solange es nicht "auf dem Boden" ist (vereinfacht)
+                if (this.y < 400) {                           
                  this.y -= this.speedY;
                  this.speedY -= this.acceleration;
             }
-             this.x += this.speedX;                             // Horizontale Bewegung
-             this.rotation += 15;                               // Lässt den Stein rotieren (optional)
+             this.x += this.speedX;                           
+             this.rotation += 15;                             
             }
-        }, 25);                                                 // Aktualisierungsrate für Flugbahn und Rotation
+        }, 25);                                               
     }
 
      /**
@@ -63,17 +62,15 @@ class ThrowableObject extends MovableObject {
      */
      draw(ctx) {
         if (this.img) {
-            ctx.save();                                                             // Speichere aktuellen Zustand des Canvas (wichtig für Rotation)
-            ctx.translate(this.x + this.width / 2, this.y + this.height / 2);       // Verschiebe Ursprung zur Mitte des Steins
-            ctx.rotate(this.rotation * Math.PI / 180);                              // Rotiere den Kontext
-            ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2)); // Verschiebe Ursprung zurück
-            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);       // Zeichne das Bild an der aktuellen Position
-            ctx.restore();                                                          // Stelle vorherigen Zustand des Canvas wieder her
+            ctx.save();                                                             
+            ctx.translate(this.x + this.width / 2, this.y + this.height / 2);       
+            ctx.rotate(this.rotation * Math.PI / 180);                              
+            ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2)); 
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);       
+            ctx.restore();                                                          
         }
-         // --- DEBUG: Kollisionsbox ---
-         //ctx.strokeStyle = 'red';
-         //ctx.strokeRect(this.x, this.y, this.width, this.height);
     }
+    
      /**
      * Stoppt das Bewegungsintervall des Objekts.
      * Wichtig zur Vermeidung von Performance-Problemen, wenn das Objekt zerstört wird.

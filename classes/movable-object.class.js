@@ -3,21 +3,13 @@ class MovableObject {
     y = 280;
     height = 150;
     width = 100;
-    img;                                // Variable für das Bild-Objekt
-    imageCache = {};                    // Cache für geladene Bilder
-    currentImage = 0;                   // Index für Animationen
+    img;                               
+    imageCache = {};                    
+    currentImage = 0;                   
 
-    // Lädt ein Bild
     loadImage(path) {
-        this.img = new Image();         // Standard JS Image Objekt
-        this.img.onload = () => {       // Bild erfolgreich geladen
-        };
-        this.img.onerror = () => {
-            // Fehler beim Laden des Bildes
-            console.error(`FEHLER: Bild konnte nicht geladen werden: ${path}. Bitte Pfad und Datei überprüfen!`);
-            // Optional: Setze ein Platzhalterbild oder markiere das Objekt als "defekt"
-            // this.img = new Image(); // Erstelle ein leeres Bild, um weitere Fehler zu vermeiden
-            // this.img.src = 'img/placeholder_error.png'; // Pfad zu einem Fehler-Platzhalterbild
+        this.img = new Image();         
+        this.img.onload = () => {       
         };
         this.img.src = path;
     }
@@ -30,13 +22,12 @@ class MovableObject {
         arr.forEach((path) => {
             let img = new Image();
             img.onload = () => {
-                // console.log(`Animationsbild erfolgreich geladen: ${path}`); // Optional
             };
             img.onerror = () => {
                 console.error(`FEHLER: Animationsbild konnte nicht geladen werden: ${path}.`);
             };
             img.src = path;
-            this.imageCache[path] = img; // Speichert Bild im Cache unter seinem Pfad
+            this.imageCache[path] = img; 
         });
     }
 
@@ -47,14 +38,12 @@ class MovableObject {
         if (this.img) {
              ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
         } else {
-            // Fallback: Zeichne ein einfaches Rechteck, wenn kein Bild geladen ist
              ctx.fillStyle = 'grey';
              ctx.fillRect(this.x, this.y, this.width, this.height);
              console.warn('Kein Bild zum Zeichnen für Objekt an x:', this.x, 'y:', this.y);
         }
     }
 
-     // Einfache Bewegungsfunktionen (Beispiele)
      moveRight() {
      }
 
