@@ -27,7 +27,7 @@ main {
 }
 .impressum {
   max-width: 810px;
-  max-height: 550px
+  max-height: 550px;
   color: #703347;
   position: relative;
   display: grid;
