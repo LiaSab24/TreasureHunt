@@ -20,9 +20,8 @@ class World {
     worldAuthor = "LianeSchmuhl";
 
     character = new Character(); 
-    enemies = [new Enemy(400), new Enemy(800), new Enemy(1200)]; 
-    //clouds = [new Cloud(0),new Cloud(400),new Cloud(900), new Cloud(1300), new Cloud(1700), new Cloud(2100)]; 
-    clouds = []; // Wolken werden dynamisch generiert
+    enemies = []; 
+    clouds = []; 
     coins = []; 
     stones = [];
     throwableObjects = [];     
@@ -31,14 +30,12 @@ class World {
     keyboard = {}; 
     camera_x = 0;               
     gameLoopIntervalId = null;  
-    //treasureBag = null;                     // treasure-bag.png
-    treasureChest = null;                   // treasure-chest.png
-  //  mast = null;                            // mast.png
-    LEVEL_END = 2500;                       // Level-Ende (soll dynamisch gesetzt werden)
+    treasureChest = null;                   
+    LEVEL_END = 2500;                       
     gameWon = false;           
     isPaused = false; 
-    audioManager = new AudioManager();  // Instanz der Audio-Klasse
-    onStopGameCallback = null;          // Neue Property, um die Funktion zu speichern         
+    audioManager = new AudioManager();  
+    onStopGameCallback = null;                  
 
     /**
     * Erstellt eine neue Instanz der Spielwelt.
@@ -51,12 +48,12 @@ class World {
     * Diese Methode startet die Game Loop und initialisiert den Charakter.
     * @returns {void}
     */
-    constructor(canvas, onStopGame) { // <-- Neuer Parameter hier
+    constructor(canvas, onStopGame) { 
         this.canvas = canvas;
         this.canvas.width = 1000; 
         this.canvas.height = 700; 
         this.ctx = canvas.getContext('2d');
-        this.onStopGameCallback = onStopGame; // <-- Speichert die Funktion
+        this.onStopGameCallback = onStopGame; 
         this.keyboard = {};
         this.initLevel(); 
         this.draw();
@@ -99,7 +96,7 @@ class World {
         this.coins = [];
         this.stones = [];
         this.enemies = [];
-        this.endboss = new Endboss(this); // Endboss wird hier initialisiert
+        this.endboss = new Endboss(this);  
         this.throwableObjects = [];
     }
 

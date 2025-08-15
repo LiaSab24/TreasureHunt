@@ -1,8 +1,8 @@
 class Enemy extends MovableObject {
     height = 170;
     width = 80;
-    y = 380; // Startet am Boden
-    health = 1; // Jeder Gegner hat 1 Lebenspunkt
+    y = 380;
+    health = 1;
 
     //IMAGES_WALKING = [
     //    'images/enemies/enemy/enemy1/Walk/Walk1.png',
@@ -30,17 +30,13 @@ class Enemy extends MovableObject {
      * @param {World} world - Die Referenz zum World-Objekt.
      */
     constructor(startX, world) {
-        super().loadImage(this.IMAGES_WALKING[0]);
-        this.loadImages(this.IMAGES_WALKING);
-        this.loadImages(this.IMAGES_DEAD);
+        super();
         this.world = world;
         this.x = startX + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.3;
-        // WICHTIG: Diese Zeilen laden die Bilder, die in der Kindklasse definiert wurden.
-        // `this` bezieht sich auf die Instanz der Kindklasse (z.B. Enemy1 oder Enemy2)
-        this.loadImage(this.IMAGES_WALKING[0]);
-        this.loadImages(this.IMAGES_WALKING);
-        this.loadImages(this.IMAGES_DEAD);
+        //this.loadImage(this.IMAGES_WALKING[0]);
+        //this.loadImages(this.IMAGES_WALKING);
+        //this.loadImages(this.IMAGES_DEAD);
         this.startAnimation();
     }
 
