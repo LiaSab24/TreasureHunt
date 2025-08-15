@@ -226,12 +226,12 @@ class World {
     */
     initEnemies() {
         this.enemies.push(
-            new Enemy(550, this),
-            new Enemy(700, this),
-            new Enemy(900, this),
-            new Enemy(1050, this),
-            new Enemy(1200, this),
-            new Enemy(1350, this),
+            new Enemy1(550, this),
+            new Enemy2(700, this),
+            new Enemy1(900, this),
+            new Enemy2(1050, this),
+            new Enemy1(1200, this),
+            new Enemy2(1350, this),
         );
     }
 
