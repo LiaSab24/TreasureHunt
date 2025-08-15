@@ -346,49 +346,49 @@ class World {
      * @memberof World
      * @function initButtonControls
      * @returns {void}
-     * @description Erstellt Event-Listener für die Steuerungsbuttons,
-     * um die entsprechenden Aktionen im `this.keyboard`-Objekt zu setzen.
-     * Diese Methode ermöglicht die Steuerung des Charakters über Touch-Buttons.
-     * @param {string} buttonId - Die ID des HTML-Button-Elements, das gedrückt wird.
-     * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
-     * @description Diese Methode bindet "Gedrückt halten" und "Loslassen"-Events
-     * für Maus und Touch an einen einzelnen UI-Button.
-     * Sie wird in der initButtonControls() aufgerufen, um die Steuerung des Charakters zu ermöglichen.
      */
     initButtonControls() {
+        this.initControlButtons();
+        this.initGameControlButtons();
+    }
+
+    /**
+     * wird in der initButtonControls() aufgerufen.
+     * Initialisiert die Steuerungsbuttons für die Bewegungen und Aktionen.
+     */
+    initControlButtons() {
         const controlButtonMap = {
             'leftButton': 'TOUCH_LEFT',
             'rightButton': 'TOUCH_RIGHT',
             'upButton': 'TOUCH_JUMP',
             'wurfButton': 'TOUCH_THROW'
         };
-
-        // Geht durch die Map und bindet die Events für jeden Button.
-        for (const buttonId in controlButtonMap) {
-            const actionKey = controlButtonMap[buttonId];
+        Object.entries(controlButtonMap).forEach(([buttonId, actionKey]) => {
             this.bindPressAndHoldEvents(buttonId, actionKey);
-        }
+        });
+    }
 
-        // Event-Listener für Pause, Play, Stop
-        const pauseButton = document.getElementById('pauseButton');
-        const playButton = document.getElementById('playButton');
-        const stopButton = document.getElementById('stopButton');
-        const audioButton = document.getElementById('audioOnOffButton');
+    /**
+     * wird in der initButtonControls() aufgerufen.
+     * Initialisiert die Buttons für Pause, Play, Stop und Audio.
+     */
+    initGameControlButtons() {
+        this.bindButtonClick('pauseButton', () => this.pauseGame());
+        this.bindButtonClick('playButton', () => this.resumeGame());
+        this.bindButtonClick('stopButton', () => this.stopGame());
+        this.bindButtonClick('audioOnOffButton', () => this.audioManager.toggleMute());
+    }
 
-        if (pauseButton) {
-            pauseButton.addEventListener('click', () => this.pauseGame());
-        }
-        if (playButton) {
-            playButton.addEventListener('click', () => this.resumeGame());
-           // playButton.style.display = 'none'; // Play-Button am Anfang ausblenden
-        }
-        if (stopButton) {
-            stopButton.addEventListener('click', () => this.stopGame());
-        }
-        if (audioButton) {
-            audioButton.addEventListener('click', () => {
-                this.audioManager.toggleMute();
-            });
+    /**
+     * wird in der initGameControlButtons() aufgerufen.
+     * Bindet einen Klick-Event an einen Button, falls vorhanden.
+     * @param {string} buttonId
+     * @param {Function} handler
+     */
+    bindButtonClick(buttonId, handler) {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.addEventListener('click', handler);
         }
     }
 
@@ -397,13 +397,12 @@ class World {
      * @param {string} buttonId - Die ID des HTML-Button-Elements.
      * @param {string} actionKey - Der Schlüssel, der im `this.keyboard`-Objekt gesetzt wird.
      * @memberof World
-     * @function bindPressAndHoldEvents
      * @returns {void}
      * @description Bindet "Gedrückt halten" und "Loslassen"-Events für einen einzelnen UI-Button.
      */
     bindPressAndHoldEvents(buttonId, actionKey) {
         const button = document.getElementById(buttonId);
-        if (!button) return;                    // Bricht ab, wenn der Button nicht existiert
+        if (!button) return;                    
 
         const setActionState = (isPressed) => (event) => {
             event.preventDefault();
@@ -516,7 +515,6 @@ class World {
     /**
      * wird in der run() aufgerufen
      * @memberof World
-     * @function handleGameOver
      * @returns {void}
      * @description Diese Methode stoppt die Game Loop,
      * zeigt den Game-Over-Bildschirm an.
@@ -535,7 +533,6 @@ class World {
     /**
      * wird in der run() aufgerufen
      * @memberof World
-     * @function checkKeyboardInput
      * @returns {void} 
      * @description Diese Methode prüft die Tastatureingaben und löst die entsprechenden Aktionen des Charakters aus.
      * Sie ermöglicht die Bewegung des Charakters nach links und rechts,
@@ -564,7 +561,6 @@ class World {
     /**
      * @param {Stone} stone - Das Wurfobjekt, das zur Welt hinzugefügt wird.
      * @memberof World  
-     * @function addThrowableObject
      * @returns {void}
      * @description Diese Methode fügt ein Wurfobjekt (Stein) zur Welt hinzu.
      * Sie wird aufgerufen, wenn der Charakter einen Stein wirft.
@@ -576,7 +572,6 @@ class World {
     /**
      * wird in der handleWin() aufgerufen
      * @memberof World
-     * @function handleWin
      * @returns {void}
      * @description Diese Methode wird aufgerufen, wenn der Charakter die Schatztruhe erreicht.
      * Sie stoppt die Game Loop und spielt den Gewinn-Sound ab.
@@ -595,86 +590,105 @@ class World {
     }
 
     /**
-     * Diese Methode wird in der run() aufgerufen.
+     * wird in der run() aufgerufen.
      * @memberof World
-     * @function checkCollisions
      * @returns {void}
-     * @description Diese Methode prüft Kollisionen zwischen dem Charakter und anderen Objekten in der Welt.
-     * Sie überprüft Kollisionen mit Münzen, Steinen, Gegnern und dem Endboss.
-     * Sie entfernt gesammelte Münzen und Steine aus den Arrays
-     * und aktualisiert die Statusleisten des Charakters.
-     * Sie behandelt auch Kollisionen mit der Schatztruhe, um den Gewinnzustand auszulösen.
-     * Sie prüft Kollisionen zwischen Steinen und Gegnern, um Schaden zu verursachen.
-     * Sie entfernt "tote" Gegner aus dem Array, behält aber den Endboss für die Todesanimation.
-     * @param {void}
      */
     checkCollisions() {
-        // 1. Kollision Charakter mit Münzen
+        this.checkCoinCollisions();
+        this.checkStoneCollisions();
+        this.checkEnemyCollisions();
+        this.checkThrowableObjectCollisions();
+        this.checkTreasureChestCollision();
+        this.cleanupDestroyedObjects();
+    }
+
+    /** 
+     * wird in der checkCollisions() aufgerufen.
+     * Prüft Kollisionen zwischen Charakter und Münzen
+     */
+    checkCoinCollisions() {
         this.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
-                this.character.collectCoin();           
-                this.coins.splice(index, 1);            
-                this.updateStatusBars();                
-                this.audioManager.play('coin');         
+                this.character.collectCoin();
+                this.coins.splice(index, 1);
+                this.updateStatusBars();
+                this.audioManager.play('coin');
             }
         });
+    }
 
-        // 2. Kollision Charakter mit Steinen
+    /** 
+     * wird in der checkCollisions() aufgerufen.
+     * Prüft Kollisionen zwischen Charakter und Steinen
+     */
+    checkStoneCollisions() {
         this.stones.forEach((stone, index) => {
             if (this.character.isColliding(stone)) {
-                this.character.collectStone();          
-                this.stones.splice(index, 1);           
-                this.updateStatusBars();                
+                this.character.collectStone();
+                this.stones.splice(index, 1);
+                this.updateStatusBars();
             }
         });
+    }
 
-        // 3. Kollision Charakter mit Gegnern und Endboss
+    /** 
+     * wird in der checkCollisions() aufgerufen.
+     * Prüft Kollisionen zwischen Charakter und Gegnern/Endboss
+     */
+    checkEnemyCollisions() {
         this.enemies.forEach((enemy) => {
-        // Prüft Kollision und ob Gegner noch lebt
-        if (this.character.isColliding(enemy) && !enemy.isDead()) {
-            // Sprungamgriff auf den Boss
-            if (enemy instanceof Endboss && this.character.isAboveGround() && this.character.speedY < 0) { 
-                enemy.hit();                
-                this.character.bounce();    
-            } 
-            // Normale Kollision (von der Seite/unten)
-            else if (!this.character.isHurt()) {
+            if (this.character.isColliding(enemy) && !enemy.isDead()) {
+                if (enemy instanceof Endboss && this.character.isAboveGround() && this.character.speedY < 0) {
+                    enemy.hit();
+                    this.character.bounce();
+                } else if (!this.character.isHurt()) {
+                    this.character.hit();
+                    this.updateStatusBars();
+                }
+            } else if (!(enemy instanceof Endboss) && this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
                 this.character.hit();
                 this.updateStatusBars();
             }
-        } 
-        // Kollision mit normalen Gegnern
-        else if (!(enemy instanceof Endboss) && this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isHurt()) {
-            this.character.hit();
-            this.updateStatusBars();
-        }
-    });
+        });
+    }
 
-        // 4. Kollision Steine mit ALLEN Gegnern (inklusive Endboss)
+    /** 
+     * wird in der checkCollisions() aufgerufen.
+     * Prüft Kollisionen zwischen Steinen und Gegnern/Endboss
+     */
+    checkThrowableObjectCollisions() {
         this.throwableObjects.forEach((stone) => {
             this.enemies.forEach((enemy) => {
                 if (stone && !stone.isDestroyed && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
-                    enemy.hit(); 
-                    stone.isDestroyed = true; 
+                    enemy.hit();
+                    stone.isDestroyed = true;
                 }
             });
         });
+    }
 
-        // 5. Kollision Charakter mit Schatztruhe NUR wenn Endboss tot ist
+    /** 
+     * wird in der checkCollisions() aufgerufen.
+     * Prüft Kollision Charakter mit Schatztruhe (nur wenn Endboss tot) 
+     */
+    checkTreasureChestCollision() {
         if (this.treasureChest && this.character.isColliding(this.treasureChest)) {
             if (this.endboss && !this.endboss.isDead()) {
                 return;
             } else {
-                this.handleWin(); 
+                this.handleWin();
             }
         }
+    }
 
-        // --- Aufräumen: Objekte entfernen ---
-        this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed)
-
-        // Entfernt "tote" Gegner (die getroffen wurden)
-        // Endboss im Array behalten, auch wenn er tot ist, damit die Todesanimation gezeigt werden kann
-        this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss); 
+    /** 
+     * wird in der checkCollisions() aufgerufen.
+     * Entfernt zerstörte Steine und tote Gegner (außer Endboss) 
+     */
+    cleanupDestroyedObjects() {
+        this.throwableObjects = this.throwableObjects.filter(stone => !stone.isDestroyed);
+        this.enemies = this.enemies.filter(enemy => !enemy.isDead() || enemy instanceof Endboss);
     }
 
     /**
@@ -684,16 +698,7 @@ class World {
      * @returns {void}
      * @param {void}
      * @description Diese Methode ist der Hauptzeichnungszyklus des Spiels.
-     * Sie wird in der Game Loop aufgerufen und führt die folgenden Schritte aus:
-     * 1. Löscht den Canvas, um die vorherigen Zeichnungen zu entfernen.
-     * 2. Zeichnet den Hintergrund mit Parallax-Effekt, indem es die Hintergrundebenen durchläuft
-     *    und sie entsprechend der Kamera-Position anzeigt.
-     * 3. Verschiebt die Kamera, um den Charakter im Fokus zu halten.
-     * 4. Zeichnet alle Spielobjekte (Wolken, Münzen, Steine, Gegner, Wurfobjekte, Charakter und Schatztruhe).
-     * 5. Setzt die Kamera-Translation zurück, um die Position für die nächsten Zeichnungen zu korrigieren.
-     * 6. Zeichnet die Statusleiste des Endbosses, wenn der Endboss existiert und in der Nähe ist.
-     * 7. Wenn das Spiel pausiert ist, wird ein Pause-Overlay gezeichnet.
-     * 8. Aktualisiert die Statusleisten des Charakters (Leben, Münzen, Steine).
+     * Sie wird in der Game Loop aufgerufen
      */
     draw() {
         // --- 1. Canvas löschen ---
@@ -703,20 +708,17 @@ class World {
         this.backgroundObjects.forEach(layer => {
             let effectiveX = layer.x + this.camera_x * layer.parallaxFactor;
 
-            // --- Kachellogik ---
-            // Wenn eine Kachel komplett links aus dem Bild ist (unter Berücksichtigung ihrer Geschwindigkeit)
-            // Beispiel: Kachelbreite 720. Wenn effectiveX < -720, ist sie links raus.
-            // Wir verschieben sie dann um 3 Kachelbreiten nach rechts (da wir 3 Kacheln pro Ebene haben)
+            /**
+             * Diese Logik sorgt dafür, dass die Kacheln nahtlos wiederholt werden.
+             */
             if (effectiveX <= -layer.width) {
                 layer.x += layer.width * 3;             
             } else if (effectiveX > layer.width * 2) {  
                 layer.x -= layer.width * 3;
             }
-
-             // Zeichnet die Kachel an ihrer *aktuellen* Position (layer.x),
-             // aber verschoben durch die Kamera-Simulation für den Parallax-Effekt
              this.ctx.drawImage(layer.img, effectiveX, layer.y, layer.width, layer.height);
         });
+
         // --- 3. Kamera für Spielobjekte verschieben ---
         this.ctx.translate(this.camera_x, 0);
 
@@ -730,6 +732,7 @@ class World {
         if (this.treasureChest) {                       
             this.treasureChest.draw(this.ctx);
         }
+
         // --- 5. Kamera-Translation zurücksetzen ---
         this.ctx.translate(-this.camera_x, 0);
 
@@ -741,7 +744,7 @@ class World {
     }
 
      /**
-     * wird in der draw() Methode aufgerufen, --- 4. Zeichnet Elemente ---
+     * wird in der draw() Methode aufgerufen
      * @memberof World
      * @function drawObjects
      * @description Diese Methode nimmt ein Array von Objekten und zeichnet jedes Objekt auf dem Canvas.
@@ -756,9 +759,8 @@ class World {
     }
 
     /**
-     * wird in der draw() Methode aufgerufen, --- 7. Zeichnet das Pause-Overlay ---
+     * wird in der draw() Methode aufgerufen
      * @memberof World
-     * @function drawPauseOverlay
      * @returns {void}
      * @description Diese Methode zeichnet ein halbtransparentes Overlay über den Canvas,
      * um anzuzeigen, dass das Spiel pausiert ist.
@@ -778,9 +780,8 @@ class World {
     }
 
     /**
-     * wird in der draw() Methode aufgerufen, --- 6. Statusleiste ENDBOSS zeichnen ---
+     * wird in der draw() Methode aufgerufen
      * @memberof World
-     * @function drawEndbossStatusBar
      * @returns {void}
      * @description Diese Methode zeichnet die Statusanzeige des Endbosses.
      * Sie zeigt den Gesundheitsbalken des Endbosses an, wenn der Charakter in der Nähe ist.
@@ -815,19 +816,14 @@ class World {
     }
 
      /**
-      * Diese Methode wird in der checkCollisions() und buyLife() aufgerufen.
+      * wird in der checkCollisions() und buyLife() aufgerufen.
       * @memberof World 
-      * @function updateStatusBars
       * @returns {void} 
       * @description Diese Methode aktualisiert die Textinhalte der Statusleisten-Elemente im HTML.
-      * Sie zeigt die aktuellen Werte für Leben, Münzen und Steine des Charakters an.
-      * Außerdem wird der "Kaufe Leben"-Button aktualisiert, um anzuzeigen,
-      * ob der Charakter genug Münzen hat, um ein Leben zu kaufen.
-      * Wenn der Charakter genug Münzen hat, wird der Button aktiviert und zeigt den Preis an.
-      * Wenn nicht genug Münzen vorhanden sind, wird der Button deaktiviert und zeigt an,
-      * wie viele Münzen fehlen, um ein Leben zu kaufen.
-      * Diese Methode wird aufgerufen, wenn der Charakter Münzen oder Steine sammelt,
-      * wenn er ein Leben kauft oder wenn sich der Charakterzustand ändert.
+      * zeigt die aktuellen Werte für Leben, Münzen und Steine des Charakters an.
+      * der "Kaufe Leben"-Button wird aktualisiert
+      * Wenn genug Münzen vorhanden sind, wird der Button aktiviert und zeigt den Preis an.
+      * Wenn nicht genug Münzen vorhanden sind, wird der Button deaktiviert 
       * @param {void}
       */
     updateStatusBars() {
@@ -850,7 +846,6 @@ class World {
      * Diese Methode wird aufgerufen, wenn der Charakter genug Münzen hat, um ein Leben zu kaufen.
      * Sie wird durch den "Kaufe Leben"-Button im HTML ausgelöst.
      * @memberof World
-     * @function buyLife
      * @returns {void}
      * @description Diese Methode prüft, ob der Charakter genug Münzen hat, um ein Leben zu kaufen.
      * Wenn ja, werden 5 Münzen abgezogen und ein Leben hinzugefügt.
