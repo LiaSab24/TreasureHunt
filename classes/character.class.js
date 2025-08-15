@@ -2,23 +2,23 @@ class Character extends MovableObject {
     height = 170; 
     width = 80;
     y = 380;     
-    speed = 1.5;                                // Bewegungsgeschwindigkeit des Charakters
+    speed = 1.5;                               
     speedY = 0; 
-    speedX = 0;                                 // Horizontale Geschwindigkeit (für Wurfobjekte)
+    speedX = 0;                                
     acceleration = 1.5; 
-    isOnGround = true;                          // Ist der Charakter am Boden?
-    world;                                      // Referenz zur Welt (wird von world.class.js gesetzt)
+    isOnGround = true;                         
+    world;                                     
     lives = 5;
     coins = 0;
     stones = 0;
     world;
-    lastHitTime = 0;                            // Zeitpunkt des letzten Treffers
-    invincibilityDuration = 1000;               // Dauer der Unverwundbarkeit in ms (1 Sekunde)
-    lastThrowTime = 0;                          // Zeitpunkt des letzten Wurfs
-    throwCooldown = 500;                        // Cooldown in ms (0.5 Sekunden)
-    GROUND_Y = 380;                             // Y-Position des Bodens für diesen Charakter (abhängig von Höhe)
-    facingDirection = 'right';                  // Blickrichtung des Charakters (initial nach rechts)
-    isThrowing = false;                         // Ist der Charakter gerade am Werfen?
+    lastHitTime = 0;                           
+    invincibilityDuration = 1000;              
+    lastThrowTime = 0;                         
+    throwCooldown = 500;                       
+    GROUND_Y = 380;                            
+    facingDirection = 'right';                 
+    isThrowing = false;                        
 
     IMAGES_IDLE = [
         'images/character_neu/Idle/1.png',
@@ -60,12 +60,12 @@ class Character extends MovableObject {
 
     // Zeitstempel für Idle-Animation
     lastIdleTime = 0;
-    idleDelay = 3000; // Wartezeit in ms bevor Idle-Animation startet
+    idleDelay = 3000; 
     idleCounter = 0;
     
     constructor() {
         super();
-        this.loadImage(this.IMAGES_IDLE[0]);        // Ladet das erste Idle-Bild
+        this.loadImage(this.IMAGES_IDLE[0]);        
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
@@ -73,11 +73,14 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_THROW);
         this.applyGravity();
-        this.animate();                             // Startet die Animation
-        this.lastIdleTime = new Date().getTime();   // Setzt die Zeit für die Idle-Animation
+        this.animate();                             
+        this.lastIdleTime = new Date().getTime();   
     }
 
-
+    /**
+     * wird im constructor aufgerufen
+     * Animiert den Charakter basierend auf seinem Zustand.
+     */
     animate() {
         setInterval(() => {
             if (this.world && this.world.isPaused) { return; }
@@ -103,15 +106,18 @@ class Character extends MovableObject {
             }
             this.playAnimation(imagesToPlay);
 
-        }, 120); // <-- 120 Millisekunden (150 ms für langsamere Animation, 90 ms für schnellere Animation)
+        }, 120); 
     }
 
+    /**
+     * wird im constructor aufgerufen
+     * Aktualisiert den Timer für die Idle-Animation.
+     */
     updateIdleTimer() {
-        // Wenn der Charakter sich bewegt oder springt, setze den Timer zurück
-         if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft']) || !this.isOnGround) {
-            this.lastIdleTime = new Date().getTime();
-         }
-     }
+        if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft']) || !this.isOnGround) {
+           this.lastIdleTime = new Date().getTime();
+        }
+    }
 
  // --- Sammelmethoden ---
     collectCoin() {
@@ -128,9 +134,9 @@ class Character extends MovableObject {
      * Reduziert die Lebenspunkte des Charakters und setzt einen Unverwundbarkeits-Timer.
      */
     hit() {
-        if (!this.isHurt()) {                           // Nur treffen, wenn nicht gerade unverwundbar      
+        if (!this.isHurt()) {                               
             this.lives -= 1;
-            this.lastHitTime = new Date().getTime();    // Zeit des Treffers speichern
+            this.lastHitTime = new Date().getTime();    
 
             if (this.isDead()) {
                 // Hier kann die Todesanimation gestartet werden
@@ -147,7 +153,7 @@ class Character extends MovableObject {
      * @returns {boolean} True, wenn der Charakter unverwundbar ist, sonst false.
      */
     isHurt() {
-        const timePassed = new Date().getTime() - this.lastHitTime; // Zeit seit letztem Treffer
+        const timePassed = new Date().getTime() - this.lastHitTime; 
         return timePassed < this.invincibilityDuration;
     }
 
@@ -160,9 +166,9 @@ class Character extends MovableObject {
     }
 
     moveRight() {
-        if(!this.isDead()){                         // Nur bewegen wenn nicht tot
+        if(!this.isDead()){                         
             this.x += this.speed;
-            this.facingDirection = 'right';         // Blickrichtung aktualisieren
+            this.facingDirection = 'right';         
         }
     }
 
@@ -170,7 +176,7 @@ class Character extends MovableObject {
         // Verhindere Bewegung über den linken Rand hinaus
         if (!this.isDead() && this.x > 0) {
            this.x -= this.speed;
-           this.facingDirection = 'left';          // Blickrichtung aktualisieren
+           this.facingDirection = 'left';          
         }
     }
 
@@ -181,16 +187,12 @@ class Character extends MovableObject {
     * to propel the character upwards and forwards, and updates the character's state to be airborne.
     * * @returns {void} This function does not return a value.
     */
-   /**
-     * Löst einen Sprung aus, wenn der Charakter am Boden ist.
-     * setzt die vertikale Geschwindigkeitund spielt den Sound ab
-     */
     jump() {         
-        if (this.isOnGround && !this.isDead()) {            // Springen nur erlauben, wenn der Charakter am Boden ist und nicht tot
-            this.speedY = 20;                               // Positive Geschwindigkeit nach oben 
-          /*  this.speedX = 10;    */                       // Horizontale Geschwindigkeit zurücksetzen 
+        if (this.isOnGround && !this.isDead()) {            
+            this.speedY = 20;                               
+          /*  this.speedX = 10;    */                       
             this.isOnGround = false;
-            if (this.world && this.world.audioManager) {    // Charakter hat über `this.world` Zugriff auf den audioManager
+            if (this.world && this.world.audioManager) {    
                 this.world.audioManager.play('jump');
             }
         }
@@ -209,7 +211,7 @@ class Character extends MovableObject {
      * Lässt den Charakter nach einem erfolgreichen Sprung auf einen Gegner abprallen.
      */
     bounce() {
-        this.speedY = 15; // Setzt die vertikale Geschwindigkeit, um einen kleinen Sprung nach oben zu simulieren
+        this.speedY = 15; 
     }
 
    /**
@@ -217,14 +219,14 @@ class Character extends MovableObject {
      * Aktualisiert die vertikale Geschwindigkeit und Position.
      */ 
     applyGravity() {
-        if (this.isDead()) return;                  // Keine Gravitation wenn tot (oder Fallanimation)
+        if (this.isDead()) return;                  
         if (!this.isOnGround || this.speedY > 0) {
-            this.y -= this.speedY;                  // Y-Position basierend auf vertikaler Gesch
-            this.speedY -= this.acceleration;       // Geschwindigkeit durch Gravitation erhöhen
+            this.y -= this.speedY;                  
+            this.speedY -= this.acceleration;       
             //Lanndung
             if (this.y >= this.GROUND_Y) {
-                this.y = this.GROUND_Y;             // Genau auf den Boden setzen
-                this.speedY = 0;                    // Vertikale Geschwindigkeit stoppen
+                this.y = this.GROUND_Y;             
+                this.speedY = 0;                    
                 this.isOnGround = true;
             }
         }

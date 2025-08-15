@@ -4,9 +4,9 @@
  * `parallaxFactor` und der Kameraposition gesteuert.
  */
 class BackgroundObject extends MovableObject {
-    width = 1000;                       // Volle Breite des Canvas
-    height = 700;                       // Volle Höhe des Canvas
-    parallaxFactor = 1;                 // Standard: Bewegt sich mit dem Vordergrund
+    width = 1000;                       
+    height = 700;                       
+    parallaxFactor = 1;                 
 
 
     /**
@@ -19,6 +19,6 @@ class BackgroundObject extends MovableObject {
         super().loadImage(imagePath);
         this.x = x;
         this.y = y; 
-        this.parallaxFactor;            // Setze den spezifischen Faktor
+        this.parallaxFactor = parallaxFactor;
     }
 }
