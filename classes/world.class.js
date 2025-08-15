@@ -431,13 +431,9 @@ class World {
      * Sie setzt den Spielzustand auf pausiert, stoppt die Hintergrundmusik,  
      */
     pauseGame() {
-        if (!this.isPaused) {                       // Nur pausieren, wenn es läuft
+        if (!this.isPaused) {                       
             this.isPaused = true;
             this.audioManager.stop('background');
-            console.log("Spiel pausiert.");
-            //this.drawPauseOverlay();                // Zeigt den Pause-Screen auf dem Canvas
-            // Buttons werden aktualisiert
-           // document.getElementById('pauseButton').style.display = 'none';
             document.getElementById('playButton').style.display = 'inline-block';
         }
     }
@@ -452,12 +448,9 @@ class World {
      * startet die Hintergrundmusik
      */
     resumeGame() {
-        if (this.isPaused) {                        // Nur fortsetzen, wenn es pausiert ist
+        if (this.isPaused) {                        
             this.isPaused = false;
             this.audioManager.play('background');
-            console.log("Spiel fortgesetzt.");
-            // Buttons werden aktualisiert
-          //  document.getElementById('playButton').style.display = 'none';
             document.getElementById('pauseButton').style.display = 'inline-block';
         }
     }
@@ -474,14 +467,13 @@ class World {
      * um das Spiel zu beenden.
      */
     stopGame() {
-        console.log("Spiel gestoppt und beendet.");
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
             this.gameLoopIntervalId = null;
         }
         this.audioManager.stop('background'); 
         if (typeof this.onStopGameCallback === 'function') {
-            this.onStopGameCallback();      // Ruft die gespeicherte Funktion auf
+            this.onStopGameCallback();      
         }
     }
 
@@ -498,7 +490,7 @@ class World {
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
         }
-        this.audioManager.play('background');     // Startet die Hintergrundmusik, sobald das Spiel läuft
+        this.audioManager.play('background');     
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
               this.draw();
@@ -514,10 +506,10 @@ class World {
                 return;
             }
 
-            this.checkKeyboardInput();      // für Characterbewegung u Kamera-Update        
-            this.character.applyGravity();  // Characterbewegugn im Sprung
-            this.checkCollisions();         // Kollisionen prüfen
-            this.draw();                    // Zeichnen der Objekte 
+            this.checkKeyboardInput();         
+            this.character.applyGravity();  
+            this.checkCollisions();         
+            this.draw();                    
         }, 1000 / 60);
     }
 
@@ -533,10 +525,10 @@ class World {
      * Außerdem wird der Hintergrund gestoppt und der Game-Over-Sound abgespielt.
      */
     handleGameOver() {
-        clearInterval(this.gameLoopIntervalId); // Stoppt die Game Loop
+        clearInterval(this.gameLoopIntervalId); 
         this.gameLoopIntervalId = null;
-        this.audioManager.stop('background'); // Stoppt die backgroundMusik 
-        this.audioManager.play('game_over');  // spielt den Game-Over-Sound <--> fehlt noch
+        this.audioManager.stop('background');   
+        this.audioManager.play('game_over');    
         showGameOverScreen();
     }
 
@@ -563,10 +555,10 @@ class World {
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) {
             this.character.jump();
         }
-        if (this.keyboard['d'] || this.keyboard['D']  || this.keyboard['TOUCH_THROW']) { // Taste D für Werfen
+        if (this.keyboard['d'] || this.keyboard['D']  || this.keyboard['TOUCH_THROW']) { 
             this.character.throwStone();
         }
-         this.camera_x = -this.character.x + 100; // 100 Pixel Offset vom linken Rand
+         this.camera_x = -this.character.x + 100; 
     }
 
     /**
@@ -579,7 +571,6 @@ class World {
      */
     addThrowableObject(stone) {
         this.throwableObjects.push(stone);
-        console.log('Stein zur Welt hinzugefügt. Anzahl:', this.throwableObjects.length); // Debug
     }
 
     /**
@@ -592,12 +583,12 @@ class World {
      * Sie zeigt den Gewinnbildschirm an und setzt den Spielzustand auf gewonnen.
      */
     handleWin() {
-        if (!this.gameWon) {                            // Nur einmal ausführen
+        if (!this.gameWon) {                            
              this.gameWon = true;
-             clearInterval(this.gameLoopIntervalId);    // Stoppt die Game Loop
+             clearInterval(this.gameLoopIntervalId);    
              this.gameLoopIntervalId = null;
-             this.keyboard = {};                        // Tastatureingaben ignorieren
-             this.audioManager.stop('background');      // Stoppt die Musik und spielt den Gewinn-Sound
+             this.keyboard = {};                        
+             this.audioManager.stop('background');      
              this.audioManager.play('win');
              showWinScreen();
         }
@@ -621,19 +612,19 @@ class World {
         // 1. Kollision Charakter mit Münzen
         this.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
-                this.character.collectCoin();           // Methode in Character aufrufen
-                this.coins.splice(index, 1);            // Münze aus dem Array entfernen
-                this.updateStatusBars();                // Statusbar sofort aktualisieren
-                this.audioManager.play('coin');         // NEU
+                this.character.collectCoin();           
+                this.coins.splice(index, 1);            
+                this.updateStatusBars();                
+                this.audioManager.play('coin');         
             }
         });
 
         // 2. Kollision Charakter mit Steinen
         this.stones.forEach((stone, index) => {
             if (this.character.isColliding(stone)) {
-                this.character.collectStone();          // Methode in Character aufrufen
-                this.stones.splice(index, 1);           // Stein aus dem Array entfernen
-                this.updateStatusBars();                // Statusbar sofort aktualisieren
+                this.character.collectStone();          
+                this.stones.splice(index, 1);           
+                this.updateStatusBars();                
             }
         });
 
@@ -642,16 +633,14 @@ class World {
         // Prüft Kollision und ob Gegner noch lebt
         if (this.character.isColliding(enemy) && !enemy.isDead()) {
             // Sprungamgriff auf den Boss
-            if (enemy instanceof Endboss && this.character.isAboveGround() && this.character.speedY < 0) { // isAboveGround() prüft, ob er in der Luft ist, speedY < 0 prüft, ob er fällt 
-                enemy.hit();                // Gegner nimmt Schaden
-                this.character.bounce();    // Charakter springt zurück
-                //this.audioManager.play('enemy_death'); // NEU: Sound für Treffer auf Gegner -- fehlt noch
+            if (enemy instanceof Endboss && this.character.isAboveGround() && this.character.speedY < 0) { 
+                enemy.hit();                
+                this.character.bounce();    
             } 
             // Normale Kollision (von der Seite/unten)
             else if (!this.character.isHurt()) {
                 this.character.hit();
                 this.updateStatusBars();
-                //this.audioManager.play('character_hit'); // NEU -- fehlt noch
             }
         } 
         // Kollision mit normalen Gegnern
@@ -665,9 +654,8 @@ class World {
         this.throwableObjects.forEach((stone) => {
             this.enemies.forEach((enemy) => {
                 if (stone && !stone.isDestroyed && enemy && !enemy.isDead() && stone.isColliding(enemy)) {
-                    enemy.hit(); // Trifft jeden Gegner, auch den Endboss
-                    stone.isDestroyed = true; // Markiert den Stein zum Entfernen
-                    //this.audioManager.play('enemy_death'); // NEU -- fehlt noch
+                    enemy.hit(); 
+                    stone.isDestroyed = true; 
                 }
             });
         });
@@ -675,10 +663,9 @@ class World {
         // 5. Kollision Charakter mit Schatztruhe NUR wenn Endboss tot ist
         if (this.treasureChest && this.character.isColliding(this.treasureChest)) {
             if (this.endboss && !this.endboss.isDead()) {
-                // Truhe ist blockiert, solange Endboss lebt
                 return;
             } else {
-                this.handleWin(); // Gewinnzustand auslösen
+                this.handleWin(); 
             }
         }
 
@@ -721,8 +708,8 @@ class World {
             // Beispiel: Kachelbreite 720. Wenn effectiveX < -720, ist sie links raus.
             // Wir verschieben sie dann um 3 Kachelbreiten nach rechts (da wir 3 Kacheln pro Ebene haben)
             if (effectiveX <= -layer.width) {
-                layer.x += layer.width * 3;             // Verschiebe diese Kachel weit nach rechts
-            } else if (effectiveX > layer.width * 2) {  // Optional: Falls man auch nach links scrollt
+                layer.x += layer.width * 3;             
+            } else if (effectiveX > layer.width * 2) {  
                 layer.x -= layer.width * 3;
             }
 
@@ -740,7 +727,7 @@ class World {
         this.drawObjects(this.enemies);
         this.drawObjects(this.throwableObjects);
         this.character.draw(this.ctx);
-        if (this.treasureChest) {                       // Zeichnet die Truhe, falls sie existiert
+        if (this.treasureChest) {                       
             this.treasureChest.draw(this.ctx);
         }
         // --- 5. Kamera-Translation zurücksetzen ---
@@ -778,8 +765,8 @@ class World {
      * Sie zeigt den Text "Pause" und eine Anweisung zum Fortsetzen des Spiels an.
      */
      drawPauseOverlay() {
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          // Halbtransparentes Grau
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);       // Über den ganzen Canvas
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';                          
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);      
 
         this.ctx.font = "48px 'Arial'";
         this.ctx.fillStyle = "white";
@@ -802,7 +789,7 @@ class World {
      * Die Anzeige wird nur angezeigt, wenn der Endboss existiert und nicht tot ist.
      */
     drawEndbossStatusBar() {
-        if (!this.endboss) return;              // Nur ausführen, wenn es einen Endboss gibt
+        if (!this.endboss) return;             
 
         const distance = Math.abs(this.endboss.x - this.character.x); 
         const statusBar = document.getElementById('endbossStatus');
@@ -812,7 +799,7 @@ class World {
         if (distance < 800 && !this.endboss.isDead()) {
             statusBar.style.display = 'flex';
             // Berechnet, wie viel Prozent Leben der Boss noch hat
-            const healthPercentage = (this.endboss.health / this.endboss.maxHealth) * 100; // 3 ist die maximale Gesundheit
+            const healthPercentage = (this.endboss.health / this.endboss.maxHealth) * 100; 
             healthBar.style.width = healthPercentage + '%';
 
             // Wenn die Leben niedrig sind, färbt sich der Balken rot!
@@ -823,7 +810,7 @@ class World {
             }
 
         } else {
-            statusBar.style.display = 'none'; // Sonst verstecken
+            statusBar.style.display = 'none'; 
         }
     }
 
@@ -873,7 +860,7 @@ class World {
         if (this.character.coins >= 5 && !this.character.isDead()) {
             this.character.coins -= 5;
             this.character.lives += 1;
-            this.updateStatusBars();                                        // Anzeige sofort aktualisieren
+            this.updateStatusBars();                                        
         }  
     }
 }
