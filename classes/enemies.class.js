@@ -9,6 +9,7 @@ class Enemy extends MovableObject {
 
     /**
      * Erstellt eine neue Instanz eines Gegners.
+     * Verschiebt einen zufälligen Gegner um 30 Pixel nach oben
      * @param {number} startX - Die anfängliche X-Position, um eine zufällige Verteilung zu ermöglichen.
      * @param {World} world - Die Referenz zum World-Objekt.
      */
@@ -17,6 +18,10 @@ class Enemy extends MovableObject {
         this.world = world;
         this.x = startX + Math.random() * 500;
         this.speed = 0.15 + Math.random() * 0.3;
+        if (Math.random() < 0.5) {
+            this.y -= 30; 
+        }
+        //this.y += (Math.random() * 20) - 30;
         this.startAnimation();
     }
 

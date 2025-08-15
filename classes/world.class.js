@@ -113,7 +113,6 @@ class World {
         const canvasWidth = this.canvas.width;
         const layers = [
             { path: 'images/bg-canvas/bg1.png', parallaxFactor: 0 },
- //           { path: 'images/bg-canvas/bg1.png', parallaxFactor: 0.2 },
             { path: 'images/bg-canvas/cactus.png', parallaxFactor: 0.4 },
             { path: 'images/bg-canvas/cactus.png', parallaxFactor: 0.6 },
             { path: 'images/bg-canvas/piso1.png', parallaxFactor: 1 }
