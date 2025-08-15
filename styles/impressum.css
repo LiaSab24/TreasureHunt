@@ -10,7 +10,7 @@ body {
   backdrop-filter: blur(10px);
   background-repeat: no-repeat;
   height: 100vh; 
-  height: 100dvh; /* 100% of the viewport height, accounting for dynamic toolbars */
+  height: 100dvh; 
   display: flex;
   justify-content: center;
 }
@@ -26,39 +26,21 @@ main {
   margin-top: 50px;
 }
 .impressum {
-/*  width: 90%; */
   max-width: 810px;
-  max-height: 550px;
+  max-height: 550px
   color: #703347;
-/*  padding: 2%;*/
   position: relative;
   display: grid;
   place-items: center;
-/*  display: flex;
-/*  justify-content: center;
-/*  align-items: center;
-/*  background-image: url('../images/bg/button/emptyMap2500.png');
-/*  background-repeat: no-repeat;
-/*  background-position: center;
-/* background-size: contain; */
   img {
     grid-area: 1 / 1;
   }
   .impressum-content {
-   /* width: 100%;
-   /* margin: 3%; */
     grid-area: 1 / 1;
-  /*  display: flex;
-  /*  flex-direction: column;
-  /*  align-items: center;
-  /*  justify-content: center;
-    gap: 20px; */
     height: 75%;
     overflow-y: auto;
-   /* padding: 20px; */
     margin: 0 15% 5%;
     text-align: left;
-  /*  font-size: 1rem; */
     font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);
     color: #703347;
   }
