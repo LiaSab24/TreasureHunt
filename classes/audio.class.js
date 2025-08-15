@@ -7,12 +7,8 @@ class AudioManager {
         this.loadSound('throw', 'audio/throwing.m4a');
         this.loadSound('win', 'audio/Gewonnen.m4a');
         this.loadSound('coin', 'audio/coin-collision.mp3');
-        
-        // noch fehlende Sounds
-        //this.loadSound('character_hit', 'audio/character-hit.mp3'); 
-        this.loadSound('game_over', 'audio/game_over.wav'); // Sound für das Spielende
-        //this.loadSound('enemy_death', 'audio/enemy_death.mp3'); // Sound, wenn ein Gegner besiegt wir       
-        this.loadSound('background', 'audio/background_music.mp3', true, 0.2);  // Hintergrundmusik mit speziellen Optionen (loop, volume)
+        this.loadSound('game_over', 'audio/game_over.wav'); 
+        this.loadSound('background', 'audio/background_music.mp3', true, 0.2);  
     }
 
     /**
@@ -31,21 +27,11 @@ class AudioManager {
 
     /**
      * spielt einen Sound anhand seines Namens ab
+     * wird nur abgespielt, wenn NICHT stummgeschaltet
      * setzt den Sound vorher auf den Anfang zurück, damit er bei schnellem Aufruf erneut abgespielt werden kann
      * @param {string} name 
      */
     play(name) {
-        //if (this.isMuted) return; // wenn stummgeschaltet, nicht abspielen 
-        //if (this.sounds[name]) {
-        //    this.sounds[name].currentTime = 0;
-        //    this.sounds[name].play().catch(e => {
-        //        // Autoplay kann durch den Browser blockiert werden, bis der User interagiert.
-        //        // catch-Block verhindert Fehler in der Konsole.
-        //        console.warn(`Audio '${name}' konnte nicht abgespielt werden. Warte auf User-Interaktion.`);
-        //    });
-        //}
-        
-        // Nur abspielen, wenn NICHT stummgeschaltet
         if (!this.isMuted && this.sounds[name]) {
             this.sounds[name].currentTime = 0;
             this.sounds[name].play().catch(e => {
@@ -72,16 +58,16 @@ class AudioManager {
      * um Browser-Probleme mit .muted zu umgehen
      */
     toggleMute() {
-        this.isMuted = !this.isMuted;   // Zustand umschalten (true -> false, false -> true)
-        const audioIcon = document.getElementById('audioIcon'); // !NEU! Das <img>-Element holen
+        this.isMuted = !this.isMuted;  
+        const audioIcon = document.getElementById('audioIcon'); 
         
         if (this.isMuted) {
             // --- TON AUS ---
             for (const key in this.sounds) {
-                this.sounds[key].pause(); // Alle Sounds anhalten   //muted = this.isMuted;
+                this.sounds[key].pause(); 
             }
             if (audioIcon) {
-                audioIcon.src = 'images/button/speakerOff.PNG'; // Bild auf "AUS" setzen
+                audioIcon.src = 'images/button/speakerOff.PNG'; 
             }
              console.log("Audio stummgeschaltet");
         } else {
@@ -90,7 +76,7 @@ class AudioManager {
               this.play('background');
             }
             if (audioIcon) {
-                audioIcon.src = 'images/button/speakerOn.PNG'; // Bild auf "AN" setzen
+                audioIcon.src = 'images/button/speakerOn.PNG'; 
             }
             console.log("Audio eingeschaltet");
         }
