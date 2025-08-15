@@ -11,7 +11,7 @@ let canvas;
  */
 function initGame() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, showIntroScreen);       // 'showIntroScreen' wird als zweiten Parameter übergeben
+    world = new World(canvas, showIntroScreen);       
     document.getElementById('introOverlay').style.display = 'none';
     document.getElementById('gameContainer').style.display = 'block';
     document.getElementById('gameOverOverlay').style.display = 'none';
@@ -62,7 +62,6 @@ const buttonEventMap = {
 function toggleHelpText() {
     const helpText = document.getElementById('helpText');
     if (helpText) {
-        // Toggle zwischen "block" und "none"
         helpText.style.display = (helpText.style.display === 'none' || helpText.style.display === '') ? 'block' : 'none';
     }
 }
@@ -96,14 +95,16 @@ function setupInitialUI() {
 // ============================================================================
 // C. Haupt-Initialisierung 
 // ============================================================================
+/*
+* Initialisiert das Spiel und zeigt den Intro-Screen an.
+* Prüft, ob der Intro-Screen sichtbar ist, um zu vermeiden,
+* dass man das Spiel neustartet, wenn man im Spiel Enter drückt.
+*/
 
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-        // Prüfen, ob der Intro-Screen sichtbar ist, um zu vermeiden,
-        // dass man das Spiel neustartet, wenn man im Spiel Enter drückt.
         const introOverlay = document.getElementById('introOverlay');
-        if //(introOverlay.style.display !== 'none') {
-            (getComputedStyle(introOverlay).display !== 'none') {
+        if (getComputedStyle(introOverlay).display !== 'none') {
             initGame();
         }
          else if (getComputedStyle(gameOverOverlay).display !== 'none' || getComputedStyle(winOverlay).display !== 'none') {
@@ -111,15 +112,6 @@ window.addEventListener('keydown', (event) => {
         }
     }
 });
-
-/**
- * Fenstergröße ändern/anpassen
- */
-//window.addEventListener('resize', () => {
-//    if (world) {
-//        world.resize();
-//    }
-//});
 
 /**
  * DOMContentLoaded
@@ -157,8 +149,8 @@ function showWinScreen() {
 function showIntroScreen() {
     document.getElementById('introOverlay').style.display = 'flex';
     document.getElementById('gameContainer').style.display = 'none';
-    document.getElementById('gameOverOverlay').style.display = 'none'; // Sicherheitshalber auch ausblenden
-    document.getElementById('winOverlay').style.display = 'none';      // Sicherheitshalber auch ausblenden
+    document.getElementById('gameOverOverlay').style.display = 'none'; 
+    document.getElementById('winOverlay').style.display = 'none';      
 }
 
 /** 
