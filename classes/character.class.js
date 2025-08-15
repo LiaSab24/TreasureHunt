@@ -134,16 +134,24 @@ class Character extends MovableObject {
      * Reduziert die Lebenspunkte des Charakters und setzt einen Unverwundbarkeits-Timer.
      */
     hit() {
-        if (!this.isHurt()) {                               
+        if (!this.isHurt()) {
             this.lives -= 1;
-            this.lastHitTime = new Date().getTime();    
+            this.lastHitTime = new Date().getTime();
 
             if (this.isDead()) {
-                // Hier kann die Todesanimation gestartet werden
+                // Todesanimation starten: Animation auf Anfang setzen
+                this.currentImage = 0;
+                // Game-Over-Sound abspielen
+                if (this.world && this.world.audioManager) {
+                    this.world.audioManager.play('game_over');
+                }
             } else {
-                 // Soundeffekt für Treffer
-                 // Kurzer Rückstoß
-                 // this.x -= 10; // Beispiel für Rückstoß nach links
+                // Soundeffekt für Treffer
+                if (this.world && this.world.audioManager) {
+                    this.world.audioManager.play('hurt');
+                }
+                // Kurzer Rückstoß
+                this.x -= 10; // Beispiel für Rückstoß nach links
             }
         }
     }

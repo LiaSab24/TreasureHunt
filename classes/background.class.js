@@ -19,6 +19,6 @@ class BackgroundObject extends MovableObject {
         super().loadImage(imagePath);
         this.x = x;
         this.y = y; 
-        this.parallaxFactor = parallaxFactor;
+        this.parallaxFactor;
     }
 }
