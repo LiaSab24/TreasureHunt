@@ -5,10 +5,8 @@ class Endboss extends MovableObject {
         this.x = 2400;
         this.y = 200;
         this.width = 200;
-        this.height = 200;
-        
+        this.height = 200;   
         this.Speed = 1.5; 
-
         this.health = 5;    
         this.maxHealth = 5; 
         this.isActuallyDead = false;
@@ -29,37 +27,53 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Checks if the final boss is dead.
+     * @returns {boolean} - True if dead, false otherwise.
+     */
     isDead() {
         return this.isActuallyDead;
     }
 
+    /**
+     * Handles the hit logic for the final boss.
+     */
     hit() {
         if (this.isActuallyDead || this.world.isPaused) {
             return; 
         }
         
         this.health -= 1;                                               
-        console.log("Schlange getroffen! Leben übrig:", this.health);   
         if (this.health <= 0) {
             this.health = 0;                                            
             this.isActuallyDead = true;
-            console.log("Schlange ist besiegt!");
         }
     }
 
+    /**
+     * Moves the final boss to the right.
+     */
     moveRight() {
         this.x += this.speed;
     }
 
+    /**
+     * Moves the final boss to the left.
+     */
     moveLeft() {
         this.x -= this.speed;
     }
 
     /**
-     * steuert die Bewegungen und Animationen des Endbosses
-     * prüft den Zustand des Endbosses und wendet die passende Geschwindigkeit an
-     * Zustand des Endbosses wird regelmäßig aktualisiert, um das Verhalten zu steuern
-     * 
+     * Moves the final boss downwards.
+     */
+    moveDown() {
+        this.y += this.speed;
+    }
+    /**
+     * Controls the movements and animations of the final boss
+     * Checks the status of the final boss and applies the appropriate speed
+     * The state of the final boss is updated regularly to control its behavior
      * @returns {void}
      */
     animate() {
@@ -68,11 +82,7 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
             }
-
-            // Die normale Lauf-Animation läuft immer.
-            this.playAnimation(this.IMAGES_WALKING);
-
-            // Nur wenn der Cooldown vorbei ist, darf eine neue Aktion gestartet werden.
+            this.playAnimation(this.IMAGES_WALKING)
             if (!this.actionCooldown) {
                 this.decideNextAction();
             }
@@ -80,52 +90,35 @@ class Endboss extends MovableObject {
     }
     
     /**
-     * VÖLLIG NEUE LOGIK: Der Taktgeber der Schlange.
-     * Entscheidet, was die nächste Aktion ist und führt sie aus.
+     * The snake's clock.
+     * Decides what the next action is and executes it.
      */
     decideNextAction() {
-        // 1. Cooldown setzen: Verhindert, dass diese Funktion 60x pro Sekunde aufgerufen wird.
         this.actionCooldown = true;
-
         const distanceToChar = Math.abs(this.x - this.world.character.x);
-
-        // Nur aktiv werden, wenn der Charakter in der Nähe ist.
         if (distanceToChar < 850) {
-            // Y-Achsen-Bewegung beim ersten Mal
             if (!this.hasDescended) {
                 this.descendToGround();
                 this.hasDescended = true;
             }
-
-            // ZUFALL: Zu 70% greift sie an, zu 30% pausiert sie. Das macht sie unberechenbar.
             if (Math.random() > 0.3) {
-                // ANGRIFFS-AKTION
-                console.log("Schlange greift an!");
-                this.speed = 4; // Schneller für den Angriff
-                this.moveTowardsCharacterForDuration(400); // Bewegt sich für 0.4 Sekunden
-                
-                // Setzt den Cooldown für die nächste Aktion.
-                setTimeout(() => { this.actionCooldown = false; }, 1500); // 1.5s Pause nach dem Angriff
-
+                this.speed = 4; 
+                this.moveTowardsCharacterForDuration(400);                
+                setTimeout(() => { this.actionCooldown = false; }, 1500); 
             } else {
-                // PAUSEN-AKTION
-                console.log("Schlange pausiert und lauert...");
-                // Setzt den Cooldown für die nächste Aktion.
-                setTimeout(() => { this.actionCooldown = false; }, 2000); // 2s reine Pause
+                setTimeout(() => { this.actionCooldown = false; }, 2000); 
             }
         } else {
-            // Wenn der Charakter weit weg ist, warte einfach.
             setTimeout(() => { this.actionCooldown = false; }, 500);
         }
     }
 
     /**
-     * HELFER-FUNKTION: Bewegt die Schlange für eine bestimmte Dauer.
-     * @param {number} duration - Die Dauer der Bewegung in Millisekunden.
+     * HELPER FUNCTION: Moves the snake for a specific duration.
+     * @param {number} duration - The duration of the movement in milliseconds.
      */
     moveTowardsCharacterForDuration(duration) {
-        const direction = (this.x > this.world.character.x) ? 'left' : 'right';
-        
+        const direction = (this.x > this.world.character.x) ? 'left' : 'right';        
         const moveInterval = setInterval(() => {
             if (direction === 'left') {
                 this.moveLeft();
@@ -134,13 +127,15 @@ class Endboss extends MovableObject {
             }
         }, 1000 / 60);
 
-        // Stoppt die Bewegung nach der angegebenen Dauer.
         setTimeout(() => {
             clearInterval(moveInterval);
         }, duration);
     }
 
-    // Bewegt die Schlange langsam nach unten
+    /**
+     * Lets the snake sink to the ground to start the animation.
+     * The snake slowly sinks to a specific Y position.
+     */
     descendToGround() {
         const targetY = 380;                            
         const descendInterval = setInterval(() => {
@@ -154,8 +149,8 @@ class Endboss extends MovableObject {
     }
     
     /**
-     * Spielt eine Animation ab, indem sie durch ein Array von Bildpfaden iteriert.
-     * @param {string[]} images - Das Array der Bilder, die animiert werden sollen.
+     * Plays an animation by iterating through an array of image paths.
+     * @param {string[]} images - The array of images to animate.
      */
     playAnimation(images) {
         let i = this.currentImage % images.length;
