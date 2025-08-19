@@ -153,13 +153,33 @@ function showIntroScreen() {
     document.getElementById('winOverlay').style.display = 'none';      
 }
 
-/** 
- * Zeigt den Game Over-Bildschirm an, wenn das Spiel verloren ist.
- * Diese Funktion wird aufgerufen, wenn der Spieler keine Leben mehr hat.
+/**
+ * Zeigt den Pause-Bildschirm an und pausiert das Spiel.
  */
-function showGameOverScreen() {
-     const gameOverOverlay = document.getElementById('gameOverOverlay');
-     if(gameOverOverlay) {
-        gameOverOverlay.style.display = 'flex';
-     }
+//function showPauseScreen() {
+//    document.getElementById('pauseOverlay').style.display = 'flex';
+//    // Hier könnte zusätzlicher Code zum Pausieren des Spiels eingefügt werden
+//}
+
+function fullscreen () {
+    let fullscreen = document.getElementById( 'fullscreenButton');
+    enterFullscreen (fullscreen);
+}
+
+function enterFullscreen (element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    }
+}
+
+function exitFullscreen () {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
 }
