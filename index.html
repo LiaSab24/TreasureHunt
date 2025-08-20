@@ -26,41 +26,17 @@
     <script src="classes/throwable-object.class.js"></script>
     <script src="classes/audio.class.js"></script>
     <script src="classes/world.class.js"></script>
-    <script type="module" src="js/game.js"></script> </body>
+    <script src="js/templatesHTML.js"></script>
+    <script src="js/game.js"></script> </body>
 </head>
 <body> 
-    <div id="introOverlay" class="overlay">
-        <div class="fullscreen">
-            <img 
-           id="fullscreenButton" src="images/bg/button/fullscreen.png" alt="fullscreen">
-        </div>
+    <div id="introOverlay" class="intro-overlay">
+        <div id="startButton" class="start-button button-img"></div>
+        <div id="game-info" style="display: none;"></div>
 
-        <div class="game-info">
-            <img src="images/bg/button/emptyMap.png" alt="leere Schatzkarte als Infobox-Hintergrund" width="100%">  
-            <div class="content">
-                <h3>Ein Schatz in der Wüste</h3>
-                <p>Vor viel zu langer Zeit ist ein Piratenschiff mit seinem Schatz gesunken und er scheint verloren.
-                    <br>Doch das Wasser ist verdunstet und nun liegt der Schatz mit den Resten des Schiffes irgendwo in der Wüste.
-                </p>
-                <p>Finde diesen Schatz, bevor er für immer verloren ist!
-                    <br>Du musst dich durch die Wüste schlagen, Gegner besiegen und den Schatz finden.
-                </p>
-                <br>
-                <p><strong>Aber Achtung!</strong></p>
-                <p>Du bist nicht allein bei der Suche nach dem Gold.</p>
-                <p>Denn die Piraten wollen ihr Gold wieder haben!</p>  
-                <p>Sammel Steine <img src="images/objects/stones/stone.PNG" alt="Stone" width="16"> für deine Verteidigung!</p>
-                <br>
-                <p>Folge einfach der Spur der Münzen ... <img src="images/objects/coins/coin.png" alt="Münze/coin" width="16"> Sie werden dich zum Schatz führen.</p>
-                <p>Mit 5 Münzen kannst du dir ein Leben dazu kaufen. Du wirst es brauchen ...</p>
-                <p>Viel Spaß!</p>
-            </div>
-        </div>
-
-        <div class="button">
-            <div id="startButton" class="start-button"></div>
-            <div id="helpButton" class="help-button"></div>
-            
+        <div class="button">           
+            <div id="infoButton" class="info-button button-img" onclick="showGameInfo()"></div>
+            <div id="helpButton" class="help-button button-img"></div>           
             <div id="helpText" class="info-text" style="display: none;">
                 <p>Steuerung:</p>
                 <p>⬅️ / ➡️ = Laufen</p>
@@ -77,15 +53,18 @@
                     <p>= Sammle Münzen und Steine!</p>
                 </div>
             </div>
-        </div>
-        <div class="imp-container">
-            <div id="impButton" class="imp-button"></div>
+            <div id="impButton" class="imp-button button-img"></div>
         </div>
     </div>
 
-    <div id="gameContainer" style="display: none;">
-        
-        <canvas id="canvas" width="1000" height="700"></canvas>
+    <div id="gameContainer" class="game-container" style="display: none;">
+
+        <canvas id="canvas" width="1000" height="700">
+            <div class="fullscreen">
+                <img 
+               id="fullscreenButton" src="images/bg/button/fullscreen.png" alt="fullscreen">
+            </div>
+        </canvas>
 
         <div id="statusBarContainer">
             <div class="statusBar">Leben: <span id="livesStatus">5</span></div>
@@ -117,18 +96,14 @@
     </div>
 
     <div id="gameOverOverlay" class="game-over-overlay" style="display: none;">
-        <div class="game-over-img">
-            <button id="restartButton" class="restart-button">
-                <img src="images/bg/button/neuesSpiel.png" alt="neues Spiel Button" width="40%">
-            </button>
+       <div class="game-over-img">  
+            <div id="restartButton" class="restart-button button-img"></div>
         </div>
     </div>
 
     <div id="winOverlay" class="win-overlay" style="display: none;">
         <div class="win-overlay-img">
-            <button id="restartButtonWin" class="restart-button">
-                <img src="images/bg/button/neuesSpiel.png" alt="neues Spiel Button" width="40%">
-            </button>
+            <div id="restartButtonWin" class="restart-button button-img"></div>
         </div>   
     </div>
 

@@ -49,12 +49,19 @@ const buttonEventMap = {
     'backButton': () => window.location.href = 'index.html',
     'impButton': () => window.location.href = 'impressum.html',
     'buyLifeButton': () => world?.buyLife(),
+    'infoButton': showGameInfo,
     'helpButton': toggleHelpText
 };
 
 // ============================================================================
 // B. Ausgelagerte Aktionen (Helper-Funktionen)
 // ============================================================================
+
+function showGameInfo() {   
+    const gameInfo = document.getElementById("game-info");
+    gameInfo.style.display = "block";  
+    gameInfo.innerHTML = getShowGameInfo();
+}
 
 /**
  * Zeigt den Hilfe-Text an oder versteckt ihn.

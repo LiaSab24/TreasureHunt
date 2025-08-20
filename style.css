@@ -52,7 +52,7 @@ h3 {
   color: #9b5667;
 }
 
-.overlay {
+.intro-overlay {
   position: fixed; 
   top: 0;
   left: 0;
@@ -66,11 +66,8 @@ h3 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 300px;
   z-index: 100;  
-  color: white;
-  overflow-y: auto;   
-    padding: 40px 0;  
   .img-text-flex {
     display: flex;
     align-items: center;
@@ -131,14 +128,16 @@ h3 {
   }
 }
 
-.start-button, .help-button, .imp-button {
-  background-image: url('images/bg/button/startMap.png');
+.start-button {
+  background-image: url('images/bg/button/start.png');
+}
+.button-img {
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   opacity: 0.85;
-  width: 100px;
-  height: 50px;
+  width: 300px;
+  height: 150px;
   display: inline-block;
   margin: 0 12px;
   cursor: pointer;
@@ -149,17 +148,16 @@ h3 {
   }
 }
 
-.help-button {
-  background-image: url('images/bg/button/helpMap.png');
+.info-button {
+  background-image: url('images/bg/button/game-info.png');
 }
 
-.imp-container {
-  display: grid;
-  place-self: center;
-  .imp-button {
-      background-image: url('images/bg/button/impMap.png');
-      background-size: contain;
-    }
+.help-button {
+  background-image: url('images/bg/button/control.png');
+}
+
+.imp-button {
+    background-image: url('images/bg/button/impressum.png');
 }
 
 .info-text {
@@ -168,6 +166,7 @@ h3 {
   background-color: rgba(100, 100, 100, 0.7); /*rgba(255, 255, 255, 0.1);*/
   border-radius: 5px;
   max-width: 400px;
+  color: white;
 }
 .imprint-text {
   color: #703347;
@@ -180,8 +179,7 @@ h3 {
   max-width: 600px;
 }
 
-
-#gameContainer {
+.game-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -300,8 +298,7 @@ canvas {
 .arrow-up {transform: rotate(90deg);}
 .arrow-right {transform: rotate(180deg);}
 
-.game-over-overlay,
-.win-overlay {
+.game-over-overlay, .win-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -315,37 +312,25 @@ canvas {
   z-index: 100;
 }
 
-.game-over-img {
-  background-image: url('images/bg/gameOver.png');
+.game-over-img, .win-overlay-img {
   background-size: cover;
   background-position: center;
   width: 55%;
   height: 60%;
   position: relative;
+  .restart-button {
+    background-image: url('images/bg/button/new-game.png');
+    width: 200px;
+    position: absolute;
+    bottom: -10px;
+    left: 3%;
+  }
+}
+
+.game-over-img {
+  background-image: url('images/bg/gameOver.png');
 }
 
 .win-overlay-img {
   background-image: url('images/bg/gewonnen.png');
-  background-size: cover;
-  background-position: center;
-  width: 55%;
-  height: 60%;
-  position: relative;
-
-}
-.game-over-overlay,
-.win-overlay {
-  button {
-    cursor: pointer;
-    background: none;
-    border: none;
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
-
-.d-none {
-  display: none;
 }
