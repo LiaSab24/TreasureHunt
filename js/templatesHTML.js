@@ -1,6 +1,7 @@
-function getShowGameInfo() {
+function getShowGameInfoHTML() {
     return `
     <div class="game-info">
+      <button class="close-button" onclick="hideGameInfo()">&times;</button>
       <img src="images/bg/button/emptyMap.png" alt="leere Schatzkarte als Infobox-Hintergrund" width="100%">  
       <div class="content">
           <h3>Ein Schatz in der Wüste</h3>
@@ -14,10 +15,10 @@ function getShowGameInfo() {
           <p><strong>Aber Achtung!</strong></p>
           <p>Du bist nicht allein bei der Suche nach dem Gold.</p>
           <p>Denn die Piraten wollen ihr Gold wieder haben!</p>  
-          <p>Sammel Steine <img src="images/objects/stones/stone.PNG" alt="Stone" width="16"> für deine Verteidigung!</p>
+          <p>Sammel Steine <img src="images/objects/stones/stone.PNG" alt="Stone"> für deine Verteidigung!</p>
           <br>
           <p>Folge einfach der Spur der Münzen ... 
-          <img src="images/objects/coins/coin.png" alt="Münze/coin" width="16"> Sie werden dich zum Schatz führen.</p>
+          <img src="images/objects/coins/coin.png" alt="Münze/coin"> Sie werden dich zum Schatz führen.</p>
           <p>Mit 5 Münzen kannst du dir ein Leben dazu kaufen. Du wirst es brauchen ...</p>
           <p>Viel Spaß!</p>
       </div>

@@ -32,8 +32,6 @@
 <body> 
     <div id="introOverlay" class="intro-overlay">
         <div id="startButton" class="start-button button-img"></div>
-        <div id="game-info" style="display: none;"></div>
-
         <div class="button">           
             <div id="infoButton" class="info-button button-img" onclick="showGameInfo()"></div>
             <div id="helpButton" class="help-button button-img"></div>           
@@ -57,6 +55,7 @@
         </div>
     </div>
 
+    <div id="game-info" style="display: none;"></div>
     <div id="gameContainer" class="game-container" style="display: none;">
 
         <canvas id="canvas" width="1000" height="700">
@@ -80,7 +79,7 @@
             </div>
         </div>
 
-        <div id="gameInfo" class="game-buttons-container">
+        <div id="gameButtonsContainer" class="game-buttons-container">
             <div class="game-buttons">
                 <button id="pauseButton" data-tooltip="Pause" class="game-button"><img src="images/button/pause.PNG" alt="Pause button"></button>
                 <button id="playButton" data-tooltip="Play" class="game-button"><img src="images/button/play.PNG" alt="play button"></button>

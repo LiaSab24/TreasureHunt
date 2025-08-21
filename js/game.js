@@ -58,9 +58,15 @@ const buttonEventMap = {
 // ============================================================================
 
 function showGameInfo() {   
-    const gameInfo = document.getElementById("game-info");
-    gameInfo.style.display = "block";  
-    gameInfo.innerHTML = getShowGameInfo();
+    const gameInfoContainer = document.getElementById("game-info");
+    gameInfoContainer.style.display = "flex";  
+    gameInfoContainer.innerHTML = getShowGameInfoHTML();
+}
+
+function hideGameInfo() {
+    const gameInfoContainer = document.getElementById("game-info");
+    gameInfoContainer.style.display = "none";
+    gameInfoContainer.innerHTML = ""; 
 }
 
 /**
