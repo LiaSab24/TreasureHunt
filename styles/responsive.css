@@ -57,7 +57,7 @@
     }
   }
 
-  #gameContainer {
+  .game-container {
     width: 95vw; 
     max-width: 1000px;
     height: auto;
@@ -71,26 +71,26 @@
   }
 
   /* Statusleisten anpassen */
-  #statusBarContainer,
+  .status-bar-container,
   .status-bar-container.endboss-bar {
     padding: 5px;
     gap: 8px;
     top: 5px;
   }
 
-  #statusBarContainer {
+  .status-bar-container {
     left: 5px;
     .statusBar {
       font-size: 0.9em;
     }
   }
 
-  #buyLifeButton {
+  .buy-life-button {
     margin-left: 10px;
     padding: 0;
   }
 
-  .status-bar-container.endboss-bar {
+  .status-bar-container .endboss-bar {
     width: 150px;
     right: 5px;
   }
@@ -106,8 +106,8 @@
     height: 10px;
   }
 
-  /* Steuerungsbuttons anpassen .gameInfo */
-  .gameInfo {
+  /* Steuerungsbuttons anpassen .game-buttons-container */
+  .game-buttons-container {
     .game-buttons {
       padding: 5px 0;
       gap: 5px;

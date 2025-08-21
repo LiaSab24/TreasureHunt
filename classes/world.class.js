@@ -834,7 +834,7 @@ class World {
         if(this.character.coins >= 5) {
            buyButton.style.display = 'inline-block'; 
            buyButton.disabled = false;
-           buyButton.innerText = 'Kaufe Leben (5 Münzen)';
+           buyButton.innerText = 'Kaufe 1 Leben mit 5 Münzen';
         } else {
             buyButton.style.display = 'inline-block';
             buyButton.disabled = true;

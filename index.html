@@ -66,21 +66,21 @@
             </div>
         </canvas>
 
-        <div id="statusBarContainer">
+        <div id="statusBarContainer" class="status-bar-container">
             <div class="statusBar">Leben: <span id="livesStatus">5</span></div>
             <div class="statusBar">Münzen: <span id="coinsStatus">0</span></div>
             <div class="statusBar">Steine: <span id="stonesStatus">0</span></div>
-            <button id="buyLifeButton" style="display: none;">Kaufe Leben (5 Münzen)</button>
+            <button id="buyLifeButton" class="buy-life-button" style="display: none;">Kaufe Leben (5 Münzen)</button>
         </div>
 
-        <div id="endbossStatus" class="status-bar-container endboss-bar">
+        <div id="endbossStatus" class="endboss-status-bar">
             <span>ENDBOSS</span>
             <div class="status-bar">
                 <div id="endbossHealthBar" class="status-bar-fill health"></div>
             </div>
         </div>
 
-        <div id="gameInfo" class="gameInfo">
+        <div id="gameInfo" class="game-buttons-container">
             <div class="game-buttons">
                 <button id="pauseButton" data-tooltip="Pause" class="game-button"><img src="images/button/pause.PNG" alt="Pause button"></button>
                 <button id="playButton" data-tooltip="Play" class="game-button"><img src="images/button/play.PNG" alt="play button"></button>
