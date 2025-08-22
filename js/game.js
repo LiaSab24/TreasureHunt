@@ -29,14 +29,9 @@ function restartGame() {
  * Öffnet die Impressum-Seite.
  * @param {*} url 
  */
-
 function goToImpressum(url) {
   window.location.href = url;
 }
-
-// ============================================================================
-// A. Konfiguration Button-IDs
-// ============================================================================
 
 /**
  * Definiert, welche Funktion bei einem Klick auf einen bestimmten Button ausgeführt wird.
@@ -47,36 +42,51 @@ const buttonEventMap = {
     'restartButton': restartGame,
     'restartButtonWin': restartGame,
     'backButton': () => window.location.href = 'index.html',
-    'impButton': () => window.location.href = 'impressum.html',
+    'impButton': showImpressum, //() => window.location.href = 'impressum.html',
     'buyLifeButton': () => world?.buyLife(),
     'infoButton': showGameInfo,
-    'helpButton': toggleHelpText
+    'helpButton': showGameControls 
 };
 
-// ============================================================================
-// B. Ausgelagerte Aktionen (Helper-Funktionen)
-// ============================================================================
-
-function showGameInfo() {   
+/**
+ * Zeigt das #game-info Overlay an und füllt es mit dem übergebenen Inhalt.
+ * @param {string} contentHTML - Der HTML-Inhalt, der angezeigt werden soll.
+ */
+function showOverlayWithContent(contentHTML) {
     const gameInfoContainer = document.getElementById("game-info");
-    gameInfoContainer.style.display = "flex";  
-    gameInfoContainer.innerHTML = getShowGameInfoHTML();
+    gameInfoContainer.style.display = "flex";
+    // Ruft die Rahmen-Vorlage auf und übergibt den spezifischen Inhalt
+    gameInfoContainer.innerHTML = getGameInfoFrameHTML(contentHTML);
 }
 
+/**
+ * Zeigt das Overlay mit den Spiel-Informationen an.
+ */
+function showGameInfo() {   
+    showOverlayWithContent(getStoryContentHTML());
+}
+
+/**
+ * Zeigt das Overlay mit den Spiel-Steuerungsinformationen an.
+ */
+function showGameControls() {
+    showOverlayWithContent(getControlsContentHTML());
+}
+
+/**
+ * Zeigt das Overlay mit den Impressum-Informationen an.
+ */
+function showImpressum() {
+    showOverlayWithContent(getImpressumContentHTML());
+}
+
+/**
+ * Versteckt das Overlay mit den Spiel-Informationen.
+ */
 function hideGameInfo() {
     const gameInfoContainer = document.getElementById("game-info");
     gameInfoContainer.style.display = "none";
     gameInfoContainer.innerHTML = ""; 
-}
-
-/**
- * Zeigt den Hilfe-Text an oder versteckt ihn.
- */
-function toggleHelpText() {
-    const helpText = document.getElementById('helpText');
-    if (helpText) {
-        helpText.style.display = (helpText.style.display === 'none' || helpText.style.display === '') ? 'block' : 'none';
-    }
 }
 
 /**
@@ -105,15 +115,11 @@ function setupInitialUI() {
     }
 }
 
-// ============================================================================
-// C. Haupt-Initialisierung 
-// ============================================================================
 /*
 * Initialisiert das Spiel und zeigt den Intro-Screen an.
 * Prüft, ob der Intro-Screen sichtbar ist, um zu vermeiden,
 * dass man das Spiel neustartet, wenn man im Spiel Enter drückt.
 */
-
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         const introOverlay = document.getElementById('introOverlay');
@@ -167,18 +173,17 @@ function showIntroScreen() {
 }
 
 /**
- * Zeigt den Pause-Bildschirm an und pausiert das Spiel.
+ * Aktiviert den Vollbildmodus.
  */
-//function showPauseScreen() {
-//    document.getElementById('pauseOverlay').style.display = 'flex';
-//    // Hier könnte zusätzlicher Code zum Pausieren des Spiels eingefügt werden
-//}
-
 function fullscreen () {
     let fullscreen = document.getElementById( 'fullscreenButton');
     enterFullscreen (fullscreen);
 }
 
+/**
+ * Aktiviert den Vollbildmodus für das angegebene Element.
+ * @param {*} element 
+ */
 function enterFullscreen (element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
@@ -189,6 +194,9 @@ function enterFullscreen (element) {
     }
 }
 
+/**
+ * Deaktiviert den Vollbildmodus.
+ */
 function exitFullscreen () {
     if (document.exitFullscreen) {
         document.exitFullscreen();

@@ -71,11 +71,12 @@ h3 {
   z-index: 100;  
 }
 
-.intro-overlay .img-text-flex {
+/*
+.intro-overlay {
   display: flex;
   align-items: center;
   gap: 5px;
-}
+} */
 
 /*
 .overlay-content {
@@ -164,6 +165,11 @@ h3 {
       }
     }
   }
+}
+
+.keyboard-D {
+  width: 24px !important;
+  height: 24px !important;
 }
 
 .start-button {
