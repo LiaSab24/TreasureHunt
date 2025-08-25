@@ -50,9 +50,10 @@ class World {
     */
     constructor(canvas, onStopGame) { 
         this.canvas = canvas;
-        this.canvas.width = 1000; 
-        this.canvas.height = 700; 
+        //this.canvas.width = 1000; 
+        //this.canvas.height = 700; 
         this.ctx = canvas.getContext('2d');
+        this.resize(1000, 700);
         this.onStopGameCallback = onStopGame; 
         this.keyboard = {};
         this.initLevel(); 
@@ -64,6 +65,21 @@ class World {
         this.gameWon = false;    
         this.isPaused = false;   
     }
+
+    /**
+     * Passt die Größe des Canvas an und stellt sicher,
+     * dass das Spiel korrekt weitergezeichnet wird.
+     * @param {number} width Die neue Breite
+     * @param {number} height Die neue Höhe
+     */
+    resize(width, height) {
+        this.canvas.width = width;
+        this.canvas.height = height
+        if (this.camera_x) {
+        this.camera_x.updateViewport(width, height);
+    }
+    }
+
     /**
      * Diese Methode wird in der Konstruktor-Methode aufgerufen.
      * @function initLevel

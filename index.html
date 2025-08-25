@@ -42,12 +42,15 @@
     <div id="game-info" style="display: none;"></div>
     <div id="gameContainer" class="game-container" style="display: none;">
 
-        <canvas id="canvas" width="1000" height="700">
-            <div class="fullscreen">
-                <img 
-               id="fullscreenButton" src="images/bg/button/fullscreen.png" alt="fullscreen">
-            </div>
-        </canvas>
+        <canvas id="canvas" width="1000" height="700"></canvas>
+
+        <div id="audioOnOffButton" data-tooltip="Audio on/off" class="audio-button">
+            <img id="audioIcon" src="images/button/speakerOn.PNG" alt="Audio on/off button">
+        </div>
+
+        <div class="fullscreen">
+            <img id="fullscreenButton" src="images/bg/button/fullscreen.png" alt="fullscreen">
+        </div>
 
         <div id="statusBarContainer" class="status-bar-container">
             <div class="statusBar">Leben: <span id="livesStatus">5</span></div>
@@ -63,7 +66,7 @@
             </div>
         </div>
 
-        <div id="gameButtonsContainer" class="game-buttons-container">
+        <div id="gameButtonsContainer" class="game-buttons-container" style="display: none;">
             <div class="game-buttons">
                 <button id="pauseButton" data-tooltip="Pause" class="game-button"><img src="images/button/pause.PNG" alt="Pause button"></button>
                 <button id="playButton" data-tooltip="Play" class="game-button"><img src="images/button/play.PNG" alt="play button"></button>
@@ -72,7 +75,6 @@
                 <button id="upButton" data-tooltip="Springen" class="game-button"><img src="images/button/arrow.PNG" alt="up button" class="arrow-up"></button>
                 <button id="rightButton" data-tooltip="nach Rechts" class="game-button"><img src="images/button/arrow.PNG" alt="rightButton" class="arrow-right"></button>
                 <button id="wurfButton" data-tooltip="Werfen" class="game-button"><img src="images/button/stoneThrowing.PNG" alt="wurfButton" width="48"></button>
-                <button id="audioOnOffButton" data-tooltip="Audio on/off" class="game-button"><img id="audioIcon" src="images/button/speakerOn.PNG" alt="Audio on/off button"></button>
             </div>
         </div>  
 

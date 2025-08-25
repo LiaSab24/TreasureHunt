@@ -175,32 +175,121 @@ function showIntroScreen() {
 /**
  * Aktiviert den Vollbildmodus.
  */
-function fullscreen () {
-    let fullscreen = document.getElementById( 'fullscreenButton');
-    enterFullscreen (fullscreen);
-}
+//function fullscreen () {
+//    let fullscreen = document.getElementById( 'fullscreenButton');
+//    enterFullscreen (fullscreen);
+//}
+
+// =================================================================
+// INITIALISIERUNG & EVENT LISTENERS
+// =================================================================
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    const gameContainer = document.getElementById('gameContainer');
+    const canvas = document.getElementById('canvas');
+    const fullscreenButton = document.getElementById('fullscreenButton')
+    const originalWidth = canvas.width;
+    const originalHeight = canvas.height;
+
+    if (fullscreenButton) {
+        fullscreenButton.addEventListener('click', () => toggleFullscreen(gameContainer));
+    }
+
+    const onFullscreenChange = () => handleFullscreenChange(canvas, fullscreenButton, originalWidth, originalHeight, world);
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange); // Für Chrome, Safari, Opera
+});
+
+
+// =================================================================
+// LOGIK-FUNKTIONEN
+// =================================================================
 
 /**
- * Aktiviert den Vollbildmodus für das angegebene Element.
- * @param {*} element 
+ * Reagiert auf Änderungen des Vollbildstatus: Passt Canvas-Größe an und aktualisiert Button.
+ * Canvas an Bildschirmgröße anpassen
+ * Originalgröße wiederherstellen
+ * Spiel neu zeichnen, um die neue Auflösung zu übernehmen.
  */
-function enterFullscreen (element) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-    } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
+function handleFullscreenChange(canvas, button, originalWidth, originalHeight, world) {
+    updateFullscreenButton(button);
+    if (!world) {
+        console.error("World object is not available to handle resize!");
+        return;
+    }
+
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        //!SECTIONcanvas.width = window.screen.width;
+        //!SECTIONcanvas.height = window.screen.height;
+        world.resize(window.screen.width, window.screen.height);
+    } else {
+        //canvas.width = originalWidth;
+        //canvas.height = originalHeight;
+        world.resize(originalWidth, originalHeight);
+    }
+
+    if (typeof world !== 'undefined' && world && typeof world.draw === 'function') {
+        world.draw();
     }
 }
 
 /**
- * Deaktiviert den Vollbildmodus.
+ * Schaltet den Vollbildmodus für das Canvas an oder aus.
  */
-function exitFullscreen () {
+function toggleFullscreen(elementToFullscreen) {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        enterFullscreen(elementToFullscreen);
+    } else {
+        exitFullscreen();
+    }
+}
+
+/**
+ * Aktualisiert das Icon des Vollbild-Buttons basierend auf dem aktuellen Status.
+ */
+function updateFullscreenButton(buttonElement) {
+    if (!buttonElement) return; // Sicherheitsprüfung
+    
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        buttonElement.src = 'images/bg/button/exitFullscreen.png';
+        buttonElement.alt = 'Exit Fullscreen';
+    } else {
+        buttonElement.src = 'images/bg/button/fullscreen.png';
+        buttonElement.alt = 'Fullscreen';
+    }
+}
+
+
+// =================================================================
+// BROWSER-API FUNKTIONEN (CROSS-BROWSER)
+// =================================================================
+
+/**
+ * Aktiviert den Vollbildmodus für ein Element (Browser-übergreifend).
+ */
+function enterFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) { // Firefox
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) { // Chrome, Safari & Opera
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) { // IE/Edge
+        element.msRequestFullscreen();
+    }
+}
+
+/**
+ * Deaktiviert den Vollbildmodus (Browser-übergreifend).
+ */
+function exitFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
+    } else if (document.mozCancelFullScreen) { // Firefox
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari & Opera
         document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+        document.msExitFullscreen();
     }
 }
