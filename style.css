@@ -39,7 +39,7 @@ h2 {
 }
 
 h3 {
-  font-size: 1.75rem;
+  font-size: clamp(1rem, 0.3528rem + 1.5524vw, 1.75rem);
   margin-bottom: 10px;
 }
 
@@ -58,7 +58,7 @@ h3 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 300px;
+  gap: clamp(0rem, -16.1788rem + 38.8098vw, 18.75rem);
   z-index: 100;  
 }
 
@@ -130,17 +130,17 @@ h3 {
   }
   .content {
     grid-area: 1 / 1;
-    width: 100%;
+    width: 90%;
     height: 75%;
     text-align: center;
     padding: 2% 10% 0 8%;
     color: #632d3c;
     text-shadow: 0 0 5px white;
-    z-index: 1; /* Muss nur höher sein als das img im gleichen Container */
+    z-index: 1; 
     overflow-y: auto;
     p {
       font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);
-      line-height: 1.6;
+      line-height: 1.5;
       img {
         width: 16px;
         height: 16px;
@@ -149,11 +149,6 @@ h3 {
       }
     }
   }
-}
-
-.keyboard-D {
-  width: 24px !important;
-  height: 24px !important;
 }
 
 .start-button {

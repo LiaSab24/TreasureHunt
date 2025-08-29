@@ -45,16 +45,7 @@
   }
 
   .game-info {
-    margin-top: 100px;
-    .content {
-      h3 {
-        font-size: 1.25rem;
-      }
-      p {
-        font-size: 0.75rem;
-      }
-
-    }
+    width: 75%;
   }
 
   .game-container {

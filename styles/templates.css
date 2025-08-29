@@ -1,0 +1,33 @@
+.controls-intro {
+  font-weight: bold;
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 4px 0;
+  text-align: left;
+  line-height: 1.5;
+}
+
+th {
+  font-size: clamp(1rem, 0.3528rem + 1.5524vw, 1.75rem);
+  font-weight: bold;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #703347;
+  text-underline-offset: 2px;
+}
+
+td {
+  font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);
+}
+
+.keyboard-D {
+  width: 20px !important;
+  height: 20px !important;
+}
