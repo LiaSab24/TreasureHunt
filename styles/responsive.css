@@ -58,13 +58,13 @@
   }
 
   .game-container {
-    width: 95vw; 
+    width: 100vw; 
     max-width: 1000px;
     height: auto;
   }
 
   canvas {
-    width: 70%;
+    width: 10%;
     height: auto;
     aspect-ratio: 1000 / 700; 
     margin-inline: auto;
