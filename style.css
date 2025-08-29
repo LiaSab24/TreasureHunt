@@ -17,9 +17,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 70px;
-  width: 100%;             
-  height: auto;            
+  gap: 70px;                      
   min-height: 100vh;       
   color: #333;            
 }
@@ -51,9 +49,10 @@ h3 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('images/bg/treasureHunt.png');
-  background-size: cover;
+  background-image: url('images/bg/treasureHunt1000.png');
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   background-color: rgba(0, 0, 0, 0.6); 
   display: flex;
   flex-direction: column;

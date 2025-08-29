@@ -1,6 +1,4 @@
-// js/classes/renderer.class.js
-
-class Renderer {
+class Drawing {
     world;
     ctx;
     canvas;
@@ -15,14 +13,11 @@ class Renderer {
      * Haupt-Zeichenmethode, wird in der Game Loop aufgerufen.
      */
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.drawBackground();
-        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);    
+        this.drawBackground();    
         this.ctx.translate(this.world.camera_x, 0);
         this.drawGameObjects();
         this.ctx.translate(-this.world.camera_x, 0);
-
         this.drawUI();
     }
     

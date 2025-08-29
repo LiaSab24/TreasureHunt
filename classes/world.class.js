@@ -27,7 +27,7 @@ class World {
     levelInitializer;
     collisionHandler;
     inputHandler;
-    renderer;
+    drawing;
     onStopGameCallback = null;
 
     constructor(canvas, onStopGame) {
@@ -40,7 +40,7 @@ class World {
         this.levelInitializer = new LevelInitializer(this);
         this.collisionHandler = new Collisions(this);
         this.inputHandler = new InputHandler(this);
-        this.renderer = new Renderer(this);
+        this.drawing = new Drawing(this);
 
         this.initGame();
     }
@@ -72,7 +72,7 @@ class World {
 
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
-                this.renderer.draw(); // Nur zeichnen, keine Logik
+                this.drawing.draw(); // Nur zeichnen, keine Logik
                 return;
             }
             if (this.character.isDead()) {
@@ -84,7 +84,7 @@ class World {
             this.checkKeyboardInput();
             this.character.applyGravity();
             this.collisionHandler.checkAllCollisions();
-            this.renderer.draw();
+            this.drawing.draw();
         }, 1000 / 60);
     }
 
