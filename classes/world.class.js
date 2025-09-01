@@ -33,7 +33,7 @@ class World {
     constructor(canvas, onStopGame) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
-        this.resize(1000, 700); // Set initial size
+        this.resize(1000, 700); 
         this.onStopGameCallback = onStopGame;
 
         // Delegiere Aufgaben an spezialisierte Klassen
@@ -41,7 +41,6 @@ class World {
         this.collisionHandler = new Collisions(this);
         this.inputHandler = new InputHandler(this);
         this.drawing = new Drawing(this);
-
         this.initGame();
     }
 
@@ -72,7 +71,7 @@ class World {
 
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
-                this.drawing.draw(); // Nur zeichnen, keine Logik
+                this.drawing.draw(); 
                 return;
             }
             if (this.character.isDead()) {

@@ -119,11 +119,17 @@ class Character extends MovableObject {
         }
     }
 
- // --- Sammelmethoden ---
+    // --- Sammelmethoden ---
+    /**
+     * Erhöht die Anzahl der gesammelten Münzen.
+     */
     collectCoin() {
         this.coins += 1;
     }
 
+    /**
+     * Erhöht die Anzahl der gesammelten Steine.
+     */
     collectStone() {
         this.stones += 1;
     }
@@ -139,19 +145,15 @@ class Character extends MovableObject {
             this.lastHitTime = new Date().getTime();
 
             if (this.isDead()) {
-                // Todesanimation starten: Animation auf Anfang setzen
                 this.currentImage = 0;
-                // Game-Over-Sound abspielen
                 if (this.world && this.world.audioManager) {
                     this.world.audioManager.play('game_over');
                 }
             } else {
-                // Soundeffekt für Treffer
                 if (this.world && this.world.audioManager) {
                     this.world.audioManager.play('hurt');
                 }
-                // Kurzer Rückstoß
-                this.x -= 10; // Beispiel für Rückstoß nach links
+                this.x -= 10; 
             }
         }
     }
@@ -173,6 +175,9 @@ class Character extends MovableObject {
         return this.lives <= 0;
     }
 
+    /**
+     * Bewegt den Charakter nach rechts.
+     */
     moveRight() {
         if(!this.isDead()){                         
             this.x += this.speed;
@@ -180,8 +185,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Bewegt den Charakter nach links.
+     */
     moveLeft() {
-        // Verhindere Bewegung über den linken Rand hinaus
         if (!this.isDead() && this.x > 0) {
            this.x -= this.speed;
            this.facingDirection = 'left';          
@@ -197,8 +204,7 @@ class Character extends MovableObject {
     */
     jump() {         
         if (this.isOnGround && !this.isDead()) {            
-            this.speedY = 20;                               
-          /*  this.speedX = 10;    */                       
+            this.speedY = 20;                                                    
             this.isOnGround = false;
             if (this.world && this.world.audioManager) {    
                 this.world.audioManager.play('jump');
@@ -231,7 +237,6 @@ class Character extends MovableObject {
         if (!this.isOnGround || this.speedY > 0) {
             this.y -= this.speedY;                  
             this.speedY -= this.acceleration;       
-            //Lanndung
             if (this.y >= this.GROUND_Y) {
                 this.y = this.GROUND_Y;             
                 this.speedY = 0;                    
@@ -242,42 +247,40 @@ class Character extends MovableObject {
 
      /**
      * Löst den Wurf eines Steins aus, wenn die Bedingungen erfüllt sind.
+     * Startposition des Steins ist die Mitte des Charakters.
      * Verbraucht einen Stein, startet einen Cooldown und spielt den Wurf-Sound.
      */
     throwStone() {
         const now = new Date().getTime();
-        // Prüfen: Genug Steine? Nicht tot? Cooldown abgelaufen?
         if (this.stones > 0 && !this.isDead()  && now - this.lastThrowTime > this.throwCooldown) {
-            this.stones--;                              // Einen Stein verbrauchen
-            this.lastThrowTime = now;                   // Zeit des Wurfs speichern
-            this.isThrowing = true;                     // Wurfanimation starten
-            this.currentImage = 0;                      // Wurf-Animation von vorne starten
+            this.stones--;                              
+            this.lastThrowTime = now;                   
+            this.isThrowing = true;                     
+            this.currentImage = 0;                      
             setTimeout(() => {
                 this.isThrowing = false;
-            }, 350); // 350ms reichen für eine kurze Wurf-Animation
+            }, 350); 
 
-            // NEU: Spielt den Wurf-Sound direkt hier ab
             if (this.world && this.world.audioManager) {
                 this.world.audioManager.play('throw');
             }
 
-            // Startposition des Steins (z.B. Mitte des Charakters)
-            let startX = this.x + (this.facingDirection === 'right' ? this.width - 30 : 0); // Etwas vor dem Charakter starten
-            let startY = this.y + this.height / 3;      // Etwas höher als die Füße
-
-            // Neues Wurfobjekt erstellen
+            let startX = this.x + (this.facingDirection === 'right' ? this.width - 30 : 0); 
+            let startY = this.y + this.height / 3;    
             let stone = new ThrowableObject(startX, startY, this.facingDirection, this.world); 
-            // Wurfobjekt zur Welt hinzufügen (Methode muss in World existieren)
             this.world.addThrowableObject(stone)
-            this.world.updateStatusBars(); // Sicherstellen, dass Steinabzug angezeigt wird
+            this.world.updateStatusBars(); 
 
         } 
     }
 
+    /**
+     * Zeichnet das Charakter-Objekt auf das gegebene Canvas-Kontext.
+     * @param {*} ctx - Der Canvas-Kontext, auf dem gezeichnet werden soll.
+     */
     draw(ctx) {
-        ctx.save();                             // Wir speichern die aktuelle Einstellung vom Stift
+        ctx.save();                             
         if (this.facingDirection === 'left') {
-            // Wenn der Charakter nach links schaut, wrid das Bild gespiegelt
             ctx.translate(this.x + this.width, this.y);
             ctx.scale(-1, 1);
             ctx.drawImage(this.img, 0, 0, this.width, this.height);
@@ -292,9 +295,9 @@ class Character extends MovableObject {
      * @param {string[]} images - Array von Bildpfaden für die aktuelle Animation.
      */
     playAnimation(images) {
-        let i = this.currentImage % images.length;                  // Index im Array berechnen
+        let i = this.currentImage % images.length;                  
         let path = images[i];
-        this.img = this.imageCache[path];                           // Bild aus dem Cache holen und setzen
+        this.img = this.imageCache[path];                           
         this.currentImage++;
     }
 }

@@ -1,5 +1,6 @@
-// js/classes/input-handler.class.js
-
+/**
+ * Klasse zur Verarbeitung von Eingaben (Tastatur und Touch).
+ */
 class InputHandler {
     world;
 
