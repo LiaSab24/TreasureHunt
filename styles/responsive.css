@@ -48,17 +48,14 @@
     width: 75%;
   }
 
-  .game-container {
-    width: 100vw; 
-    max-width: 1000px;
-    height: auto;
+  #gameContainer {
+    width: 100%; 
+    height: 100vh;
   }
 
   canvas {
-    width: 10%;
-    height: auto;
-    aspect-ratio: 1000 / 700; 
-    margin-inline: auto;
+    width: 100%;
+    height: 100dvh;
   }
 
   /* Statusleisten anpassen */
@@ -110,6 +107,16 @@
           object-fit: contain;
         }
       }
+    }
+  }
+
+  .game-over-img,
+  .win-overlay-img {
+    & .restart-button {
+      width: 100px;
+      height: 50px;
+      bottom: 0;
+      right: 1%;
     }
   }
 

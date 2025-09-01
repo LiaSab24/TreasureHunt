@@ -293,3 +293,7 @@ function exitFullscreen() {
         document.msExitFullscreen();
     }
 }
+
+window.addEventListener('keypress', (event) => {
+    console.log(event);
+});
