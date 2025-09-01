@@ -103,6 +103,7 @@ class World {
         if (!this.isPaused) {
             this.isPaused = true;
             this.audioManager.stop('background');
+            document.getElementById('pauseButton').style.display = 'none';
             document.getElementById('playButton').style.display = 'inline-block';
         }
     }
@@ -111,6 +112,7 @@ class World {
         if (this.isPaused) {
             this.isPaused = false;
             this.audioManager.play('background');
+            document.getElementById('playButton').style.display = 'none';
             document.getElementById('pauseButton').style.display = 'inline-block';
         }
     }

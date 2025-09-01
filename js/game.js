@@ -26,14 +26,6 @@ function restartGame() {
 }
 
 /**
- * Öffnet die Impressum-Seite.
- * @param {*} url 
- */
-function goToImpressum(url) {
-  window.location.href = url;
-}
-
-/**
  * Definiert, welche Funktion bei einem Klick auf einen bestimmten Button ausgeführt wird.
  * Dies macht den Code erweiterbar und leicht lesbar.
  */
@@ -42,7 +34,7 @@ const buttonEventMap = {
     'restartButton': restartGame,
     'restartButtonWin': restartGame,
     'backButton': () => window.location.href = 'index.html',
-    'impButton': showImpressum, //() => window.location.href = 'impressum.html',
+    'impButton': showImpressum, 
     'buyLifeButton': () => world?.buyLife(),
     'infoButton': showGameInfo,
     'helpButton': showGameControls 
