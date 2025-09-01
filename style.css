@@ -308,7 +308,12 @@ canvas {
 /* -- Ende Endboss style -- */
 
 .game-buttons-container {
+  display: none;
   width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   .game-buttons {
     display: flex;
     justify-content: center;
@@ -379,3 +384,4 @@ canvas {
 .win-overlay-img {
   background-image: url('images/bg/gewonnen.png');
 }
+

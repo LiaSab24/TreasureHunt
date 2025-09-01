@@ -96,6 +96,7 @@
 
   /* Steuerungsbuttons anpassen .game-buttons-container */
   .game-buttons-container {
+    display: inline-block;
     .game-buttons {
       padding: 5px 0;
       gap: 5px;
