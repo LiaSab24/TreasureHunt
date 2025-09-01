@@ -24,7 +24,7 @@ class World {
 
     // ---- Module/Helfer ----
     audioManager = new AudioManager();
-    levelInitializer;
+    level1;
     collisionHandler;
     inputHandler;
     drawing;
@@ -37,7 +37,7 @@ class World {
         this.onStopGameCallback = onStopGame;
 
         // Delegiere Aufgaben an spezialisierte Klassen
-        this.levelInitializer = new LevelInitializer(this);
+        this.level1 = new level1(this);
         this.collisionHandler = new Collisions(this);
         this.inputHandler = new InputHandler(this);
         this.drawing = new Drawing(this);
@@ -49,7 +49,7 @@ class World {
      * Initialisiert oder startet das Spiel neu.
      */
     initGame() {
-        this.levelInitializer.initializeLevel();
+        this.level1.initializeLevel();
         this.run();
     }
 

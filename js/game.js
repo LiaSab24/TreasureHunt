@@ -295,5 +295,8 @@ function exitFullscreen() {
 }
 
 window.addEventListener('keypress', (event) => {
-    console.log(event);
+    const tastenName = event.key;
+    const tastenCode = event.keyCode;
+    const keyCode = event.code;
+    console.log(`Taste: ${tastenName}, Code: ${tastenCode}, KeyCode: ${keyCode}`);
 });
