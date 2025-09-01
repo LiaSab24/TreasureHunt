@@ -1,6 +1,4 @@
-// js/classes/level-initializer.class.js
-
-class level1 {
+class Level1 {
     world;
 
     constructor(world) {

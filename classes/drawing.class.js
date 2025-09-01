@@ -21,6 +21,9 @@ class Drawing {
         this.drawUI();
     }
     
+    /**
+     * Zeichnet die HintergrundLayers.
+     */
     drawBackground() {
         this.world.backgroundObjects.forEach(layer => {
             let effectiveX = layer.x + this.world.camera_x * layer.parallaxFactor;
@@ -33,6 +36,9 @@ class Drawing {
         });
     }
 
+    /**
+     * Zeichnet die Spielobjekte.
+     */
     drawGameObjects() {
         this.drawObjects(this.world.clouds);
         this.drawObjects(this.world.coins);
@@ -45,6 +51,9 @@ class Drawing {
         }
     }
 
+    /**
+     * Zeichnet die Benutzeroberfläche.
+     */
     drawUI() {
         this.drawEndbossStatusBar();
         if (this.world.isPaused) {
@@ -52,22 +61,32 @@ class Drawing {
         }
     }
 
+    /**
+     * Zeichnet eine Liste von Objekten.
+     * @param {*} objects 
+     */
     drawObjects(objects) {
         objects.forEach(obj => obj.draw(this.ctx));
     }
 
+    /**
+     * Zeichnet das Pause-Overlay.
+     */
     drawPauseOverlay() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.font = "48px 'Arial'";
         this.ctx.fillStyle = "white";
         this.ctx.textAlign = "center";
         this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.font = "24px 'Arial'";
-        this.ctx.fillText("Drücke 'Play' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+        this.ctx.fillText("Drücke 'Space' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
     }
 
+    /**
+     * Zeichnet die Statusleiste des Endgegners.
+     * @returns 
+     */
     drawEndbossStatusBar() {
         if (!this.world.endboss) return;
 

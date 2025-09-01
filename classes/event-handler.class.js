@@ -38,7 +38,8 @@ class InputHandler {
             'leftButton': 'TOUCH_LEFT',
             'rightButton': 'TOUCH_RIGHT',
             'upButton': 'TOUCH_JUMP',
-            'wurfButton': 'TOUCH_THROW'
+            'wurfButton': 'TOUCH_THROW',
+            'buyButton': 'TOUCH_BUY'
         };
         Object.entries(controlButtonMap).forEach(([buttonId, actionKey]) => {
             this.bindPressAndHoldEvents(buttonId, actionKey);

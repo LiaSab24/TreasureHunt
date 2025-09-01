@@ -36,8 +36,8 @@ class World {
         this.resize(1000, 700); 
         this.onStopGameCallback = onStopGame;
 
-        // Delegiere Aufgaben an spezialisierte Klassen
-        this.level1 = new level1(this);
+        // Delegiert Aufgaben an spezialisierte Klassen
+        this.level1 = new Level1(this);
         this.collisionHandler = new Collisions(this);
         this.inputHandler = new InputHandler(this);
         this.drawing = new Drawing(this);
@@ -61,7 +61,7 @@ class World {
     }
 
     /**
-     * Startet die Haupt-Game-Loop.
+     * Startet den Haupt-Game-Loop.
      */
     run() {
         if (this.gameLoopIntervalId) {
@@ -95,7 +95,7 @@ class World {
         if (this.keyboard['ArrowLeft'] || this.keyboard['TOUCH_LEFT']) this.character.moveLeft();
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) this.character.jump();
         if (this.keyboard['d'] || this.keyboard['D'] || this.keyboard['TOUCH_THROW']) this.character.throwStone();
-        
+        if (this.keyboard['k'] || this.keyboard['K'] || this.keyboard['TOUCH_BUY_LIFE']) this.buyLife();
         this.camera_x = -this.character.x + 100;
     }
 
@@ -151,7 +151,7 @@ class World {
     }
     
     /**
-    * wird in der checkCoinCollisions() in collisions.class.js und buyLife() aufgerufen.
+    * wird in der checkCoinCollisions() in collisions.class.js, throwStone() in character.class.js und buyLife() aufgerufen.
     * @memberof World 
     * @returns {void} 
     * @description Diese Methode aktualisiert die Textinhalte der Statusleisten-Elemente im HTML.
