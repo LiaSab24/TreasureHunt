@@ -103,14 +103,20 @@
       flex-wrap: wrap;
       .game-button {
         img {
-          width: 60px;
-          height: 60px;
+          width: 40px;
+          height: 40px;
           object-fit: contain;
         }
       }
     }
   }
 
+  .audio-button {
+    img {
+      width: 40px;
+    }
+  }
+  
   .game-over-img,
   .win-overlay-img {
     & .restart-button {
