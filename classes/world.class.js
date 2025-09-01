@@ -150,6 +150,17 @@ class World {
         this.throwableObjects.push(stone);
     }
     
+    /**
+    * wird in der checkCoinCollisions() in collisions.class.js und buyLife() aufgerufen.
+    * @memberof World 
+    * @returns {void} 
+    * @description Diese Methode aktualisiert die Textinhalte der Statusleisten-Elemente im HTML.
+    * zeigt die aktuellen Werte für Leben, Münzen und Steine des Charakters an.
+    * der "Kaufe Leben"-Button wird aktualisiert
+    * Wenn genug Münzen vorhanden sind, wird der Button aktiviert und zeigt den Preis an.
+    * Wenn nicht genug Münzen vorhanden sind, wird der Button deaktiviert 
+    * @param {void}
+    */
     updateStatusBars() {
         document.getElementById('livesStatus').innerText = this.character.lives;
         document.getElementById('coinsStatus').innerText = this.character.coins;
@@ -164,6 +175,15 @@ class World {
         }
     }
 
+    /**
+    * Diese Methode wird aufgerufen, wenn der Charakter genug Münzen hat, um ein Leben zu kaufen.
+    * Sie wird durch den "Kaufe Leben"-Button im HTML ausgelöst.
+    * @memberof World
+    * @returns {void}
+    * @description Diese Methode prüft, ob der Charakter genug Münzen hat, um ein Leben zu kaufen.
+    * Wenn ja, werden 5 Münzen abgezogen und ein Leben hinzugefügt.
+    * Die Statusleisten werden sofort aktualisiert, um die Änderungen anzuzeigen.
+    */
     buyLife() {
         if (this.character.coins >= 5 && !this.character.isDead()) {
             this.character.coins -= 5;
