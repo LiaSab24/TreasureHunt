@@ -68,7 +68,6 @@ class World {
             clearInterval(this.gameLoopIntervalId);
         }
         this.audioManager.play('background');
-
         this.gameLoopIntervalId = setInterval(() => {
             if (this.isPaused) {
                 this.drawing.draw(); 
@@ -79,7 +78,6 @@ class World {
                 return;
             }
             if (this.gameWon) return;
-
             this.checkKeyboardInput();
             this.character.applyGravity();
             this.collisionHandler.checkAllCollisions();
@@ -94,8 +92,10 @@ class World {
         if (this.keyboard['ArrowRight'] || this.keyboard['TOUCH_RIGHT']) this.character.moveRight();
         if (this.keyboard['ArrowLeft'] || this.keyboard['TOUCH_LEFT']) this.character.moveLeft();
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) this.character.jump();
+        if (this.keyboard['Enter']) this.initGame();
         if (this.keyboard['d'] || this.keyboard['D'] || this.keyboard['TOUCH_THROW']) this.character.throwStone();
         if (this.keyboard['k'] || this.keyboard['K'] || this.keyboard['TOUCH_BUY_LIFE']) this.buyLife();
+        if (this.keyboard['s'] || this.keyboard['S']) this.stopGame();
         this.camera_x = -this.character.x + 100;
     }
 

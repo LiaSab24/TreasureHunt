@@ -80,7 +80,7 @@ class Drawing {
         this.ctx.textAlign = "center";
         this.ctx.fillText("Pause", this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.font = "24px 'Arial'";
-        this.ctx.fillText("Drücke 'Space' zum Fortsetzen", this.canvas.width / 2, this.canvas.height / 2 + 50);
+        this.ctx.fillText("'Space' oder 'Play' = PausenEnde", this.canvas.width / 2, this.canvas.height / 2 + 50);
     }
 
     /**

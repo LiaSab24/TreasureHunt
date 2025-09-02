@@ -21,9 +21,9 @@ function initGame() {
 /**
  * Lädt die Seite neu, um das Spiel von vorne zu beginnen.
  */
-function restartGame() {
-    window.location.reload();
-}
+//function restartGame() {
+//    window.location.reload();
+//}
 
 /**
  * Definiert, welche Funktion bei einem Klick auf einen bestimmten Button ausgeführt wird.
@@ -31,8 +31,8 @@ function restartGame() {
  */
 const buttonEventMap = {
     'startButton': initGame,
-    'restartButton': restartGame,
-    'restartButtonWin': restartGame,
+    'restartButton': initGame,//restartGame,
+    'restartButtonWin': initGame,//restartGame,
     'backButton': () => window.location.href = 'index.html',
     'impButton': showImpressum, 
     'buyLifeButton': () => world?.buyLife(),
@@ -119,7 +119,7 @@ window.addEventListener('keydown', (event) => {
             initGame();
         }
          else if (getComputedStyle(gameOverOverlay).display !== 'none' || getComputedStyle(winOverlay).display !== 'none') {
-            restartGame();
+            initGame();//restartGame();
         }
     }
 });

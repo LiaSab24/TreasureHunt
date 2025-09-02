@@ -119,6 +119,8 @@
   
   .game-over-img,
   .win-overlay-img {
+    width: 100%;
+    height: 100vh;
     & .restart-button {
       width: 100px;
       height: 50px;
