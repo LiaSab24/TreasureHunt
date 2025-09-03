@@ -5,14 +5,14 @@
  * @returns {string} - Das vollständige HTML für das Overlay.
  */
 function getGameInfoFrameHTML(contentHTML) {
-    return `
-    <div class="game-info">
-      <button class="close-button" onclick="hideGameInfo()">&times;</button>
-      <img src="images/bg/button/emptyMap.png" alt="leere Schatzkarte als Infobox-Hintergrund">  
-      <div class="content">
-          ${contentHTML} 
-      </div>
+  return `
+  <div class="game-info">
+    <button class="close-button" onclick="hideGameInfo()">&times;</button>
+    <img src="images/bg/button/emptyMap.png" alt="leere Schatzkarte als Infobox-Hintergrund">  
+    <div class="content">
+        ${contentHTML} 
     </div>
+  </div>
   `;
 }
 
@@ -21,22 +21,22 @@ function getGameInfoFrameHTML(contentHTML) {
  * Gibt nur den Inhalt für die Spiel-Story zurück.
  */
 function getStoryContentHTML()  {
-    return `
-      <h3>Ein Schatz in der Wüste</h3>
-      <p>Vor viel zu langer Zeit ist ein Piratenschiff mit seinem Schatz gesunken und er scheint verloren.
-        Doch das Wasser ist verdunstet und nun liegt der Schatz mit den Resten des Schiffes irgendwo in der Wüste.
-      </p>
-      <p>Finde diesen Schatz, bevor er für immer verloren ist! 
-      Du musst dich durch die Wüste schlagen, Gegner besiegen und den Schatz finden.
-      </p>
-      <p><strong>Aber Achtung!</strong></p>
-      <p>Du bist nicht allein bei der Suche nach dem Gold.</p>
-      <p>Denn die Piraten wollen ihr Gold wieder haben!</p>  
-      <p>Sammel Steine <img src="images/objects/stones/stone.PNG" alt="Stone"> für deine Verteidigung!</p>
-      <p>Folge einfach der Spur der Münzen ... 
-      <img src="images/objects/coins/coin.png" alt="Münze/coin"> Sie werden dich zum Schatz führen.</p>
-      <p>Mit 5 Münzen kannst du dir ein Leben dazu kaufen. Du wirst es brauchen ...</p>
-      <p>Viel Spaß!</p>
+  return `
+    <h3>Ein Schatz in der Wüste</h3>
+    <p>
+      A long time ago, a pirate ship sank with its treasure and seemed lost forever. But the water has evaporated and now the treasure lies somewhere in thedesert with the remains of the ship.
+    </p>
+    <p>
+      Find this treasure before it is lost forever! You must fight your way through the desert, defeat enemies, and find the treasure. 
+    </p>
+    <p><strong>But be careful!</strong></p>
+    <p>You are not alone in the search for the gold.</p>
+    <p>Because the pirates want their gold back!</p>  
+    <p>Collect stones <img src="images/objects/stones/stone.PNG" alt="Stone"> for your defense!</p>
+    <p>Just follow the trail of coins ... 
+    <img src="images/objects/coins/coin.png" alt="Münze/coin"> They will lead you to the treasure.</p>
+    <p>With 5 coins, you can buy extra lives. You will need them...</p>
+    <p>Have fun!</p>
   `;
 }
 
@@ -55,7 +55,7 @@ function getControlsContentHTML() {
                 <tr><td>⬆️</td><td>Jumping</td></tr>
                 <tr><td><img class="keyboard-D" src="images/help/dTaste.png" alt="D-Taste als Bild"></td><td>Throwing Stone</td></tr>
                 <tr><td>'space'</td><td>Pause on/off</td></tr>
-                <tr><td>#️⃣</td><td>Buy Life</td></tr>
+                <tr><td></td><td>Buy Life</td></tr>
                 <tr><td>↩️</td><td>Stop/Start</td></tr>
             </table>
         </div>
