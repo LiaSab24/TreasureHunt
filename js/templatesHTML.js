@@ -82,9 +82,6 @@ function getImpressumContentHTML() {
        Phone: 0172 8686750<br>
        E-Mail: <a href="mailto:info@ls-nordlicht.com">info@ls-nordlicht.com</a>
     </p>
-    <p>VAT ID: DE 261 093 655<br>
-       VAT identification number according to § 27 a Umsatzsteuergesetz: DE123456789
-    </p>
     <p>Disclaimer:<br>
        <small>The contents of our pages were created with the greatest care. However, we cannot guarantee the accuracy, completeness and timeliness of the contents.</small>
     </p>
