@@ -1,4 +1,4 @@
-/* style.css */
+/* ANCHOR Basic */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -43,6 +43,7 @@ h3 {
   margin-bottom: 10px;
 }
 
+/* ANCHOR - Layout & Container */
 .intro-overlay {
   position: fixed; 
   top: 0;
@@ -60,45 +61,6 @@ h3 {
   justify-content: center;
   gap: clamp(0rem, -16.1788rem + 38.8098vw, 18.75rem);
   z-index: 100;  
-}
-
-/*
-.overlay-content {
-  text-align: center;
-  background-color: rgba(85, 85, 85, 0.907);
-  padding: 40px;
-  border-radius: 10px;
-  button {
-    display: inline-block;
-    margin: 10px auto;
-    padding: 10px 20px;
-    font-size: 1.2em;
-    cursor: pointer; 
-  }
-}
-  */
-
-/* --- REGEL für den Close-Button --- */
-.close-button {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  z-index: 2;
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #632d3c;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0;
-  text-shadow: 0 0 3px white;
-  &:hover {
-    color: #af5567;
-    transform: scale(1.1);
-    transition: transform 0.3s;
-    opacity: 1;
-  }
 }
 
 #game-info {
@@ -151,6 +113,7 @@ h3 {
   }
 }
 
+/* ANCHOR - Buttons */
 .start-button {
   background-image: url('images/bg/button/start.png');
 }
@@ -181,6 +144,46 @@ h3 {
 
 .imp-button {
     background-image: url('images/bg/button/impressum.png');
+}
+
+.audio-button {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  z-index: 10;
+  cursor: pointer;
+
+  img {
+    width: 60px;
+  }
+
+  &:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  z-index: 2;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #632d3c;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  text-shadow: 0 0 3px white;
+
+  &:hover {
+    color: #af5567;
+    transform: scale(1.1);
+    transition: transform 0.3s;
+    opacity: 1;
+  }
 }
 
 #gameContainer {
@@ -216,22 +219,6 @@ canvas {
   border: 0.5px solid rgb(157, 122, 77);
   border-radius: 10px;
   box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.86);/*rgb(175, 85, 103);*/
-}
-
-.audio-button {
-  position: absolute;
-  bottom: 0;
-  left: 10px;
-  z-index: 10;
-  cursor: pointer;
-  img {
-    width: 60px;
-  }
-
-  &:hover {
-    transform: scale(1.2);
-    transition: transform 0.3s;
-  }
 }
 
 .status-bar-container {

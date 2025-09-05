@@ -78,6 +78,7 @@ class Endboss extends MovableObject {
      */
     animate() {
         setInterval(() => {
+            if (this.world && this.world.isPaused) return;
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
@@ -120,6 +121,7 @@ class Endboss extends MovableObject {
     moveTowardsCharacterForDuration(duration) {
         const direction = (this.x > this.world.character.x) ? 'left' : 'right';        
         const moveInterval = setInterval(() => {
+            if (this.world && this.world.isPaused) return;
             if (direction === 'left') {
                 this.moveLeft();
             } else {
@@ -139,6 +141,7 @@ class Endboss extends MovableObject {
     descendToGround() {
         const targetY = 380;                            
         const descendInterval = setInterval(() => {
+            if (this.world && this.world.isPaused) return;
             if (this.y < targetY) {
                 this.y += 0.5;                          
             } else {

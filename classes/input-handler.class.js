@@ -22,9 +22,17 @@ class InputHandler {
             this.world.keyboard[e.key] = true;
             if (e.key === 'Enter') e.preventDefault();
             if (e.key === ' ') e.preventDefault();
-
-            if (e.key.toLowerCase() === 'p' || e.key === ' ') {
+            if (e.key === ' ') {
                 this.world.isPaused ? this.world.resumeGame() : this.world.pauseGame();
+            }
+            if (e.key === 'Enter') {
+                const introOverlay = document.getElementById('introOverlay');
+                if (introOverlay && introOverlay.style.display !== 'none') {
+                    initGame();
+                }
+            }
+            if (e.key === 'Escape') {
+                this.world.stopGame();
             }
         });
 
