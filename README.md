@@ -48,7 +48,12 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 ## Gameplay-Steuerung Keyboard
 -   **Laufen:** `⬅️` / `➡️` Pfeiltasten
 -   **Springen:** `⬆️` Pfeiltaste
--   **Stein werfen:** `D`-Taste
+-   **Stein werfen:** `D`,`d`-Taste
+-   **Pause on/off** `space`-Taste
+-   **Spiel Stop** `escape`-Taste
+-   **Spiel starten** `Enter`-Taste
+-   **Mute on/off** `M`,`m`-Taste 
+-   **Buy Life** `B`,`b`-Taste
   
 ## Gameplay-Steuerung Mouse 
 -   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
