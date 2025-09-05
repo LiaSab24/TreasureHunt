@@ -56,11 +56,16 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **Buy Life** `B`,`b`-Taste
   
 ## Gameplay-Steuerung Mouse 
--   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
+-   **Laufen:**   Buttons: ` nach Links ` , `nach Rechts`
 -   **Springen:** Button: `Springen`
--   **Stein werfen:** Button: `Werfen`
--   **Pause on/off** <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG" width="20" height="20">
--    [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG)](https://liasab24.github.io/TreasureHunt/)
+-   **Stein werfen:** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stoneThrowing.PNG" width="25" height="25">
+-   **Pause on**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG" width="25" height="25">
+-   **Pause off** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/play.PNG" width="25" height="25">
+-   **Stop**      Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stop.PNG" width="25" height="25">
+-   **Mute on**   Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/speakerOn.PNG" width="25" height="25">
+-   **Mute off**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/speakerOff.PNG" width="25" height="25">
+-   **Buy Life**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/buyButton.png" width="25" height="25">
+
 
 ## Gameplay-Steuerung Mobile/Touch
 -   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`  
