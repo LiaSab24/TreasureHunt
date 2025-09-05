@@ -3,7 +3,7 @@
 Ein klassisches 2D-Jump'n'Run-Spiel, entwickelt mit objektorientiertem JavaScript, HTML und CSS als reine Webanwendung. 
 Begleitet den Helden auf seiner Schatzsuche. Folgt den Münzen und sammelt Steine zu seiner Verteidigung. Denn Achtung! Unser Held ist nicht allein auf der Suche nach der verborgene Schatztruhe!🏴‍☠️
 
-**Live-Demo:** [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/screenshot.png)](https://liasab24.github.io/TreasureHunt/)
+**Live-Demo:** [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/introTreasure.png)](https://liasab24.github.io/TreasureHunt/)
 
 
 ## Features
@@ -48,17 +48,36 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 ## Gameplay-Steuerung Keyboard
 -   **Laufen:** `⬅️` / `➡️` Pfeiltasten
 -   **Springen:** `⬆️` Pfeiltaste
--   **Stein werfen:** `D`-Taste
+-   **Stein werfen:** `D`,`d`-Taste
+-   **Pause on/off** `space`-Taste
+-   **Spiel Stop** `escape`-Taste
+-   **Spiel starten** `Enter`-Taste
+-   **Mute on/off** `M`,`m`-Taste 
+-   **Buy Life** `B`,`b`-Taste
   
 ## Gameplay-Steuerung Mouse 
--   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
--   **Springen:** Button: `Springen`
--   **Stein werfen:** Button: `Werfen`
+-   **'Laufen'**   Buttons: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/buyButton.png" width="25" height="25"> , `nach Rechts`
+-   **'Springen'** Button: `Springen`
+-   **'Stein werfen'** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stoneThrowing.PNG" width="25" height="25">
+-   **'Pause on'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG" width="25" height="25">
+-   **'Pause off'** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/play.PNG" width="25" height="25">
+-   **'Stop'**      Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stop.PNG" width="25" height="25">
+-   **'Mute on'**   Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/speakerOn.PNG" width="25" height="25">
+-   **'Mute off'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/speakerOff.PNG" width="25" height="25">
+-   **'Buy Life'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/buyButton.png" width="25" height="25">
+
 
 ## Gameplay-Steuerung Mobile/Touch
 -   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`  
 -   **Springen:** Button: `Springen`
--   **Stein werfen:** Button: `Werfen`
+-   **'Stein werfen'** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stoneThrowing.PNG" width="25" height="25">
+-   **'Pause on'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG" width="25" height="25">
+-   **'Pause off'** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/play.PNG" width="25" height="25">
+-   **'Stop'**      Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stop.PNG" width="25" height="25">
+-   **'Mute on'**   Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/speakerOn.PNG" width="25" height="25">
+-   **'Mute off'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/speakerOff.PNG" width="25" height="25">
+-   **'Buy Life'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/buyButton.png" width="25" height="25">
+
 
 ## Dokumentation
 Weitere Details zur Entwicklung und Architektur finden sich hier:
