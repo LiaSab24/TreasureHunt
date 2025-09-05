@@ -10,7 +10,7 @@ class Drawing {
     }
 
     /**
-     * Haupt-Zeichenmethode, wird in der Game Loop aufgerufen.
+     * Main drawing method, called in the game loop.
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);    
@@ -22,7 +22,7 @@ class Drawing {
     }
     
     /**
-     * Zeichnet die HintergrundLayers.
+     * Draws the background layers.
      */
     drawBackground() {
         this.world.backgroundObjects.forEach(layer => {
@@ -37,7 +37,7 @@ class Drawing {
     }
 
     /**
-     * Zeichnet die Spielobjekte.
+     * Draws the game objects.
      */
     drawGameObjects() {
         this.drawObjects(this.world.clouds);
@@ -52,7 +52,7 @@ class Drawing {
     }
 
     /**
-     * Zeichnet die Benutzeroberfläche.
+     * Draws the user interface.
      */
     drawUI() {
         this.drawEndbossStatusBar();
@@ -62,7 +62,7 @@ class Drawing {
     }
 
     /**
-     * Zeichnet eine Liste von Objekten.
+     * Draws a list of objects.
      * @param {*} objects 
      */
     drawObjects(objects) {
@@ -70,7 +70,7 @@ class Drawing {
     }
 
     /**
-     * Zeichnet das Pause-Overlay.
+     * Draws the pause overlay.
      */
     drawPauseOverlay() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -84,8 +84,8 @@ class Drawing {
     }
 
     /**
-     * Zeichnet die Statusleiste des Endgegners.
-     * @returns 
+     * Draws the endboss status bar.
+     * @returns {void} 
      */
     drawEndbossStatusBar() {
         if (!this.world.endboss) return;

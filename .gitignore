@@ -1,3 +1,8 @@
 helpFunctions.js
 /ausgelagert/
-game.js
+# Ignore node_modules
+node_modules/
+package-lock.json
+package.json
+# Ignore log files
+docs/
