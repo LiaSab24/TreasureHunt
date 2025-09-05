@@ -56,7 +56,7 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **Buy Life** `B`,`b`-Taste
   
 ## Gameplay-Steuerung Mouse 
--   **'Laufen'**   Buttons: ` nach Links ` , `nach Rechts`
+-   **'Laufen'**   Buttons: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/buyButton.png" width="25" height="25"> , `nach Rechts`
 -   **'Springen'** Button: `Springen`
 -   **'Stein werfen'** Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/stoneThrowing.PNG" width="25" height="25">
 -   **'Pause on'**  Button: <img src="https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG" width="25" height="25">
