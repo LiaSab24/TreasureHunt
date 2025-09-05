@@ -59,6 +59,7 @@ Das Projekt ist modular aufgebaut, um eine klare Trennung der Verantwortlichkeit
 -   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`
 -   **Springen:** Button: `Springen`
 -   **Stein werfen:** Button: `Werfen`
+-   **Pause on/off**  [![Treasure Hunt Vorschau](https://raw.githubusercontent.com/LiaSab24/TreasureHunt/main/images/button/pause.PNG)](https://liasab24.github.io/TreasureHunt/)
 
 ## Gameplay-Steuerung Mobile/Touch
 -   **Laufen:** Buttons: ` nach Links ` , `nach Rechts`  
