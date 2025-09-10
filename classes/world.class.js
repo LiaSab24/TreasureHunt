@@ -162,8 +162,8 @@ class World {
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) this.character.jump();
         if (this.keyboard['Enter']) this.initGame();
         if (this.keyboard['d'] || this.keyboard['D'] || this.keyboard['TOUCH_THROW']) this.character.throwStone();
-        if (this.keyboard['k'] || this.keyboard['K'] || this.keyboard['TOUCH_BUY_LIFE']) this.buyLife();
-        if (this.keyboard['s'] || this.keyboard['S']) this.stopGame();
+        if (this.keyboard['b'] || this.keyboard['B'] || this.keyboard['TOUCH_BUY_LIFE']) this.buyLife();
+        if (this.keyboard['m'] || this.keyboard['M']) this.stopGame();
         this.camera_x = -this.character.x + 100;
     }
 
