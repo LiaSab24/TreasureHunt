@@ -1,12 +1,16 @@
 class Level1 {
     world;
 
+    /**
+     * Initializes Level1 with the given world instance.
+     * @param {*} world - The game world instance.
+     */
     constructor(world) {
         this.world = world;
     }
 
     /**
-     * Hauptmethode zum Initialisieren des gesamten Levels.
+     * Main method. Initializes the level and all game objects.
      */
     initializeLevel() {
         this.resetGameState();
@@ -17,17 +21,25 @@ class Level1 {
         this.resetCamera();
     }
 
+    /**
+     * Called in initializeLevel().
+     * Resets the game state to its initial values.
+     */
     resetGameState() {
         this.world.isPaused = false;
         this.world.gameWon = false;
         this.world.backgroundObjects = [];
-        this.world.coins = [];
+        this.world.coins = [];          
         this.world.stones = [];
         this.world.enemies = [];
         this.world.endboss = new Endboss(this.world);
         this.world.throwableObjects = [];
     }
 
+    /**
+     * Called in initializeLevel().
+     * Initializes the background layers with parallax effect.
+     */
     initBackgroundLayers() {
         const canvasWidth = this.world.canvas.width;
         const layers = [
@@ -42,6 +54,10 @@ class Level1 {
         });
     }
 
+    /**
+     * Called in initializeLevel().
+     * Initializes all game objects: clouds, coins, stones, enemies, and the endboss.
+     */
     initGameObjects() {
         this.initClouds();
         this.initCoins();
@@ -50,6 +66,10 @@ class Level1 {
         this.initEndboss();
     }
 
+    /**
+     * Called in initGameObjects().
+     * Initializes clouds at various starting positions.
+     */
     initClouds() {
         this.world.clouds = [
             new Cloud(0, this.world), new Cloud(400, this.world), new Cloud(900, this.world),
@@ -57,6 +77,10 @@ class Level1 {
         ];
     }
 
+    /**
+     * Called in initGameObjects().
+     * Initializes coins at predefined positions.
+     */
     initCoins() {
         this.world.coins.push(
             new Coin(300, 520), new Coin(330, 480), new Coin(360, 450),
@@ -66,6 +90,10 @@ class Level1 {
         );
     }
 
+    /**
+     * Called in initGameObjects().
+     * Initializes stones at predefined positions.
+     */
     initStones() {
         this.world.stones.push(
             new Stone(500, 480), new Stone(550, 520), new Stone(700, 480),
@@ -75,6 +103,10 @@ class Level1 {
         );
     }
 
+    /**
+     * Called in initGameObjects().
+     * Initializes enemies at predefined positions.
+     */
     initEnemies() {
         this.world.enemies.push(
             new Enemy1(550, this.world), new Enemy2(700, this.world), new Enemy1(900, this.world),
@@ -82,21 +114,37 @@ class Level1 {
         );
     }
 
+    /**
+     * Called in initGameObjects().
+     * Sets the endboss position and adds it to the enemies array.
+     */
     initEndboss() {
         this.world.endboss.x = this.world.LEVEL_END - 100;
         this.world.endboss.y = 250;
         this.world.enemies.push(this.world.endboss);
     }
 
+    /**
+     * Called in initializeLevel().
+     * Initializes the treasure chest at the end of the level.
+     */
     initTreasureChest() {
         this.world.treasureChest = new TreasureChest(this.world.LEVEL_END, 150);
     }
 
+    /**
+     * Called in initializeLevel().
+     * Resets the character to its initial state and position.
+     */
     resetCharacter() {
         this.world.character = new Character();
         this.world.character.world = this.world;
     }
 
+    /**
+     * Called in initializeLevel().
+     * Resets the camera position to the start of the level.
+     */
     resetCamera() {
         this.world.camera_x = 0;
     }

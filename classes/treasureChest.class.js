@@ -1,15 +1,15 @@
 /**
- * Repräsentiert die Schatztruhe, das Endziel des Spiels.
- * Wenn der Charakter dieses Objekt berührt, ist das Spiel gewonnen.
+ * Represents the treasure chest, the final goal of the game.
+ * If the character touches this object, the game is won.
  */
 class TreasureChest extends MovableObject {
   height = 300; //100;
   width = 520;//100;
 
   /**
-   * Erstellt eine Instanz der Schatztruhe an einer bestimmten Position.
-   * @param {number} x - Die Position auf der x-Achse.
-   * @param {number} y - Die Position auf der y-Achse.
+   * Creates an instance of the treasure chest at a specific position.
+   * @param {number} x - The position on the x-axis.
+   * @param {number} y - The position on the y-axis.
    */
   constructor(x, y) {
     super();

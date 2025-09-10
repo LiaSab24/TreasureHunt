@@ -1,15 +1,15 @@
 /**
- * Repräsentiert einen sammelbaren Stein, der auf dem Boden liegt.
- * Dient als Munition für den Charakter.
+ * Represents a collectible stone lying on the ground.
+ * Serves as ammunition for the character.
  */
 class Stone extends MovableObject {
     height = 30;
     width = 30;
 
     /**
-     * Erstellt eine Instanz eines sammelbaren Steins.
-     * @param {number} x - Die Position auf der x-Achse.
-     * @param {number} y - Die Position auf der y-Achse.
+     * Creates an instance of a collectible stone.
+     * @param {number} x - The position on the x-axis.
+     * @param {number} y - The position on the y-axis.
      */
      constructor(x, y) {
         super().loadImage('images/objects/stones/stone.PNG');

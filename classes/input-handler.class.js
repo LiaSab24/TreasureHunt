@@ -1,36 +1,36 @@
 /**
- * Klasse zur Verarbeitung von Eingaben (Tastatur und Touch).
+ * Class for handling input (keyboard and touch).
  */
 class InputHandler {
     world;
 
+    /**
+     * Initializes the InputHandler with the world.
+     * @param {*} world 
+     */
     constructor(world) {
         this.world = world;
         this.bindEvents();
     }
 
     /**
-     * Bindet alle notwendigen Events.
+     * Called in the constructor.
+     * Binds all necessary events.
      */
     bindEvents() {
         this.bindKeyboardEvents();
         this.initButtonControls();
     }
 
+    /**
+     * Binds keyboard events for game control.
+     * Called in bindEvents().
+     */
     bindKeyboardEvents() {
         window.addEventListener('keydown', (e) => {
             this.world.keyboard[e.key] = true;
-            if (e.key === 'Enter') e.preventDefault();
-            if (e.key === ' ') e.preventDefault();
-            if (e.key === ' ') {
-                this.world.isPaused ? this.world.resumeGame() : this.world.pauseGame();
-            }
-            if (e.key === 'Enter') {
-                const introOverlay = document.getElementById('introOverlay');
-                if (introOverlay && introOverlay.style.display !== 'none') {
-                    initGame();
-                }
-            }
+            this.bindKeyboardEventSpace(e);
+            this.bindKeyboardEventEnter(e);
             if (e.key === 'Escape') {
                 this.world.stopGame();
             }
@@ -41,6 +41,36 @@ class InputHandler {
         });
     }
 
+    /**
+     * Called in bindKeyboardEvents().
+     * Binds the spacebar for pause control.
+     */
+    bindKeyboardEventSpace(e) {
+        if (e.key === ' ') e.preventDefault();
+        if (e.key === ' ') {
+            this.world.isPaused ? this.world.resumeGame() : this.world.pauseGame();
+        }
+    }
+
+    /**
+     * Called in bindKeyboardEvents().
+     * Binds the Enter key to start the game from the intro overlay.
+     */
+    bindKeyboardEventEnter(e) {
+        if (e.key === 'Enter') e.preventDefault();
+        if (e.key === 'Enter') {
+            const introOverlay = document.getElementById('introOverlay');
+            if (introOverlay && introOverlay.style.display !== 'none') {
+                this.world.initGame();
+            }
+        }
+    }
+
+    /**
+     * Called in bindEvents().
+     * Initializes button controls for touch devices.
+     * Binds buttons to the corresponding actions.
+     */ 
     initButtonControls() {
         const controlButtonMap = {
             'leftButton': 'TOUCH_LEFT',
@@ -59,11 +89,23 @@ class InputHandler {
         this.bindButtonClick('audioOnOffButton', () => this.world.audioManager.toggleMute());
     }
 
+    /**
+     * Called in initButtonControls().
+     * Binds a click event listener to a button.
+     * @param {*} buttonId 
+     * @param {*} handler 
+     */
     bindButtonClick(buttonId, handler) {
         const button = document.getElementById(buttonId);
         if (button) button.addEventListener('click', handler);
     }
 
+    /**
+     * Called in initButtonControls().
+     * Binds press-and-hold events for a button.
+     * @param {*} buttonId 
+     * @param {*} actionKey 
+     */
     bindPressAndHoldEvents(buttonId, actionKey) {
         const button = document.getElementById(buttonId);
         if (!button) return;

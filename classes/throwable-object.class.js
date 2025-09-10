@@ -1,6 +1,6 @@
 /**
- * Repräsentiert ein Objekt, das vom Charakter geworfen werden kann, z.B. einen Stein.
- * Erbt von MovableObject und fügt eine Flugbahn-Logik (Gravitation) hinzu.
+ * Represents an object that can be thrown by the character, e.g. a stone.
+ * Inherits from MovableObject and adds trajectory logic (gravity).
  */
 class ThrowableObject extends MovableObject {
     speedX = 15;                                                
@@ -12,11 +12,11 @@ class ThrowableObject extends MovableObject {
     isDestroyed = false;                                        
 
     /**
-     * Erstellt eine Instanz eines Wurfobjekts.
-     * @param {number} x - Die Startposition auf der x-Achse.
-     * @param {number} y - Die Startposition auf der y-Achse.
-     * @param {string} direction - Die Wurfrichtung ('left' oder 'right').
-     * @param {World} world - Eine Referenz auf die Spielwelt, um den Pausenzustand zu prüfen.
+     * Creates an instance of a throwable object.
+     * @param {number} x - The starting position on the x-axis.
+     * @param {number} y - The starting position on the y-axis.
+     * @param {string} direction - The throw direction ('left' or 'right').
+     * @param {World} world - A reference to the game world to check pause state.
      */
     constructor(x, y, direction, world) {
         super().loadImage('images/objects/stones/stone.PNG'); 
@@ -30,8 +30,8 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Setzt die horizontale Wurfrichtung und Geschwindigkeit.
-     * @param {string} direction - 'right' oder 'left'
+     * Sets the horizontal throw direction and speed.
+     * @param {string} direction - 'right' or 'left'
      */
     throw(direction) {
         if (direction === 'left') {
@@ -39,10 +39,10 @@ class ThrowableObject extends MovableObject {
         }
     }
 
-     /**
-     * Simuliert die Gravitation für das Wurfobjekt, um eine Bogenflugbahn zu erzeugen.
-     * Läuft in einem eigenen Intervall, um eine flüssige Bewegung zu gewährleisten.
-     */
+    /**
+    * Simulates gravity for the throwable object to create a curved trajectory.
+    * Runs in its own interval for smooth movement.
+    */
     applyGravity() {
         this.trajectorIntervalId = setInterval(() => {
             if (this.world && !this.world.isPaused) {  
@@ -56,10 +56,10 @@ class ThrowableObject extends MovableObject {
         }, 25);                                               
     }
 
-     /**
-     * Überschreibt die geerbte draw-Methode, um eine Rotationsanimation hinzuzufügen.
-     * @param {CanvasRenderingContext2D} ctx - Der 2D-Rendering-Kontext des Canvas.
-     */
+    /**
+    * Overrides the inherited draw method to add a rotation animation.
+    * @param {CanvasRenderingContext2D} ctx - The 2D rendering context of the canvas.
+    */
      draw(ctx) {
         if (this.img) {
             ctx.save();                                                             
@@ -71,13 +71,12 @@ class ThrowableObject extends MovableObject {
         }
     }
     
-     /**
-     * Stoppt das Bewegungsintervall des Objekts.
-     * Wichtig zur Vermeidung von Performance-Problemen, wenn das Objekt zerstört wird.
-     */
+    /**
+    * Stops the movement interval of the object.
+    * Important to avoid performance issues when the object is destroyed.
+    */
      destroy() {
         clearInterval(this.trajectorIntervalId);
         this.trajectorIntervalId = null;
-        // Weitere Aufräumarbeiten?
     }
 }

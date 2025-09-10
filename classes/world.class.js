@@ -30,12 +30,12 @@ class World {
 
 
     // ============================================
-    // Initialisierungsmethoden 
+    // Initialization methods
     // ============================================
     /**
-     * Erstellt eine neue Instanz der World-Klasse.
-     * @param {*} canvas 
-     * @param {*} onStopGame 
+     * Creates a new instance of the World class.
+     * @param {*} canvas - The canvas element.
+     * @param {*} onStopGame - Callback for stopping the game.
      */
     constructor(canvas, onStopGame) {
         this.canvas = canvas;
@@ -52,6 +52,10 @@ class World {
     }
 
     /**
+     * Called in constructor().
+     * @memberof World 
+     * @returns {void} 
+     * @description This method initializes the level and starts the game loop.
      * Initializes or restarts the game.
      */
     initGame() {
@@ -60,6 +64,10 @@ class World {
     }
 
     /**
+     * Called in constructor().
+     * @memberof World 
+     * @returns {void} 
+     * @description This method resizes the canvas to the specified width and height.
      * Adjusts the size of the canvas.
      */
     resize(width, height) {
@@ -68,7 +76,7 @@ class World {
     }
 
     // ============================================
-    // Game-Loop
+    // Game loop
     // ============================================
     /**
      * Starts the main game loop.
@@ -79,30 +87,85 @@ class World {
         }
         this.audioManager.play('background');
         this.gameLoopIntervalId = setInterval(() => {
-            if (this.isPaused) {
-                this.drawing.draw(); 
-                return;
-            }
-            if (this.character.isDead()) {
-                this.handleGameOver();
-                return;
-            }
-            if (this.gameWon) return;
-            this.checkKeyboardInput();
-            this.character.applyGravity();
-            this.collisionHandler.checkAllCollisions();
-            this.drawing.draw();
+        //    if (this.isPaused) {
+        //        this.drawing.draw(); 
+        //        return;
+        //    }
+        //    if (this.character.isDead()) {
+        //        this.handleGameOver();
+        //        return;
+        //    }
+        //    if (this.gameWon) return;
+        //    this.checkKeyboardInput();
+        //    this.character.applyGravity();
+        //    this.collisionHandler.checkAllCollisions();
+        //    this.drawing.draw();
+            if (this.handlePause()) return;
+            if (this.handleGameOverIfNeeded()) return;
+            if (this.handleWinIfNeeded()) return;
+            this.processFrame();
         }, 1000 / 60);
     }
 
     /**
-     * Pausiert das Spiel.
+     * called in run() in each frame.
+     * @memberof World 
+     * Handles the pause state of the game.
+     * @returns {boolean} True if the game is paused, otherwise false.
+     */
+    handlePause() {
+        if (this.isPaused) {
+            this.drawing.draw();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Called in run() in each frame.
+     * @memberof World 
+     * Handles game over if the character is dead.      
+     * @returns {boolean} True if the game is over, otherwise false.
+     */
+    handleGameOverIfNeeded() {
+        if (this.character.isDead()) {
+            this.handleGameOver();
+            return true;
+        }
+        return false;
+    }   
+
+    /**
+     * Called in run() in each frame.
+     * @memberof World 
+     * Handles winning the game if the character reaches the goal.
+     * @returns {boolean} True if the game is won, otherwise false.
+     */
+    handleWinIfNeeded() {
+        if (this.gameWon) return true;
+        return false;
+    }   
+
+    /**
+     * Called in run() in each frame.
+     * @memberof World 
+     * Processes a single frame of the game loop.
+     * Handles input, physics, collisions, and drawing.
+     */
+    processFrame() {
+        this.checkKeyboardInput();
+        this.character.applyGravity();
+        this.collisionHandler.checkAllCollisions();
+        this.drawing.draw();
+    }
+
+    /**
+     * Pauses the game.
      * @memberof World 
      * @returns {void} 
-     * @description Diese Methode pausiert das Spiel, indem sie den isPaused-Zustand auf true setzt.
-     * Die Hintergrundmusik wird gestoppt und die Anzeige der Pause- und Play-Buttons wird entsprechend angepasst.
-     * Wenn das Spiel bereits pausiert ist, hat diese Methode keine Wirkung.
-     * @param {void}
+     * @description This method pauses the game by setting isPaused to true.
+     * The background music is stopped and the pause/play buttons are updated.
+     * If the game is already paused, this method has no effect.
      */
     pauseGame() {
     if (!this.isPaused) {
@@ -113,14 +176,13 @@ class World {
     }
 
     /** 
-     * Setzt das Spiel fort, wenn es pausiert ist.
+     * Resumes the game if it is paused.
      * @memberof World
      * @return {void}
-     * @description Diese Methode setzt das Spiel fort, indem sie den isPaused-Zustand auf false setzt.
-     * Die Hintergrundmusik wird wieder abgespielt und die Anzeige der Pause- und Play-Buttons wird entsprechend angepasst.
-     * Wenn das Spiel nicht pausiert ist, hat diese Methode keine Wirkung.
-     * @param {void}
-    */
+     * @description This method resumes the game by setting isPaused to false.
+     * The background music is played again and the pause/play buttons are updated.
+     * If the game is not paused, this method has no effect.
+     */
     }
     resumeGame() {
         if (this.isPaused) {
@@ -132,13 +194,12 @@ class World {
     }
     
     /** 
-     * Stoppt das Spiel und ruft den onStopGameCallback auf, falls definiert.
+     * Stops the game and calls the onStopGameCallback if defined.
      * @memberof World
      * @return {void}
-     * @description Diese Methode stoppt das Spiel, indem sie den Game-Loop-Intervall löscht und die Hintergrundmusik stoppt.
-     * Wenn ein onStopGameCallback definiert ist, wird dieser aufgerufen, um zusätzliche Aktionen auszuführen (z.B. UI-Updates).
-     * @param {void}
-    */
+     * @description This method stops the game by clearing the game loop interval and stopping the background music.
+     * If an onStopGameCallback is defined, it is called for additional actions (e.g. UI updates).
+     */
     stopGame() {
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
@@ -151,7 +212,7 @@ class World {
     }
 
     // ============================================
-    // Event-Handling
+    // Event handling
     // ============================================
     /**
      * Processes keyboard input in each frame.
@@ -168,10 +229,10 @@ class World {
     }
 
     // ============================================
-    // Spiel-Status-Methoden
+    // Game status methods
     // ============================================
     /**
-     * Behandelt das Spielende, wenn der Charakter keine Leben mehr hat.
+     * Handles game over when the character has no lives left.
      */
     handleGameOver() {
         clearInterval(this.gameLoopIntervalId);
@@ -182,7 +243,7 @@ class World {
     }
 
     /**
-     * Behandelt den Gewinn des Spiels, wenn der Charakter das Ziel erreicht.
+     * Handles winning the game when the character reaches the goal.
      */
     handleWin() {
         if (!this.gameWon) {
@@ -197,7 +258,7 @@ class World {
     }
 
     // ============================================
-    // UI-Updates und Interaktionsmethoden
+    // UI updates and interaction methods
     // ============================================  
     /**
     * Called in checkCoinCollisions() in collisions.class.js, throwStone() in character.class.js and buyLife().
@@ -205,10 +266,7 @@ class World {
     * @returns {void} 
     * @description This method updates the text content of the status bar elements in the HTML.
     * Shows the current values for lives, coins, and stones of the character.
-    * The "Buy Life" button is updated.
-    * If enough coins are available, the button is enabled and shows the price.
-    * If not enough coins are available, the button is disabled.
-    * @param {void}
+    * The "Buy Life" button is updated: if enough coins are available, the button is enabled and shows the price; otherwise, it is disabled.
     */
     updateStatusBars() {
         document.getElementById('livesStatus').innerText = this.character.lives;
@@ -225,13 +283,12 @@ class World {
     }
 
     /**
-    * This method is called when the character has enough coins to buy a life.
-    * It is triggered by the "Buy Life" button in the HTML.
+    * Called when the character has enough coins to buy a life.
+    * Triggered by the "Buy Life" button in the HTML.
     * @memberof World
     * @returns {void}
     * @description This method checks if the character has enough coins to buy a life.
-    * If yes, 5 coins are deducted and one life is added.
-    * The status bars are updated immediately to show the changes.
+    * If yes, 5 coins are deducted and one life is added. The status bars are updated immediately to show the changes.
     */
     buyLife() {
         if (this.character.coins >= 5 && !this.character.isDead()) {
@@ -242,13 +299,13 @@ class World {
     }
 
     /**
-    * Fügt ein werfbares Objekt (Stein) zur Welt hinzu.
-    * Diese Methode wird aufgerufen, wenn der Charakter einen Stein wirft.
+    * Adds a throwable object (stone) to the world.
+    * This method is called when the character throws a stone.
     * @memberof World 
     * @returns {void} 
-    * @description Diese Methode fügt das übergebene Stein-Objekt dem Array der werfbaren Objekte in der Welt hinzu.
-    * Dadurch wird der Stein in die Spielwelt integriert und kann im Game-Loop verarbeitet und gezeichnet werden.
-    * @param {ThrowableObject} stone - Das werfbare Objekt (Stein), das zur Welt hinzugefügt werden soll.
+    * @description This method adds the given stone object to the array of throwable objects in the world.
+    * This integrates the stone into the game world so it can be processed and drawn in the game loop.
+    * @param {ThrowableObject} stone - The throwable object (stone) to be added to the world.
     */
     addThrowableObject(stone) {
         this.throwableObjects.push(stone);

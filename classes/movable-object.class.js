@@ -7,6 +7,10 @@ class MovableObject {
     imageCache = {};                    
     currentImage = 0;                   
 
+        /**
+         * Loads a single image and sets it as the object's image.
+         * @param {string} path - The path to the image file.
+         */
     loadImage(path) {
         this.img = new Image();         
         this.img.onload = () => {       
@@ -14,9 +18,9 @@ class MovableObject {
         this.img.src = path;
     }
 
-     /**
-     * Lädt mehrere Bilder in den imageCache.
-     * @param {string[]} arr - Ein Array von Bildpfaden (z.B. für Animationen)
+    /**
+     * Loads multiple images into the image cache.
+     * @param {string[]} arr - An array of image paths (e.g. for animations)
      */
      loadImages(arr) {
         arr.forEach((path) => {
@@ -32,8 +36,11 @@ class MovableObject {
     }
 
 
-    // Methode zum Zeichnen (wird von World aufgerufen)
-    // Muss in Unterklassen oft überschrieben werden
+    /**
+     * Draws the object on the given canvas context.
+     * Called by World. Should often be overridden in subclasses.
+     * @param {CanvasRenderingContext2D} ctx - The canvas context to draw on.
+     */
     draw(ctx) {
         if (this.img) {
              ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -44,14 +51,23 @@ class MovableObject {
         }
     }
 
+    /**
+     * Moves the object to the right. Should be implemented in subclasses.
+     */
      moveRight() {
      }
 
+    /**
+     * Moves the object to the left. Should be implemented in subclasses.
+     */
      moveLeft() {
      }
 
-     // Grundlegende Kollisionserkennung (Rechteck-Kollision)
-     // obj: Das andere MovableObject, mit dem die Kollision geprüft wird
+    /**
+     * Basic rectangle collision detection.
+     * @param {MovableObject} obj - The other MovableObject to check collision with.
+     * @returns {boolean} True if colliding, otherwise false.
+     */
      isColliding(obj) {
         return this.x + this.width > obj.x &&
                this.y + this.height > obj.y &&

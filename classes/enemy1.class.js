@@ -1,3 +1,6 @@
+/**
+ * Represents enemy type 1 with walking and dead animations.
+ */
 class Enemy1 extends Enemy {
     height = 170;
     width = 80;
@@ -18,6 +21,11 @@ class Enemy1 extends Enemy {
       'images/enemies/enemy/enemy1/Faint/5.png'
     ];
 
+    /**
+     * Creates an instance of Enemy1 and loads its images.
+     * @param {number} startX - The initial X position.
+     * @param {World} world - The reference to the game world.
+     */
     constructor(startX, world) {
       super(startX, world);
       this.loadImage(this.IMAGES_WALKING[0]);
