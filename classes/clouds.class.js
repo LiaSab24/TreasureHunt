@@ -1,6 +1,6 @@
 /**
- * Repräsentiert Wolken, die sich langsam im Hintergrund bewegen
- * Trägt zur Atmosphäre des Spiels bei.
+ * Represents clouds that slowly move in the background.
+ * Contributes to the atmosphere of the game.
  */
 class Cloud extends MovableObject {
     y = 80;                             
@@ -11,8 +11,8 @@ class Cloud extends MovableObject {
     world;
 
     /**
-    * Erstellt eine Instanz einer Wolke an einer zufälligen horizontalen Position.
-    * @param {number} x - Die initiale Basis-Position auf der x-Achse.
+    * Creates an instance of a cloud at a random horizontal position.
+    * @param {number} x - The initial base position on the x-axis.
     */
     constructor(x, world) {
         super().loadImage('images/clouds/cloudWhite.png'); 
@@ -22,7 +22,7 @@ class Cloud extends MovableObject {
     }
 
     /**
-    * Startet die kontinuierliche Bewegung der Wolke nach links.
+    * Starts the continuous movement of the cloud to the left.
     */
     animate() {
         setInterval(() => {
@@ -34,8 +34,8 @@ class Cloud extends MovableObject {
     }
 
     /**
-    * Bewegt die Wolke und setzt sie zurück an den rechten Bildschirmrand,
-    * wenn sie links aus dem Bild verschwunden ist.
+    * Moves the cloud and resets it to the right edge of the screen
+    * when it has disappeared off the left side.
     */
      moveLeft() {
         this.x -= this.speed;

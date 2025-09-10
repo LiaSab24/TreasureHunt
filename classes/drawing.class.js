@@ -3,6 +3,9 @@ class Drawing {
     ctx;
     canvas;
 
+    /**
+     * @param {World} world - The game world instance.
+     */
     constructor(world) {
         this.world = world;
         this.ctx = world.ctx;
