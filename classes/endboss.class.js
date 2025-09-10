@@ -1,4 +1,9 @@
 class Endboss extends MovableObject {
+    /**
+     * instance of the world the endboss belongs to
+     * @type {World}
+     * @param {*} world
+     */
     constructor(world) {
         super();
         this.world = world;

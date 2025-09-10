@@ -58,11 +58,16 @@ class Character extends MovableObject {
         'images/character_neu/Throw/3.png'
     ];
 
-    // Zeitstempel für Idle-Animation
+    // Timestamp for idle animation
     lastIdleTime = 0;
     idleDelay = 3000; 
     idleCounter = 0;
     
+    /**
+     * creates an instance of Character.
+    * Initializes properties, loads images, applies gravity, and starts animation.
+    * @constructor
+     */
     constructor() {
         super();
         this.loadImage(this.IMAGES_IDLE[0]);        
@@ -78,8 +83,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * wird im constructor aufgerufen
-     * Animiert den Charakter basierend auf seinem Zustand.
+     * Called in the constructor
+     * Animates the character based on its state.
      */
     animate() {
         setInterval(() => {
@@ -110,8 +115,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * wird im constructor aufgerufen
-     * Aktualisiert den Timer für die Idle-Animation.
+     * Called in the constructor
+     * Updates the timer for the idle animation.
      */
     updateIdleTimer() {
         if (this.world && (this.world.keyboard['ArrowRight'] || this.world.keyboard['ArrowLeft']) || !this.isOnGround) {
@@ -119,25 +124,25 @@ class Character extends MovableObject {
         }
     }
 
-    // --- Sammelmethoden ---
+    // --- Collect methods ---
     /**
-     * Erhöht die Anzahl der gesammelten Münzen.
+     * Increases the number of collected coins.
      */
     collectCoin() {
         this.coins += 1;
     }
 
     /**
-     * Erhöht die Anzahl der gesammelten Steine.
+     * Increases the number of collected stones.
      */
     collectStone() {
         this.stones += 1;
     }
 
-    // --- Lebensmanagement ---
+    // --- Life management ---
     /**
-     * Wird aufgerufen, wenn der Charakter getroffen wird.
-     * Reduziert die Lebenspunkte des Charakters und setzt einen Unverwundbarkeits-Timer.
+     * Called when the character is hit.
+     * Reduces the character's health points and sets an invincibility timer.
      */
     hit() {
         if (!this.isHurt()) {
@@ -159,8 +164,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Prüft, ob der Charakter gerade erst verletzt wurde (unverwundbar ist).
-     * @returns {boolean} True, wenn der Charakter unverwundbar ist, sonst false.
+     * Checks if the character was recently hurt (is invincible).
+     * @returns {boolean} True if the character is invincible, otherwise false.
      */
     isHurt() {
         const timePassed = new Date().getTime() - this.lastHitTime; 
@@ -168,15 +173,15 @@ class Character extends MovableObject {
     }
 
     /**
-     * Prüft, ob der Charakter keine Leben mehr hat.
-     * @returns {boolean} True, wenn Leben <= 0, sonst false.
+     * Checks if the character has no lives left.
+     * @returns {boolean} True if lives <= 0, otherwise false.
      */
     isDead() {
         return this.lives <= 0;
     }
 
     /**
-     * Bewegt den Charakter nach rechts.
+     * Moves the character to the right.
      */
     moveRight() {
         if(!this.isDead()){                         
@@ -186,7 +191,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Bewegt den Charakter nach links.
+     * Moves the character to the left.
      */
     moveLeft() {
         if (!this.isDead() && this.x > 0) {
@@ -197,10 +202,10 @@ class Character extends MovableObject {
 
     /**
     * Initiates the character's jump.
-    * * This method checks if the character is able to jump (i.e., is on the ground and not dead).
+    * This method checks if the character is able to jump (i.e., is on the ground and not dead).
     * If the conditions are met, it applies an initial vertical and horizontal speed
     * to propel the character upwards and forwards, and updates the character's state to be airborne.
-    * * @returns {void} This function does not return a value.
+    * @returns {void} This function does not return a value.
     */
     jump() {         
         if (this.isOnGround && !this.isDead()) {            
@@ -213,25 +218,25 @@ class Character extends MovableObject {
     }
 
     /**
-     * Prüft, ob der Charakter sich in der Luft befindet (d.h. nicht auf dem Boden steht).
-     * Dies ist die Grundlage für die Sprunganimation und für Sprung-Angriffe.
-     * @returns {boolean} - true, wenn der Charakter in der Luft ist, sonst false.
+     * Checks if the character is in the air (i.e., not standing on the ground).
+     * This is the basis for the jump animation and for jump attacks.
+     * @returns {boolean} - true if the character is in the air, otherwise false.
      */
     isAboveGround() {
         return this.y < 380; 
     }
 
     /**
-     * Lässt den Charakter nach einem erfolgreichen Sprung auf einen Gegner abprallen.
+     * Makes the character bounce after a successful jump on an enemy.
      */
     bounce() {
         this.speedY = 15; 
     }
 
-   /**
-     * Wendet Gravitation auf den Charakter an, wenn er sich in der Luft befindet.
-     * Aktualisiert die vertikale Geschwindigkeit und Position.
-     */ 
+     /**
+         * Applies gravity to the character when it is in the air.
+         * Updates the vertical speed and position.
+         */ 
     applyGravity() {
         if (this.isDead()) return;                  
         if (!this.isOnGround || this.speedY > 0) {
@@ -245,11 +250,11 @@ class Character extends MovableObject {
         }
     }
 
-     /**
-     * Löst den Wurf eines Steins aus, wenn die Bedingungen erfüllt sind.
-     * Startposition des Steins ist die Mitte des Charakters.
-     * Verbraucht einen Stein, startet einen Cooldown und spielt den Wurf-Sound.
-     */
+    /**
+    * Triggers the throw of a stone if the conditions are met.
+    * The starting position of the stone is the center of the character.
+    * Consumes a stone, starts a cooldown and plays the throw sound.
+    */
     throwStone() {
         const now = new Date().getTime();
         if (this.stones > 0 && !this.isDead()  && now - this.lastThrowTime > this.throwCooldown) {
@@ -275,8 +280,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Zeichnet das Charakter-Objekt auf das gegebene Canvas-Kontext.
-     * @param {*} ctx - Der Canvas-Kontext, auf dem gezeichnet werden soll.
+     * Draws the character object on the given canvas context.
+     * @param {*} ctx - The canvas context to draw on.
      */
     draw(ctx) {
         ctx.save();                             
@@ -291,8 +296,8 @@ class Character extends MovableObject {
     }
 
     /**
-     * Wählt das nächste Bild aus dem gegebenen Array aus und setzt this.img.
-     * @param {string[]} images - Array von Bildpfaden für die aktuelle Animation.
+     * Selects the next image from the given array and sets this.img.
+     * @param {string[]} images - Array of image paths for the current animation.
      */
     playAnimation(images) {
         let i = this.currentImage % images.length;                  

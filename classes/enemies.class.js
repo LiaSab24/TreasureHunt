@@ -8,10 +8,10 @@ class Enemy extends MovableObject {
     world; 
 
     /**
-     * Erstellt eine neue Instanz eines Gegners.
-     * Verschiebt einen zufälligen Gegner um 30 Pixel nach oben
-     * @param {number} startX - Die anfängliche X-Position, um eine zufällige Verteilung zu ermöglichen.
-     * @param {World} world - Die Referenz zum World-Objekt.
+     * Creates a new instance of an enemy.
+     * Moves a random enemy 30 pixels up.
+     * @param {number} startX - The initial X position to allow random distribution.
+     * @param {World} world - The reference to the World object.
      */
     constructor(startX, world) {
         super();
@@ -26,7 +26,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Startet die Bewegungs- und Animationsintervalle für den Gegner.
+     * Starts the movement and animation intervals for the enemy.
      */
     startAnimation() {
         this.movementIntervalId = setInterval(() => {
@@ -43,7 +43,7 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Bewegt den Gegner nach links, solange er lebt.
+     * Moves the enemy to the left as long as it is alive.
      */
     moveLeft() {
         if (!this.isDead()) {
@@ -52,8 +52,8 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Spielt eine Animationssequenz ab.
-     * @param {string[]} images - Das Array der Bilder, die für die Animation verwendet werden sollen.
+     * Plays an animation sequence.
+     * @param {string[]} images - The array of images to use for the animation.
      */
     playAnimation(images) {
         let i = this.currentImage % images.length;
@@ -63,9 +63,9 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Verarbeitet einen Treffer auf den Gegner.
-     * Verhindert, dass ein bereits toter Gegner erneut getroffen wird
-     * Reduziert die Lebenspunkte und löst bei 0 HP den Tod aus.
+     * Processes a hit on the enemy.
+     * Prevents a dead enemy from being hit again.
+     * Reduces health points and triggers death at 0 HP.
      */
     hit() {
         if (this.isDead()) return;
@@ -77,17 +77,17 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * Prüft, ob der Gegner keine Lebenspunkte mehr hat.
-     * Dies ist die "Single Source of Truth" für den Todeszustand.
-     * @returns {boolean} - True, wenn der Gegner tot ist, sonst false.
+     * Checks if the enemy has no health points left.
+     * This is the single source of truth for the death state.
+     * @returns {boolean} - True if the enemy is dead, otherwise false.
      */
     isDead() {
         return this.health <= 0;
     }
 
     /**
-     * Leitet die Todessequenz ein.
-     * Stoppt die Bewegungs- und Animationsintervalle,
+     * Initiates the death sequence.
+     * Stops the movement and animation intervals.
      */
     die() {
         clearInterval(this.movementIntervalId);
