@@ -31,9 +31,7 @@ class InputHandler {
             this.world.keyboard[e.key] = true;
             this.bindKeyboardEventSpace(e);
             this.bindKeyboardEventEnter(e);
-            if (e.key === 'Escape') {
-                this.world.stopGame();
-            }
+            this.bindKeyboardEventEscape(e);
         });
 
         window.addEventListener('keyup', (e) => {
@@ -44,6 +42,7 @@ class InputHandler {
     /**
      * Called in bindKeyboardEvents().
      * Binds the spacebar for pause control.
+     * @param {*} e
      */
     bindKeyboardEventSpace(e) {
         if (e.key === ' ') e.preventDefault();
@@ -55,14 +54,26 @@ class InputHandler {
     /**
      * Called in bindKeyboardEvents().
      * Binds the Enter key to start the game from the intro overlay.
+     * @param {*} e
      */
     bindKeyboardEventEnter(e) {
         if (e.key === 'Enter') e.preventDefault();
         if (e.key === 'Enter') {
             const introOverlay = document.getElementById('introOverlay');
-            if (introOverlay && introOverlay.style.display !== 'none') {
-                this.world.initGame();
+            if (introOverlay && introOverlay.style.display !== 'none') {   
+                initGame();
             }
+        }
+    }
+
+    /**
+     * Called in bindKeyboardEvents().
+     * Binds the Escape key to stop the game.
+     * @param {*} e 
+     */
+    bindKeyboardEventEscape(e) {
+        if (e.key === 'Escape') {
+            this.world.stopGame();
         }
     }
 

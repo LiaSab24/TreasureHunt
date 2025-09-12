@@ -85,21 +85,9 @@ class World {
         if (this.gameLoopIntervalId) {
             clearInterval(this.gameLoopIntervalId);
         }
+        this.audioManager.stop('background');
         this.audioManager.play('background');
         this.gameLoopIntervalId = setInterval(() => {
-        //    if (this.isPaused) {
-        //        this.drawing.draw(); 
-        //        return;
-        //    }
-        //    if (this.character.isDead()) {
-        //        this.handleGameOver();
-        //        return;
-        //    }
-        //    if (this.gameWon) return;
-        //    this.checkKeyboardInput();
-        //    this.character.applyGravity();
-        //    this.collisionHandler.checkAllCollisions();
-        //    this.drawing.draw();
             if (this.handlePause()) return;
             if (this.handleGameOverIfNeeded()) return;
             if (this.handleWinIfNeeded()) return;
@@ -222,9 +210,10 @@ class World {
         if (this.keyboard['ArrowLeft'] || this.keyboard['TOUCH_LEFT']) this.character.moveLeft();
         if (this.keyboard['ArrowUp'] || this.keyboard['TOUCH_JUMP']) this.character.jump();
         if (this.keyboard['Enter']) this.initGame();
+        if (this.keyboard['Escape']) this.stopGame();
         if (this.keyboard['d'] || this.keyboard['D'] || this.keyboard['TOUCH_THROW']) this.character.throwStone();
         if (this.keyboard['b'] || this.keyboard['B'] || this.keyboard['TOUCH_BUY_LIFE']) this.buyLife();
-        if (this.keyboard['m'] || this.keyboard['M']) this.stopGame();
+        if (this.keyboard['m'] || this.keyboard['M']) this.audioManager.toggleMute();
         this.camera_x = -this.character.x + 100;
     }
 

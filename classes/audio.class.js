@@ -47,7 +47,10 @@ class AudioManager {
      */
     play(name) {
         if (!this.isMuted && this.sounds[name]) {
-            this.sounds[name].currentTime = 0;
+            //this.sounds[name].currentTime = 0;
+            if (name !== 'background') {
+                this.sounds[name].currentTime = 0;
+            }
             this.sounds[name].play().catch(e => {
                 console.warn(`Audio '${name}' konnte nicht abgespielt werden. Warte auf User-Interaktion.`);
             });
@@ -116,7 +119,6 @@ class AudioManager {
             if (audioIcon) {
                 audioIcon.src = 'images/button/speakerOff.PNG'; 
             }
-            console.log("Audio stummgeschaltet");
         } else {
             // --- TON AN --- gestartet
             if (this.sounds['background']) {
@@ -125,7 +127,6 @@ class AudioManager {
             if (audioIcon) {
                 audioIcon.src = 'images/button/speakerOn.PNG'; 
             }
-            console.log("Audio eingeschaltet");
         }
         this.saveMuteStatus();
     }

@@ -51,13 +51,15 @@ function getControlsContentHTML() {
         </div>
         <div class="controls">
             <table>
-                <tr><th>Keys</th><th>Action</th></tr>
-                <tr><td>⬅️ / ➡️</td><td>Moving</td></tr>
+                <tr><th>Keys</th><th>Mouse/Touch</th><th>Action</th></tr>
+                <tr><td>⬅️ / ➡️</td><td><img scr="images/button/arrow.PNG" width=10 height=10></td><td>Moving</td></tr>
                 <tr><td>⬆️</td><td>Jumping</td></tr>
-                <tr><td><img class="keyboard-D" src="images/help/dTaste.png" alt="D-Key as image"></td><td>Throwing Stone</td></tr>
+                <tr><td>'D', 'd'</td><td>Throwing Stone</td></tr>
+                <tr><td>'b'/'B'</td><td>Buy Life</td></tr>
+                <tr></tr><td>'M'/'m'</td><td>Mute on/off</td></tr>
+                <tr><td>↩️</td><td>mit 'Enter' Spiel Start</td></tr>
                 <tr><td>'space'</td><td>Pause on/off</td></tr>
-                <tr><td>'k'/'K'</td><td>Buy Life</td></tr>
-                <tr><td>↩️</td><td>Stop/Start</td></tr>
+                <tr><td>'Esc'</td><td>Stop Game</td></tr>
             </table>
         </div>
   `;

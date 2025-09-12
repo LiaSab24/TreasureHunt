@@ -1,3 +1,4 @@
+// Ensure all scripts and DOM are loaded before initializing input handling
 // ===============================
 // 1. Global Variables & Config
 // ===============================
@@ -14,8 +15,8 @@ let canvas;
 
 const buttonEventMap = {
     'startButton': initGame,
-    'restartButton': initGame,//restartGame,
-    'restartButtonWin': initGame,//restartGame,
+    'restartButton': initGame,
+    'restartButtonWin': initGame,
     'backButton': () => window.location.href = 'index.html',
     'impButton': showImpressum, 
     'buyLifeButton': () => world?.buyLife(),
@@ -253,6 +254,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!canvas) return;
     const originalWidth = canvas.width;
     const originalHeight = canvas.height;
+
+    // Initialisiere World und InputHandler
+    window.world = new World(canvas, showIntroScreen);
+    window.inputHandler = new InputHandler(window.world);
 
     if (fullscreenButton) {
         fullscreenButton.addEventListener('click', () => toggleFullscreen(gameContainer));

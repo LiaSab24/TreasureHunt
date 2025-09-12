@@ -35,7 +35,7 @@
     <script src="js/game.js"></script> </body>
 </head>
 <body> 
-    <div id="introOverlay" class="intro-overlay">
+    <div id="introOverlay" class="intro-overlay" style="display: flex">
         <div id="startButton" class="start-button button-img"></div>
         <div class="button">           
             <div id="infoButton" class="info-button button-img" onclick="showGameInfo()"></div>
@@ -48,10 +48,9 @@
     <div id="gameContainer" class="game-container" style="display: none;">
 
         <canvas id="canvas" width="1000" height="700"></canvas>
-        <!--von div in button geändert-->
-        <button id="audioOnOffButton" data-tooltip="Audio on/off" class="audio-button">
-            <img id="audioIcon" src="images/button/speakerOn.PNG" alt="Audio on/off button">
-        </button>
+        <div id="audioOnOffButton" data-tooltip="Audio on/off" class="audio-button">
+            <img id="audioIcon" src="images/button/speakerOff.PNG" alt="Audio on/off button">
+        </div>
 
         <div class="fullscreen">
             <img id="fullscreenButton" src="images/bg/button/fullscreen.png" alt="fullscreen">
