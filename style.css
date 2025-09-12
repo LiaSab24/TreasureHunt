@@ -336,7 +336,7 @@ canvas {
 .arrow-right {transform: rotate(180deg);}
 
 .game-over-overlay, .win-overlay {
-  position: fixed;
+  position: absolute; /*fixed;*/
   top: 0;
   left: 0;
   width: 100%;
@@ -353,15 +353,23 @@ canvas {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  width: 55%;
-  height: 60%;
+  width: 100%; /*55%;*/
+  height: 100%; /* 60%;*/
+  max-width: 55%;
+  max-height: 60%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 20px; 
   .restart-button {
     background-image: url('images/bg/button/new-game.png');
     width: 200px;
+    height: 100px;
     position: absolute;
-    bottom: -10px;
-    left: 3%;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
   }
 }
 
