@@ -34,7 +34,7 @@
 
 /* --- RESPONSIVE STYLES FÜR QUERFORMAT (landscape) --- */
 /* gelten für Tablets und Smartphones im Querforma */
-@media (max-width: 1024px) and (orientation: landscape) {
+@media (max-width: 1366px) and (orientation: landscape) {
 
   body {
     gap: 10px; 
