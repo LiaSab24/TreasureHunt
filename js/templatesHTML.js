@@ -52,14 +52,14 @@ function getControlsContentHTML() {
         <div class="controls">
             <table>
                 <tr><th>Keys</th><th>Mouse/Touch</th><th>Action</th></tr>
-                <tr><td>⬅️ / ➡️</td><td><img scr="images/button/arrow.PNG" width=10 height=10></td><td>Moving</td></tr>
-                <tr><td>⬆️</td><td>Jumping</td></tr>
-                <tr><td>'D', 'd'</td><td>Throwing Stone</td></tr>
-                <tr><td>'b'/'B'</td><td>Buy Life</td></tr>
-                <tr></tr><td>'M'/'m'</td><td>Mute on/off</td></tr>
-                <tr><td>↩️</td><td>mit 'Enter' Spiel Start</td></tr>
-                <tr><td>'space'</td><td>Pause on/off</td></tr>
-                <tr><td>'Esc'</td><td>Stop Game</td></tr>
+                <tr><td>⬅️ / ➡️</td><td></td><td>Moving</td></tr>
+                <tr><td>⬆️</td><td></td><td>Jumping</td></tr>
+                <tr><td>'D', 'd'</td><td></td><td>Throwing Stone</td></tr>
+                <tr><td>'b'/'B'</td><td></td><td>Buy Life</td></tr>
+                <tr></tr><td>'M'/'m'</td><td></td><td>Mute on/off</td></tr>
+                <tr><td>↩️ 'Enter'</td><td></td><td> Spiel Start</td></tr>
+                <tr><td>'space'</td><td></td><td>Pause on/off</td></tr>
+                <tr><td>'Esc'</td><td></td><td>Stop Game</td></tr>
             </table>
         </div>
   `;
