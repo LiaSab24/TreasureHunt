@@ -19,7 +19,7 @@ const buttonEventMap = {
     'restartButtonWin': initGame,
     'backButton': () => window.location.href = 'index.html',
     'impButton': showImpressum, 
-    'buyLifeButton': () => world?.buyLife(),
+ //   'buyLifeButton': () => world?.buyLife(),
     'infoButton': showGameInfo,
     'helpButton': showGameControls 
 };
@@ -33,7 +33,13 @@ const buttonEventMap = {
  */
 function initGame() {
     canvas = document.getElementById('canvas');
+    if (world && typeof world.stopGame === 'function') {
+        world.stopGame();
+    }
+
     world = new World(canvas, showIntroScreen);
+    new InputHandler(world);
+    
     document.getElementById('introOverlay').style.display = 'none';
     document.getElementById('gameContainer').style.display = 'block';
     document.getElementById('gameOverOverlay').style.display = 'none';
@@ -204,11 +210,11 @@ function updateFullscreenButton(buttonElement) {
 function enterFullscreen(element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {  // Firefox
+    } else if (element.mozRequestFullScreen) {      // Firefox
         element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) {  // Chrome, Safari & Opera
+    } else if (element.webkitRequestFullscreen) {   // Chrome, Safari & Opera
         element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {  // IE/Edge
+    } else if (element.msRequestFullscreen) {       // IE/Edge
         element.msRequestFullscreen();
     }
 }
@@ -219,11 +225,11 @@ function enterFullscreen(element) {
 function exitFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
+    } else if (document.mozCancelFullScreen) {      // Firefox
         document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
+    } else if (document.webkitExitFullscreen) {     // Chrome, Safari & Opera
         document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
+    } else if (document.msExitFullscreen) {         // IE/Edge
         document.msExitFullscreen();
     }
 }
@@ -254,10 +260,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!canvas) return;
     const originalWidth = canvas.width;
     const originalHeight = canvas.height;
-
-    // Initialisiere World und InputHandler
-    window.world = new World(canvas, showIntroScreen);
-    window.inputHandler = new InputHandler(window.world);
 
     if (fullscreenButton) {
         fullscreenButton.addEventListener('click', () => toggleFullscreen(gameContainer));
