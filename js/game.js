@@ -12,6 +12,11 @@ let world;
  * @type {HTMLCanvasElement}
  */
 let canvas;
+/**
+ * Global variable for the input handler instance.
+ * @type {InputHandler}
+ */
+let inputHandler;
 
 const buttonEventMap = {
     'startButton': initGame,
@@ -32,13 +37,16 @@ const buttonEventMap = {
  * and creates a new instance of the World class.
  */
 function initGame() {
+    localStorage.removeItem('isMuted');
     canvas = document.getElementById('canvas');
     if (world && typeof world.stopGame === 'function') {
         world.stopGame();
     }
 
     world = new World(canvas, showIntroScreen);
-    new InputHandler(world);
+    inputHandler.setWorld(world);
+
+    world.audioManager.updateUIIcon();
     
     document.getElementById('introOverlay').style.display = 'none';
     document.getElementById('gameContainer').style.display = 'block';
@@ -253,6 +261,8 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('DOMContentLoaded', () => {
     setupInitialUI();
     setupEventListeners();
+
+    inputHandler = new InputHandler();
 
     const gameContainer = document.getElementById('gameContainer');
     const canvas = document.getElementById('canvas');

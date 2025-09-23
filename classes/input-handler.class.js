@@ -5,12 +5,19 @@ class InputHandler {
     world;
 
     /**
-     * Initializes the InputHandler with the world.
-     * @param {*} world 
+     * bindEvents() is called in the constructor.
+     * @param {} 
      */
-    constructor(world) {
-        this.world = world;
+    constructor() {
         this.bindEvents();
+    }
+
+    /**
+     * Sets the world instance.
+     * @param {World} world
+     */
+    setWorld(world) {
+        this.world = world;
     }
 
     /**
@@ -28,6 +35,7 @@ class InputHandler {
      */
     bindKeyboardEvents() {
         window.addEventListener('keydown', (e) => {
+            if (!this.world) return;
             this.world.keyboard[e.key] = true;
             this.bindKeyboardEventSpace(e);
             this.bindKeyboardEventEnter(e);
@@ -35,6 +43,7 @@ class InputHandler {
         });
 
         window.addEventListener('keyup', (e) => {
+            if (!this.world) return;
             this.world.keyboard[e.key] = false;
         });
     }
@@ -46,7 +55,7 @@ class InputHandler {
      */
     bindKeyboardEventSpace(e) {
         if (e.key === ' ') e.preventDefault();
-        if (e.key === ' ') {
+        if (e.key === ' ' && this.world) {
             this.world.isPaused ? this.world.resumeGame() : this.world.pauseGame();
         }
     }
@@ -72,7 +81,7 @@ class InputHandler {
      * @param {*} e 
      */
     bindKeyboardEventEscape(e) {
-        if (e.key === 'Escape') {
+        if (e.key === 'Escape' && this.world) {
             this.world.stopGame();
         }
     }
@@ -94,10 +103,10 @@ class InputHandler {
             this.bindPressAndHoldEvents(buttonId, actionKey);
         });
 
-        this.bindButtonClick('pauseButton', () => this.world.pauseGame());
-        this.bindButtonClick('playButton', () => this.world.resumeGame());
-        this.bindButtonClick('stopButton', () => this.world.stopGame());
-        this.bindButtonClick('audioOnOffButton', () => this.world.audioManager.toggleMute());
+        this.bindButtonClick('pauseButton', () => { if (this.world) this.world.pauseGame();});
+        this.bindButtonClick('playButton', () => { if (this.world) this.world.resumeGame(); });
+        this.bindButtonClick('stopButton', () => { if (this.world) this.world.stopGame(); });
+        this.bindButtonClick('audioOnOffButton', () => { if (this.world) this.world.audioManager.toggleMute(); });
     }
 
     /**
@@ -123,6 +132,7 @@ class InputHandler {
 
         const setActionState = (isPressed) => (event) => {
             event.preventDefault();
+            if (!this.world) return;
             this.world.keyboard[actionKey] = isPressed;
         };
 

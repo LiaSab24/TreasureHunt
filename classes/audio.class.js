@@ -72,24 +72,6 @@ class AudioManager {
     }
 
     /**
-     * Loads the mute status from local storage.
-     * If no status is saved, defaults to "not muted".
-     * @param {void}
-     * @returns {void}
-     * @description This method reads the mute status (isMuted) from local storage under the key defined in localStorageKey.
-     * If a saved value is found, it is used to set the current mute status.
-     * If no saved value is present, the mute status is set to false (not muted).
-     */
-    loadMuteStatus() {
-        const storedMuteStatus = localStorage.getItem(this.localStorageKey);
-        if (storedMuteStatus !== null) {
-            this.setMuteStatus(JSON.parse(storedMuteStatus));
-        } else {
-            this.setMuteStatus(false);
-        }
-    }
-
-    /**
     * Saves the mute status to local storage.
     * @param {void}
     * @returns {void}
@@ -97,6 +79,24 @@ class AudioManager {
     */
     saveMuteStatus() {
         localStorage.setItem(this.localStorageKey, JSON.stringify(this.isMuted));
+    }
+
+    /**
+    * Updates the speaker icon in the UI based on the current mute status.
+    * Called whenever the mute status changes.
+    * @return {void}
+    * @description This method updates the source of the speaker icon image in the UI to reflect the current mute status.
+    * If the AudioManager is muted, it sets the icon to 'speakerOff.PNG'; otherwise, it sets it to 'speakerOn.PNG'.
+    */
+    updateUIIcon() {
+    const audioIcon = document.getElementById('audioIcon');
+        if (audioIcon) {
+            if (this.isMuted) {
+                audioIcon.src = 'images/button/speakerOff.PNG';
+            } else {
+                audioIcon.src = 'images/button/speakerOn.PNG';
+            }
+        }
     }
 
     /**
@@ -109,7 +109,7 @@ class AudioManager {
     */
     setMuteStatus(muted) {
         this.isMuted = muted;
-        const audioIcon = document.getElementById('audioIcon'); 
+        //const audioIcon = document.getElementById('audioIcon'); 
 
         if (this.isMuted) {
             // --- TON AUS ---
@@ -121,16 +121,51 @@ class AudioManager {
             }
         } else {
             // --- TON AN --- gestartet
-            if (this.sounds['background']) {
+            if (this.sounds['background'] && this.sounds['background'].paused) {
                 this.play('background');
             }
-            if (audioIcon) {
-                audioIcon.src = 'images/button/speakerOn.PNG'; 
-            }
+           // if (audioIcon) {
+           //     audioIcon.src = 'images/button/speakerOn.PNG'; 
+           // }
         }
+        this.updateUIIcon();
         this.saveMuteStatus();
     }
 
+    /**
+     * Loads the mute status from local storage.
+     * If no status is saved, defaults to "not muted".
+     * @param {void}
+     * @returns {void}
+     * @description This method reads the mute status (isMuted) from local storage under the key defined in localStorageKey.
+     * If a saved value is found, it is used to set the current mute status.
+     * If no saved value is present, the mute status is set to true (not muted).
+     */
+    loadMuteStatus() {
+        const storedMuteStatus = localStorage.getItem(this.localStorageKey);
+        if (storedMuteStatus !== null) {
+            this.isMuted = JSON.parse(storedMuteStatus);  
+        //    this.setMuteStatus(JSON.parse(storedMuteStatus));
+        } else {
+            //this.setMuteStatus(true);
+            this.isMuted = true; // Standard ist STUMM
+        }
+        this.updateUIIcon();
+    }
+
+    /**
+     * Manages background music playback based on the current mute status.
+     * Called when the game starts or restarts.
+     * @return {void}
+     * @description This method checks the current mute status (isMuted).
+     * If the AudioManager is not muted, it starts playing the background music.
+     * If it is muted, no action is taken.
+     */
+    manageBackgroundMusicOnStart() {
+        if (!this.isMuted) {
+            this.play('background');
+        }
+    }
 
     /**
      * Calls setMuteStatus with the opposite value.

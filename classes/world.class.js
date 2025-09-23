@@ -86,7 +86,8 @@ class World {
             clearInterval(this.gameLoopIntervalId);
         }
         this.audioManager.stop('background');
-        this.audioManager.play('background');
+        //this.audioManager.play('background');
+        this.audioManager.manageBackgroundMusicOnStart();
         this.gameLoopIntervalId = setInterval(() => {
             if (this.handlePause()) return;
             if (this.handleGameOverIfNeeded()) return;
