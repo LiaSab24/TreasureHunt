@@ -5,7 +5,9 @@
   padding: 0;
   scroll-behavior: smooth;
 }
-
+*, body  {
+  overflow: hidden;
+}
 body {
   font-family: 'Arial', sans-serif;
   background-image: url('images/bg/bg-waterfall/waterfall.png');
@@ -18,7 +20,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 70px;                      
-  min-height: 100vh;       
+  min-height: 100vh;  
+  height: 100%;
   color: #333;            
 }
 /*
