@@ -37,7 +37,7 @@ const buttonEventMap = {
  * and creates a new instance of the World class.
  */
 function initGame() {
-    localStorage.removeItem('isMuted');
+  //  localStorage.removeItem('isMuted');
     canvas = document.getElementById('canvas');
     if (world && typeof world.stopGame === 'function') {
         world.stopGame();
