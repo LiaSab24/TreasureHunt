@@ -57,7 +57,7 @@ function getControlsContentHTML() {
                 <tr><td>'D', 'd'</td><td></td><td>Throwing Stone</td></tr>
                 <tr><td>'b'/'B'</td><td></td><td>Buy Life</td></tr>
                 <tr></tr><td>'M'/'m'</td><td></td><td>Mute on/off</td></tr>
-                <tr><td>↩️ 'Enter'</td><td></td><td> Spiel Start</td></tr>
+                <tr><td>↩️ 'Enter'</td><td></td><td> Game Start</td></tr>
                 <tr><td>'space'</td><td></td><td>Pause on/off</td></tr>
                 <tr><td>'Esc'</td><td></td><td>Stop Game</td></tr>
             </table>
