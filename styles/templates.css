@@ -32,3 +32,8 @@ td {
   height: 25px !important;
   object-fit: contain;
 }
+.start-icon {
+  width: 60px !important;
+  height: 30px !important;
+  object-fit: contain;
+}

@@ -79,7 +79,7 @@ function getControlsContentHTML() {
                 </tr>
                 <tr>
                   <td>↩️ 'Enter'</td>
-                  <td></td>
+                  <td><img src="images/bg/button/start.png" class="table-icon start-icon"</td>
                   <td> Game Start</td>
                 </tr>
                 <tr>
