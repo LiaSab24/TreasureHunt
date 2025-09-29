@@ -47,19 +47,51 @@ function getStoryContentHTML()  {
 function getControlsContentHTML() {
     return `
         <div class="controls-intro">
-            <h3>Keyboard Controls</h3>
+            <h3>Controls</h3>
         </div>
         <div class="controls">
             <table>
                 <tr><th>Keys</th><th>Mouse/Touch</th><th>Action</th></tr>
-                <tr><td>⬅️ / ➡️</td><td></td><td>Moving</td></tr>
-                <tr><td>⬆️</td><td></td><td>Jumping</td></tr>
-                <tr><td>'D', 'd'</td><td></td><td>Throwing Stone</td></tr>
-                <tr><td>'b'/'B'</td><td></td><td>Buy Life</td></tr>
-                <tr></tr><td>'M'/'m'</td><td></td><td>Mute on/off</td></tr>
-                <tr><td>↩️ 'Enter'</td><td></td><td> Game Start</td></tr>
-                <tr><td>'space'</td><td></td><td>Pause on/off</td></tr>
-                <tr><td>'Esc'</td><td></td><td>Stop Game</td></tr>
+                <tr>
+                  <td>⬅️ / ➡️</td>
+                  <td><img src="images/button/arrow.PNG" class="table-icon"><img src="images/button/arrow.PNG" class="table-icon arrow-right"></td>
+                  <td>Moving</td>
+                </tr>
+                <tr>
+                  <td>⬆️</td>
+                  <td><img src="images/button/arrow.PNG" class="table-icon arrow-up"></td>
+                  <td>Jumping</td>
+                </tr>
+                <tr>
+                  <td>'D', 'd'</td>
+                  <td><img src="images/button/stoneThrowing.PNG" class="table-icon"></td>
+                  <td>Throwing Stone</td>
+                </tr>
+                <tr>
+                  <td>'b'/'B'</td>
+                  <td><img src="images/button/buyButton.png" class="table-icon"></td>
+                  <td>Buy Life</td>
+                </tr>
+                <tr>
+                  <td>'M'/'m'</td>
+                  <td><img src="images/button/speakerOff.PNG" class="table-icon"><img src="images/button/speakerOn.PNG" class="table-icon"></td>
+                  <td>Mute on/off</td>
+                </tr>
+                <tr>
+                  <td>↩️ 'Enter'</td>
+                  <td></td>
+                  <td> Game Start</td>
+                </tr>
+                <tr>
+                  <td>'space'</td>
+                  <td><img src="images/button/pause.PNG" class="table-icon"><img src="images/button/play.PNG" class="table-icon"></td>
+                  <td>Pause/Play</td>
+                </tr>
+                <tr>
+                  <td>'Esc'</td>
+                  <td><img src="images/button/stop.PNG" class="table-icon"></td>
+                  <td>Stop Game</td>
+                </tr>
             </table>
         </div>
   `;

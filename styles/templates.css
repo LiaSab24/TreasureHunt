@@ -27,7 +27,8 @@ td {
   font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);
 }
 
-.keyboard-D {
-  width: 20px !important;
-  height: 20px !important;
+.table-icon {
+  width: 25px !important;
+  height: 25px !important;
+  object-fit: contain;
 }
