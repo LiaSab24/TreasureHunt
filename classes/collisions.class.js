@@ -57,10 +57,16 @@ class Collisions {
     checkEnemyCollisions() {
         this.world.enemies.forEach((enemy) => {
             if (this.world.character.isColliding(enemy) && !enemy.isDead()) {
-                if (enemy instanceof Endboss && this.world.character.isAboveGround() && this.world.character.speedY < 0) {
-                    enemy.hit();
-                    this.world.character.bounce();
-                } 
+                if (this.world.character.isAboveGround() && this.world.character.speedY < 0) {
+                    if (enemy instanceof Endboss) {
+                        enemy.hit();
+                        this.world.character.bounce();
+                    } 
+                    else  {
+                        enemy.hit();
+                        this.world.character.bounce();
+                    } 
+                }
                 else if (!this.world.character.isHurt()) {
                     this.world.character.hit();
                     this.world.updateStatusBars();
