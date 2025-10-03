@@ -24,10 +24,12 @@ function getStoryContentHTML()  {
   return `
     <h3>A Treasure in the Desert</h3>
     <p>
-      A long time ago, a pirate ship sank with its treasure and seemed lost forever. But the water has evaporated and now the treasure lies somewhere in the desert with the remains of the ship.
+      A long time ago, a pirate ship sank with its treasure and seemed lost forever. 
+      But the water has evaporated and now the treasure lies somewhere in the desert with the remains of the ship.
     </p>
     <p>
-      Find this treasure before it is lost forever! You must fight your way through the desert, defeat enemies, and find the treasure. 
+      Find this treasure before it is lost forever! 
+      You must fight your way through the desert, defeat enemies, and find the treasure. 
     </p>
     <p><strong>But be careful!</strong></p>
     <p>You are not alone in the search for the gold.</p>

@@ -10,6 +10,8 @@ class World {
     treasureChest = null;
     endboss = null;
     LEVEL_END = 2500;
+    sandParticles = [];
+    maxSandParticles = 150; 
     
     // ---- State ----
     canvas;
@@ -42,6 +44,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.resize(1000, 700); 
         this.onStopGameCallback = onStopGame;
+        
 
     // Delegates tasks to specialized classes
         this.level1 = new Level1(this);
@@ -49,6 +52,7 @@ class World {
         this.inputHandler = new InputHandler(this);
         this.drawing = new Drawing(this);
         this.initGame();
+        //this.spawnSandParticles();
     }
 
     /**
@@ -145,6 +149,7 @@ class World {
         this.checkKeyboardInput();
         this.character.applyGravity();
         this.collisionHandler.checkAllCollisions();
+        this.updateSandParticles();
         this.drawing.draw();
     }
 
@@ -299,5 +304,38 @@ class World {
     */
     addThrowableObject(stone) {
         this.throwableObjects.push(stone);
+    }
+
+    // ============================================
+    // Visual Effects
+    // ============================================
+    /**
+     * Called in processFrame() in each frame.
+     * @memberof World
+     * @returns {void} 
+     * @description This method updates the sand particles in the world.
+     * It moves existing particles, removes faded ones, and spawns new particles to maintain a maximum count.
+     * The particles create a parallax effect based on their depth.
+     */
+    updateSandParticles() {
+        if (this.isPaused) return
+        this.sandParticles = this.sandParticles.filter(p => p.update());
+        if (this.sandParticles.length < this.maxSandParticles) {
+            for (let i = 0; i < 2; i++) { 
+                let x = -this.camera_x + this.canvas.width + Math.random() * 200;
+                let depth = Math.random();
+                let speedX = -1 - (depth * 4); // Geschwindigkeit zwischen -1 und -5
+                let size = 1 + (depth * 3); // Größe zwischen 1 und 4
+
+                // alpha: Ferne Partikel sind durchsichtiger, nahe sind sichtbarer
+                let alpha = 0.3 + (depth * 0.5); // Alpha zwischen 0.3 und 0.8
+                let y = Math.random() * this.canvas.height;
+                //let speedX = -1 - Math.random() * 3;
+                let speedY = (Math.random() - 0.5) * 1;
+                //let size = 1 + Math.random() * 4;
+                //let alpha = 0.6 + Math.random() * 0.4;
+                this.sandParticles.push(new SandParticle(x, y, speedX, speedY, size, alpha, depth));
+            }
+        }
     }
 }

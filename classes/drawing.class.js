@@ -17,8 +17,10 @@ class Drawing {
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);    
-        this.drawBackground();    
+        this.drawBackground();  
+        //this.drawObjects(this.world.sandParticles);  
         this.ctx.translate(this.world.camera_x, 0);
+        //this.drawGameObjectsWithParticles();
         this.drawGameObjects();
         this.ctx.translate(-this.world.camera_x, 0);
         this.drawUI();
@@ -44,6 +46,7 @@ class Drawing {
      */
     drawGameObjects() {
         this.drawObjects(this.world.clouds);
+        this.drawObjects(this.world.sandParticles);
         this.drawObjects(this.world.coins);
         this.drawObjects(this.world.stones);
         this.drawObjects(this.world.enemies);

@@ -51,6 +51,15 @@ class MovableObject {
         }
     }
 
+    //draw(ctx) {
+    //    // TESTCODE: Malt einen leuchtend roten Kreis
+    //    ctx.fillStyle = 'red';
+    //    ctx.beginPath();
+    //    ctx.arc(this.x, this.y, 10, 0, 2 * Math.PI); // Malt einen Kreis mit 10px Radius
+    //    ctx.fill();
+    //    console.log("MovableObject.draw() wurde aufgerufen!");
+    //}
+
     /**
      * Moves the object to the right. Should be implemented in subclasses.
      */
