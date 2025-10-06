@@ -109,8 +109,17 @@ class Level1 {
      */
     initEnemies() {
         this.world.enemies.push(
-            new Enemy1(550, this.world), new Enemy2(700, this.world), new Enemy1(900, this.world),
-            new Enemy2(1050, this.world), new Enemy1(1200, this.world), new Enemy2(1350, this.world)
+            new Enemy1(550, this.world), 
+            new Enemy2(700, this.world), 
+            new DesertSpirit1(750, this.world), 
+            new Enemy1(900, this.world),
+            new Enemy2(1250, this.world), 
+            new DesertSpirit1(1300, this.world),
+            new Enemy1(1500, this.world), 
+            new Enemy2(1800, this.world),
+            new DesertSpirit1(1880, this.world),
+            new Enemy1(2000, this.world),
+            new DesertSpirit1(2200, this.world)
         );
     }
 
