@@ -243,19 +243,6 @@ function exitFullscreen() {
 }
 
 // ===============================
-// 7. Utility & Debug Functions
-// ===============================
-/**
- * Key press event listener for debugging purposes.
- */
-window.addEventListener('keydown', (event) => {
-    const keyName = event.key;
-    const keyCode = event.keyCode;
-    const code = event.code;
-    console.log(`Key: ${keyName}, keyCode: ${keyCode}, Code: ${code}`);
-});
-
-// ===============================
 // DOMContentLoaded Event
 // ===============================
 window.addEventListener('DOMContentLoaded', () => {
