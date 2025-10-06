@@ -7,10 +7,10 @@ class MovableObject {
     imageCache = {};                    
     currentImage = 0;                   
 
-        /**
-         * Loads a single image and sets it as the object's image.
-         * @param {string} path - The path to the image file.
-         */
+    /**
+     * Loads a single image and sets it as the object's image.
+     * @param {string} path - The path to the image file.
+     */
     loadImage(path) {
         this.img = new Image();         
         this.img.onload = () => {       
