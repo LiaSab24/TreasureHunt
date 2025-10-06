@@ -107,6 +107,9 @@
           height: 40px;
           object-fit: contain;
         }
+         &:hover::after {
+          content: none;
+         }
       }
     }
   }
