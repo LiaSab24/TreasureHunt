@@ -104,8 +104,9 @@ h3 {
     z-index: 1; 
     overflow-y: auto;
     p {
-      font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);
-      line-height: 1.5;
+      /*font-size: clamp(0.75rem, 0.3186rem + 1.0349vw, 1.25rem);*/
+      font-size: clamp(1rem, 0.3528rem + 1.5524vw, 1.75rem);
+      line-height: 1.2;
       img {
         width: 16px;
         height: 16px;

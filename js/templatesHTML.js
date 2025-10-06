@@ -118,8 +118,5 @@ function getImpressumContentHTML() {
        Phone: 0172 8686750<br>
        E-Mail: <a href="mailto:info@ls-nordlicht.com">info@ls-nordlicht.com</a>
     </p>
-    <p>Disclaimer:<br>
-       <small>The contents of our pages were created with the greatest care. However, we cannot guarantee the accuracy, completeness and timeliness of the contents.</small>
-    </p>
   `;
 }
